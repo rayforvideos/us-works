@@ -1,8 +1,19 @@
 import { type DefaultOptions, QueryClient } from "@tanstack/react-query";
 
-export const DEFAULT_QUERY_OPTIONS = {
-  retry: 1,
-  staleTime: 30_000,
+import { isApiError } from "../api-error";
+import { QUERY_MAX_RETRY_COUNT, QUERY_STALE_TIME_MS, RETRYABLE_ERROR_KINDS } from "./constants";
+
+export function shouldRetry(failureCount: number, error: unknown): boolean {
+  return (
+    isApiError(error) &&
+    RETRYABLE_ERROR_KINDS.includes(error.kind) &&
+    failureCount < QUERY_MAX_RETRY_COUNT
+  );
+}
+
+const DEFAULT_QUERY_OPTIONS = {
+  retry: shouldRetry,
+  staleTime: QUERY_STALE_TIME_MS,
   refetchOnWindowFocus: false,
 } as const satisfies DefaultOptions["queries"];
 

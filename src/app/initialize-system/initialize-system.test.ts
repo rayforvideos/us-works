@@ -29,7 +29,7 @@ describe("initializeSystem", () => {
   it("QueryClient는 공용 팩토리의 기본 옵션을 가진다", () => {
     const { queries } = initializeSystem().queryClient.getDefaultOptions();
 
-    expect(queries?.retry).toBe(1);
+    expect(typeof queries?.retry).toBe("function");
     expect(queries?.staleTime).toBe(30_000);
   });
 
