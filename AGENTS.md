@@ -7,6 +7,7 @@ FE 과제(Us FE Developer Recruit Works) 저장소. React 19 + Vite 8 SPA이며 
 - 커밋과 푸시는 매번 확인을 받은 뒤에만 실행한다. 메시지와 파일 목록을 먼저 보여준다.
 - 답변 끝에 다음 단계나 후속 제안을 붙이지 않는다. 결과만 보고한다.
 - 한 파일을 여러 곳 고칠 때는 Edit을 쪼개지 않고 한 번에 다시 쓴다.
+- 의존성은 pnpm의 `minimumReleaseAge`(24시간) 정책을 따른다. 배포 직후 버전을 정확한 버전 지정으로 강제 설치하지 않고, `pnpm-workspace.yaml`에 `minimumReleaseAgeExclude`를 남기지 않는다.
 
 ## ADR 규칙
 
@@ -51,6 +52,9 @@ src/
 - 컴포넌트 파일명은 PascalCase(`Button.tsx`), 그 외는 camelCase 또는 kebab-case.
 - 컴포넌트는 named export를 기본으로 하고, 라우트 진입 컴포넌트만 default export를 허용한다.
 - 타입 전용 import는 `import type`으로 쓴다.
+- `enum`, `namespace`, 생성자 매개변수 프로퍼티는 쓰지 않는다. tsconfig의 `erasableSyntaxOnly`가 컴파일 오류로 막는다. 열거 값은 `as const` 객체와 유니언 타입으로 표현한다.
+- 객체 타입 선언은 `interface` 대신 `type`을 쓴다. props에 교차 타입(`&`)을 자주 쓰므로 한 가지로 통일한다. ESLint `consistent-type-definitions`가 강제한다.
+- `app` 레이어에서 `providers/`, `hooks/` 같은 폴더 이름은 steiger가 거부한다. 프로바이더와 라우터는 `app` 루트 파일(`AppProviders.tsx`, `router.tsx`)로 둔다.
 - React Router의 DOM 전용 API(`RouterProvider` 등)는 `react-router/dom`에서, 그 외는 `react-router`에서 import한다.
 - React Compiler가 켜져 있다. `useMemo`, `useCallback`, `memo`를 수동으로 넣지 않고, 컴파일러 규칙(eslint-plugin-react-hooks)을 따른다.
 - 스타일은 Tailwind 유틸리티를 우선 사용하고, 반복되는 조합은 `shared/ui` 컴포넌트로 추출한다. 디자인 토큰은 `src/app/styles/globals.css`의 `@theme`에 정의한다.
