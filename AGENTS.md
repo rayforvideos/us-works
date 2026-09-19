@@ -49,12 +49,12 @@ src/
 
 ## 코드 컨벤션
 
-- 컴포넌트 파일명은 PascalCase(`Button.tsx`), 그 외는 camelCase 또는 kebab-case.
+- 파일과 디렉토리 이름은 kebab-case, 훅은 camelCase. 모듈은 구현, 테스트, `index.ts`를 한 디렉토리로 묶는다. 상세는 `docs/file-structure.md`.
 - 컴포넌트는 named export를 기본으로 하고, 라우트 진입 컴포넌트만 default export를 허용한다.
 - 타입 전용 import는 `import type`으로 쓴다.
 - `enum`, `namespace`, 생성자 매개변수 프로퍼티는 쓰지 않는다. tsconfig의 `erasableSyntaxOnly`가 컴파일 오류로 막는다. 열거 값은 `as const` 객체와 유니언 타입으로 표현한다.
 - 객체 타입 선언은 `interface` 대신 `type`을 쓴다. props에 교차 타입(`&`)을 자주 쓰므로 한 가지로 통일한다. ESLint `consistent-type-definitions`가 강제한다.
-- `app` 레이어에서 `providers/`, `hooks/` 같은 폴더 이름은 steiger가 거부한다. 프로바이더와 라우터는 `app` 루트 파일(`AppProviders.tsx`, `router.tsx`)로 둔다.
+- `app` 레이어에서 `providers/`, `hooks/` 같은 폴더 이름은 steiger가 거부한다. 프로바이더와 라우터는 `app` 루트 파일(`app-providers.tsx`, `router.tsx`)로 둔다.
 - React Router의 DOM 전용 API(`RouterProvider` 등)는 `react-router/dom`에서, 그 외는 `react-router`에서 import한다.
 - React Compiler가 켜져 있다. `useMemo`, `useCallback`, `memo`를 수동으로 넣지 않고, 컴파일러 규칙(eslint-plugin-react-hooks)을 따른다.
 - 스타일은 Tailwind 유틸리티를 우선 사용하고, 반복되는 조합은 `shared/ui` 컴포넌트로 추출한다. 디자인 토큰은 `src/app/styles/globals.css`의 `@theme`에 정의한다.

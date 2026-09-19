@@ -105,10 +105,10 @@ us-works/
 └── src/
     ├── app/
     │   ├── main.tsx                # 진입점: 프로바이더 + RouterProvider
-    │   ├── AppProviders.tsx        # QueryClientProvider, Jotai Provider
+    │   ├── app-providers.tsx        # QueryClientProvider, Jotai Provider
     │   ├── router.tsx              # createBrowserRouter
-    │   ├── App.tsx                 # "/" 라우트 컴포넌트 (임시)
-    │   ├── App.test.tsx            # 파이프라인 검증용 스모크 테스트
+    │   ├── app.tsx                 # "/" 라우트 컴포넌트 (임시)
+    │   ├── app.test.tsx            # 파이프라인 검증용 스모크 테스트
     │   └── styles/globals.css
     └── shared/
         └── config/test-setup.ts
@@ -419,7 +419,7 @@ pnpm simple-git-hooks
 - [x] `pnpm dev`로 개발 서버가 뜨고 `index.html`이 `src/app/main.tsx`를 로드한다
 - [x] `pnpm build`가 성공한다
 - [x] `pnpm check`가 경고 없이 통과한다
-- [x] 스모크 테스트 `App.test.tsx`가 통과한다
+- [x] 스모크 테스트 `app.test.tsx`가 통과한다
 - [x] Prettier가 `@theme`를 읽어 Tailwind 클래스를 정렬한다 (`format:check` 통과)
 - [x] React Compiler가 적용된다 (빌드 산출물에 컴파일러 캐시 호출 `_c(` 존재)
 
