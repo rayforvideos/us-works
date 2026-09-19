@@ -2,8 +2,8 @@ import { createMemoryRouter } from "react-router";
 import { RouterProvider } from "react-router/dom";
 import { render, screen } from "@testing-library/react";
 
-import { App } from "./App";
-import { AppProviders } from "./AppProviders";
+import { App } from "./app";
+import { AppProviders } from "./app-providers";
 import { routes } from "./router";
 
 describe("App", () => {

@@ -4,7 +4,7 @@ import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { RouterProvider } from "react-router/dom";
 
-import { AppProviders } from "./AppProviders";
+import { AppProviders } from "./app-providers";
 import { router } from "./router";
 
 const rootElement = document.getElementById("root");
