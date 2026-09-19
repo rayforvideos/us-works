@@ -53,9 +53,9 @@ features/publish-content/
 └── index.ts
 ```
 
-`shared/ui`, `shared/lib`도 같은 구조다. 레이어나 세그먼트 단위의 `index.ts`는 두지 않고 모듈 디렉토리마다 둔다.
+`shared/ui`, `shared/lib`도 같은 구조이며 세그먼트 단위의 `index.ts`는 두지 않고 모듈 디렉토리마다 둔다. 반면 `shared/api`, `shared/config`는 세그먼트 `index.ts`를 공개 API로 두고 외부는 `@/shared/api`처럼 세그먼트 경로로 import한다. steiger의 `no-public-api-sidestep` 규칙이 이를 검사한다.
 
 ## 예외
 
-- `app` 레이어 루트의 진입점, 라우터, 프로바이더 파일은 디렉토리로 묶지 않는다. steiger가 `app` 아래 임의 폴더 이름을 거부하기 때문이다.
+- `app` 레이어 루트의 진입점(`main.tsx`), 라우터, 프로바이더처럼 테스트가 없는 연결 파일은 디렉토리로 묶지 않는다. 테스트가 있는 모듈은 `app` 레이어라도 예외 없이 디렉토리로 묶는다(`app/initialize-system/`).
 - 설정 파일(`vite.config.ts`, `eslint.config.js` 등)과 `shared/config`의 셋업 파일은 이 규칙의 대상이 아니다.

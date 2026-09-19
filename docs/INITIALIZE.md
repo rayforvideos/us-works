@@ -29,6 +29,7 @@ FE 과제(Us FE Developer Recruit Works)의 스캐폴딩 절차서다. 실행 �
 | typescript-eslint                         | 8.x             |                                                                                                                |
 | eslint-plugin-react-hooks                 | 7.x             | `configs.flat.recommended`                                                                                     |
 | eslint-plugin-boundaries                  | 7.x             | 단일 `dependencies` 규칙, selector 정책. `@/` 별칭 해석에 eslint-import-resolver-typescript 필요               |
+| eslint-plugin-no-comments                 | 1.2.x           | 코드 주석 금지. `eslint`, `global` 지시문만 허용                                                               |
 | steiger, @feature-sliced/steiger-plugin   | 0.6.x, 0.7.x    | `segments-by-purpose` 규칙이 `providers` 같은 세그먼트 이름을 거부                                             |
 | knip                                      | 6.x             |                                                                                                                |
 | Prettier                                  | 3.x             | `prettier-plugin-tailwindcss`는 `tailwindStylesheet` 필수                                                      |
@@ -64,7 +65,7 @@ pnpm add tailwindcss @tailwindcss/vite
 pnpm add react-router @tanstack/react-query jotai
 pnpm add -D vitest jsdom @testing-library/react @testing-library/jest-dom
 pnpm add -D eslint @eslint/js typescript-eslint eslint-plugin-react-hooks eslint-plugin-react-refresh
-pnpm add -D eslint-plugin-simple-import-sort @vitest/eslint-plugin eslint-plugin-testing-library
+pnpm add -D eslint-plugin-simple-import-sort @vitest/eslint-plugin eslint-plugin-testing-library eslint-plugin-no-comments
 pnpm add -D prettier prettier-plugin-tailwindcss eslint-config-prettier
 pnpm add -D eslint-plugin-boundaries eslint-import-resolver-typescript steiger @feature-sliced/steiger-plugin
 pnpm add -D knip
@@ -285,7 +286,8 @@ trim_trailing_whitespace = true
 8. eslint-plugin-boundaries (아래)
 9. `**/*.test.{ts,tsx}` 한정: @vitest/eslint-plugin `configs.recommended` + eslint-plugin-testing-library `configs['flat/react']`
 10. `*.config.{js,ts}` 한정: `tseslint.configs.disableTypeChecked`. `**/*.js`에는 `@eslint/js` recommended만
-11. `eslint-config-prettier`
+11. `**/*.{ts,tsx,js}` 전체: eslint-plugin-no-comments `disallowComments` (`allow: ["eslint", "global"]`, 도구 지시문 외 주석 금지)
+12. `eslint-config-prettier`
 
 boundaries 7 부분이다. `import/resolver` 설정이 없으면 `@/` 별칭 import가 해석되지 않아 외부 패키지(`origin: external`)로 분류되고 모든 정책을 통과한다. 반드시 eslint-import-resolver-typescript를 붙인다. 정책은 순서대로 평가되고 마지막 매칭이 결과를 정한다. `relationship: internal`은 같은 element 안의 import를 뜻한다.
 

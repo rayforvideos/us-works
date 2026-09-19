@@ -58,8 +58,9 @@ src/
 - React Router의 DOM 전용 API(`RouterProvider` 등)는 `react-router/dom`에서, 그 외는 `react-router`에서 import한다.
 - React Compiler가 켜져 있다. `useMemo`, `useCallback`, `memo`를 수동으로 넣지 않고, 컴파일러 규칙(eslint-plugin-react-hooks)을 따른다.
 - 스타일은 Tailwind 유틸리티를 우선 사용하고, 반복되는 조합은 `shared/ui` 컴포넌트로 추출한다. 디자인 토큰은 `src/app/styles/globals.css`의 `@theme`에 정의한다.
-- 모든 ESLint 규칙은 `error` 또는 `off`다. 파일 단위 `eslint-disable`은 금지하고, 줄 단위 예외는 이유를 주석으로 남긴다.
-- 테스트는 Vitest + Testing Library. 사용자 관점의 역할 기반 쿼리(`getByRole`)를 우선 쓴다. Vitest 5는 `clearMocks`가 기본 true다.
+- 코드 파일(`ts`, `tsx`, `js`, 설정 파일 포함)에는 주석을 쓰지 않는다. 결정과 근거는 ADR과 `docs/`에만 있다. 예외는 `eslint-disable-next-line`처럼 도구가 요구하는 지시문만이며, 그 이유는 커밋 메시지나 문서에 남긴다. ESLint `no-comments/disallowComments`가 강제한다.
+- 모든 ESLint 규칙은 `error` 또는 `off`다. 파일 단위 `eslint-disable`은 금지한다.
+- 테스트는 Vitest + Testing Library. 모듈이 약속한 것 하나가 테스트 하나이며, 순수 로직은 구현 전에, UI는 사양 문장을 구현하면서 쓴다. 상세는 `docs/testing.md`.
 
 ## 검증 명령
 
