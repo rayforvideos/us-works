@@ -9,6 +9,24 @@ HTTP 클라이언트의 동작과 API 호출 코드의 배치를 정한다. API�
 - TanStack Query 훅은 요청 함수를 감싸며 같은 `api` 세그먼트에 둔다. 쿼리 키는 `[엔티티, 동작, 파라미터]` 배열이다. 예: `["contents", "list", { page: 1, status: "public" }]`.
 - 클라이언트 인스턴스는 `initializeSystem()`이 만들어 주입한다(ADR-0005). 모듈 최상위에서 만들지 않는다.
 
+## 모듈 구성
+
+`shared/api` 아래 모듈과 역할이다. 각 모듈은 자기 계약만 테스트한다.
+
+| 모듈              | 역할                                                                                    | 테스트가 덮는 계약                                |
+| ----------------- | --------------------------------------------------------------------------------------- | ------------------------------------------------- |
+| `api-error`       | `ApiError` 클래스, 상태 코드 → `kind` 분류, axios 오류를 `ApiError`로 변환              | 분류표, 네트워크와 취소, 공통 응답 형식 아닌 본문 |
+| `token-refresher` | 갱신 단일 실행, 진행 중 Promise 조회, 실패 시 `onUnauthorized` 1회 알림                 | 동시 호출 1회 실행, 실패와 예외 처리, 알림 초기화 |
+| `http-client`     | axios 인스턴스 생성과 인터셉터 조립. 만료 확인, 헤더 부착, 401 재시도, 응답 데이터 추출 | 인증 흐름 전체와 동시 요청 시나리오               |
+| `query-client`    | `QueryClient` 팩토리와 `kind` 기반 재시도 정책                                          | 기본 옵션, 덮어쓰기, 재시도 대상 분류             |
+
+`http-client`는 인터셉터를 두 함수로 나눠 등록한다. axios 응답 인터셉터는 등록 순서대로 실행되므로 순서를 바꾸면 401 처리가 깨진다.
+
+1. `attachAuthInterceptors`: `auth` 옵션이 있을 때만 등록한다. 요청 인터셉터는 `runWhen`으로 `skipAuth` 요청을 건너뛰고, 만료 확인과 헤더 부착을 한다. 응답 오류 인터셉터는 원본 axios 오류의 401을 보고 갱신과 재시도를 한다.
+2. `attachResponseInterceptors`: 항상 등록한다. 공통 응답 형식에서 `data`를 추출하고, 남은 오류를 `ApiError`로 정규화한다. 인증 인터셉터보다 뒤에 있어야 401 판단 시점에 원본 오류가 남아 있다.
+
+`auth`가 없는 클라이언트는 2번만 가진다.
+
 ## 기본 동작
 
 - 기본 URL은 환경 변수 `VITE_API_BASE_URL`에서 읽어 팩토리에 넘긴다. `.env.example`에 값을 적어두고 `.env`는 커밋하지 않는다.
@@ -27,14 +45,15 @@ HTTP 클라이언트의 동작과 API 호출 코드의 배치를 정한다. API�
 
 ## 오류 규격
 
-클라이언트를 통과한 모든 실패는 `ApiError` 하나다. 화면은 axios 오류나 공통 응답 형식을 직접 다루지 않는다.
+클라이언트를 통과한 모든 실패는 `ApiError` 하나다. `ApiError`와 분류 함수는 `shared/api/api-error/`에 있고, 화면은 axios 오류나 공통 응답 형식을 직접 다루지 않는다.
 
-| 필드      | 타입             | 내용                                                       |
-| --------- | ---------------- | ---------------------------------------------------------- |
-| `kind`    | 아래 표의 값     | 분류. 화면은 이 값으로만 분기한다                          |
-| `status`  | `number \| null` | HTTP 상태 코드. 응답이 없으면 `null`                       |
-| `message` | `string \| null` | 응답의 `error` 필드. 없거나 공통 응답 형식이 아니면 `null` |
-| `cause`   | `unknown`        | 원본 axios 오류                                            |
+| 필드            | 타입             | 내용                                                                   |
+| --------------- | ---------------- | ---------------------------------------------------------------------- |
+| `kind`          | 아래 표의 값     | 분류. 화면은 이 값으로만 분기한다                                      |
+| `status`        | `number \| null` | HTTP 상태 코드. 응답이 없으면 `null`                                   |
+| `serverMessage` | `string \| null` | 응답의 `error` 필드. 없거나 공통 응답 형식이 아니면 `null`             |
+| `message`       | `string`         | `Error.message`. 개발자용 요약(`kind`와 상태 코드). 화면에 쓰지 않는다 |
+| `cause`         | `unknown`        | 원본 axios 오류                                                        |
 
 `kind`는 HTTP 상태 코드로 정한다.
 
@@ -50,7 +69,7 @@ HTTP 클라이언트의 동작과 API 호출 코드의 배치를 정한다. API�
 | `server`       | 5xx                           | "잠시 후 다시 시도해주세요"                                 |
 | `unknown`      | 그 외                         | 일반 오류 문구                                              |
 
-- 사용자에게 보이는 문구는 `shared/lib/error-message/`의 `getErrorMessage(error)` 한 곳에서 만든다. `validation`과 `conflict`는 서버 문구를 그대로 쓰고, 나머지는 `kind`별 고정 문구다. 화면은 `error.message`를 직접 출력하지 않는다.
+- 사용자에게 보이는 문구는 `shared/lib/error-message/`의 `getErrorMessage(error)` 한 곳에서 만든다. `validation`과 `conflict`는 `serverMessage`를 그대로 쓰고, 나머지는 `kind`별 고정 문구다. 화면은 `serverMessage`나 `message`를 직접 출력하지 않는다.
 - TanStack Query 재시도는 `kind`가 `network` 또는 `server`일 때만 한다. 나머지는 재시도하지 않는다. 이 정책은 `createQueryClient()`의 기본 `retry` 함수에 있다.
 
 ## 인증
@@ -90,6 +109,7 @@ HTTP 클라이언트의 동작과 API 호출 코드의 배치를 정한다. API�
 ### 인증 제외 요청
 
 - 로그인, 회원가입, 토큰 갱신 요청은 요청 설정에 `skipAuth: true`를 단다.
+- `skipAuth`와 내부 플래그(`authRetried`, `authExpiryChecked`)는 `shared/api/http-client/axios.d.ts`에서 axios의 `AxiosRequestConfig`를 모듈 확장으로 넓혀 추가한다. 모듈 확장은 원본과 같은 선언 형태(`interface`, 제네릭 `D = any`)를 써야 하므로 ESLint는 `**/*.d.ts`에 한해 `consistent-type-definitions`, `no-explicit-any`, `no-unused-vars`를 끈다. 내부 플래그를 설정 객체에 실어 보내는 이유는 axios가 재시도 시 설정을 새 객체로 복사하면서 알려지지 않은 키를 유지하기 때문이다.
 - `skipAuth` 요청은 헤더를 붙이지 않고, 만료 확인과 갱신 대기에 들어가지 않으며, 401을 받아도 갱신을 시도하지 않고 `unauthorized` `ApiError`로 던진다.
 
 ## 서버 제약

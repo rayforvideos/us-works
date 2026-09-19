@@ -90,6 +90,7 @@ allowBuilds:
 ```
 us-works/
 ├── .editorconfig
+├── .env.example                    # VITE_API_BASE_URL
 ├── .nvmrc                          # 24
 ├── .prettierignore
 ├── .prettierrc
@@ -112,7 +113,11 @@ us-works/
     │   ├── app.test.tsx            # 파이프라인 검증용 스모크 테스트
     │   └── styles/globals.css
     └── shared/
-        └── config/test-setup.ts
+        └── config/
+            ├── test-setup.ts
+            ├── vite-env.d.ts         # ImportMetaEnv 타입
+            ├── env/                  # VITE_API_BASE_URL 읽기와 검증 (구현, 테스트, index)
+            └── index.ts
 ```
 
 화면 구현 전에는 `shared/ui` 컴포넌트를 만들지 않는다. `@testing-library/user-event`도 첫 인터랙션 테스트를 쓸 때 추가한다.
@@ -212,10 +217,13 @@ export default mergeConfig(
       environment: "jsdom",
       globals: true,
       setupFiles: ["./src/shared/config/test-setup.ts"],
+      env: { VITE_API_BASE_URL: "http://api.test" },
     },
   }),
 );
 ```
+
+`test.env`는 테스트에서 `.env` 파일 없이도 환경 변수 검증이 통과하도록 고정값을 준다.
 
 `src/shared/config/test-setup.ts`:
 
@@ -285,9 +293,10 @@ trim_trailing_whitespace = true
 7. `@typescript-eslint/naming-convention` (typeLike PascalCase, 인터페이스 `I` 접두사 금지, variable camelCase/PascalCase/UPPER_CASE, function camelCase/PascalCase)
 8. eslint-plugin-boundaries (아래)
 9. `**/*.test.{ts,tsx}` 한정: @vitest/eslint-plugin `configs.recommended` + eslint-plugin-testing-library `configs['flat/react']`
-10. `*.config.{js,ts}` 한정: `tseslint.configs.disableTypeChecked`. `**/*.js`에는 `@eslint/js` recommended만
+10. `*.config.{js,ts}` 한정: `tseslint.configs.disableTypeChecked`. `**/*.js`에는 `@eslint/js` recommended만. `**/*.d.ts`에는 `consistent-type-definitions`, `no-explicit-any`, `no-unused-vars` 해제(모듈 확장 선언용)
 11. `**/*.{ts,tsx,js}` 전체: eslint-plugin-no-comments `disallowComments` (`allow: ["eslint", "global"]`, 도구 지시문 외 주석 금지)
 12. `eslint-config-prettier`
+13. `curly: ["error", "all"]`. `eslint-config-prettier`가 끄는 규칙이라 그 뒤에 다시 켠다
 
 boundaries 7 부분이다. `import/resolver` 설정이 없으면 `@/` 별칭 import가 해석되지 않아 외부 패키지(`origin: external`)로 분류되고 모든 정책을 통과한다. 반드시 eslint-import-resolver-typescript를 붙인다. 정책은 순서대로 평가되고 마지막 매칭이 결과를 정한다. `relationship: internal`은 같은 element 안의 import를 뜻한다.
 
@@ -406,6 +415,14 @@ export default {
   rules: { "subject-case": [0] },
 };
 ```
+
+### 5.13 `.env.example`
+
+```
+VITE_API_BASE_URL=https://fe-assignment-api.us-insight.com
+```
+
+`.env`는 `.gitignore`에 있다. 로컬에서는 `.env.example`을 복사해 `.env`를 만든다.
 
 ## 6. 훅 등록
 

@@ -50,7 +50,9 @@ src/
 ## 코드 컨벤션
 
 - 파일과 디렉토리 이름은 kebab-case, 훅은 camelCase. 모듈은 구현, 테스트, `index.ts`를 한 디렉토리로 묶는다. 상세는 `docs/file-structure.md`.
+- 함수와 모듈을 나누는 기준, 조건 분기와 시그니처 규칙, 커밋 전 자기 점검은 `docs/code-quality.md`.
 - 컴포넌트는 named export를 기본으로 하고, 라우트 진입 컴포넌트만 default export를 허용한다.
+- `if`, `else`, `for`, `while` 본문은 한 줄이라도 중괄호로 감싼다. ESLint `curly: all`이 강제한다.
 - 타입 전용 import는 `import type`으로 쓴다.
 - `enum`, `namespace`, 생성자 매개변수 프로퍼티는 쓰지 않는다. tsconfig의 `erasableSyntaxOnly`가 컴파일 오류로 막는다. 열거 값은 `as const` 객체와 유니언 타입으로 표현한다.
 - 객체 타입 선언은 `interface` 대신 `type`을 쓴다. props에 교차 타입(`&`)을 자주 쓰므로 한 가지로 통일한다. ESLint `consistent-type-definitions`가 강제한다.
