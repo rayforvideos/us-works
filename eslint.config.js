@@ -151,10 +151,22 @@ export default defineConfig([
     extends: [js.configs.recommended],
   },
   {
+    files: ["**/*.d.ts"],
+    rules: {
+      "@typescript-eslint/consistent-type-definitions": "off",
+      "@typescript-eslint/no-explicit-any": "off",
+      "@typescript-eslint/no-unused-vars": "off",
+    },
+  },
+  {
     files: ["**/*.{ts,tsx,js}"],
     plugins: { "no-comments": noComments },
     rules: { "no-comments/disallowComments": ["error", { allow: ["eslint", "global"] }] },
   },
 
   prettier,
+  {
+    files: ["**/*.{ts,tsx,js}"],
+    rules: { curly: ["error", "all"] },
+  },
 ]);
