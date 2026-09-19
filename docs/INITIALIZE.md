@@ -90,7 +90,8 @@ allowBuilds:
 ```
 us-works/
 ├── .editorconfig
-├── .env.example                    # VITE_API_BASE_URL
+├── .env.development                # 개발 모드 VITE_API_BASE_URL (커밋)
+├── .env.example                    # 변수 목록
 ├── .nvmrc                          # 24
 ├── .prettierignore
 ├── .prettierrc
@@ -416,13 +417,16 @@ export default {
 };
 ```
 
-### 5.13 `.env.example`
+### 5.13 환경 변수 파일
 
 ```
 VITE_API_BASE_URL=https://fe-assignment-api.us-insight.com
 ```
 
-`.env`는 `.gitignore`에 있다. 로컬에서는 `.env.example`을 복사해 `.env`를 만든다.
+- `.env.development`: 위 값을 담아 커밋한다. Vite가 개발 모드에서 자동으로 읽으므로 `pnpm dev`에 별도 준비가 없다.
+- `.env.example`: 필요한 변수 목록의 문서 역할이다.
+- `.env`: 개인 덮어쓰기용이며 `.gitignore`에 있다. Vite는 `.env`보다 모드 파일(`.env.development`)을 우선한다.
+- 테스트는 `vitest.config.ts`의 `test.env` 고정값을 쓴다.
 
 ## 6. 훅 등록
 
