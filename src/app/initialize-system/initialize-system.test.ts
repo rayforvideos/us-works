@@ -4,10 +4,11 @@ import { atom } from "jotai";
 import { initializeSystem } from "./initialize-system";
 
 describe("initializeSystem", () => {
-  it("Jotai 스토어와 QueryClient를 반환한다", () => {
+  it("Jotai 스토어, QueryClient, HTTP 클라이언트를 반환한다", () => {
     const system = initializeSystem();
 
     expect(system.queryClient).toBeInstanceOf(QueryClient);
+    expect(typeof system.httpClient.request).toBe("function");
     expect(typeof system.store.get).toBe("function");
     expect(typeof system.store.set).toBe("function");
     expect(typeof system.store.sub).toBe("function");
@@ -30,6 +31,13 @@ describe("initializeSystem", () => {
 
     expect(queries?.retry).toBe(1);
     expect(queries?.staleTime).toBe(30_000);
+  });
+
+  it("HTTP 클라이언트의 기본 URL은 환경 변수에서 읽고, 옵션으로 덮어쓸 수 있다", () => {
+    expect(initializeSystem().httpClient.defaults.baseURL).toBe("http://api.test");
+    expect(initializeSystem({ apiBaseUrl: "http://other.test" }).httpClient.defaults.baseURL).toBe(
+      "http://other.test",
+    );
   });
 
   it("전달한 QueryClient 옵션이 반영된다", () => {

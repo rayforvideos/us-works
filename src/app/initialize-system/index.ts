@@ -1,1 +1,2 @@
-export { type AppSystem, initializeSystem } from "./initialize-system";
+export { initializeSystem } from "./initialize-system";
+export { type AppSystem } from "./types";

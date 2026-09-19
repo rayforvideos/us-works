@@ -6,7 +6,7 @@ import { RouterProvider } from "react-router/dom";
 
 import { AppProviders } from "./app-providers";
 import { initializeSystem } from "./initialize-system";
-import { router } from "./router";
+import { createAppRouter } from "./router";
 
 const rootElement = document.getElementById("root");
 if (!rootElement) {
@@ -14,6 +14,7 @@ if (!rootElement) {
 }
 
 const system = initializeSystem();
+const router = createAppRouter();
 
 createRoot(rootElement).render(
   <StrictMode>

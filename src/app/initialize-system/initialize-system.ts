@@ -1,22 +1,14 @@
-import { type DefaultOptions, type QueryClient } from "@tanstack/react-query";
 import { createStore } from "jotai";
 
-import { createQueryClient } from "@/shared/api";
+import { createHttpClient, createQueryClient } from "@/shared/api";
+import { readEnv } from "@/shared/config";
 
-type AppStore = ReturnType<typeof createStore>;
-
-export type AppSystem = {
-  store: AppStore;
-  queryClient: QueryClient;
-};
-
-export type InitializeSystemOptions = {
-  queryClient?: DefaultOptions;
-};
+import { type AppSystem, type InitializeSystemOptions } from "./types";
 
 export function initializeSystem(options: InitializeSystemOptions = {}): AppSystem {
   const store = createStore();
+  const httpClient = createHttpClient({ baseUrl: options.apiBaseUrl ?? readEnv().apiBaseUrl });
   const queryClient = createQueryClient(options.queryClient);
 
-  return { store, queryClient };
+  return { store, queryClient, httpClient };
 }

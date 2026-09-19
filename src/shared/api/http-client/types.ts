@@ -1,0 +1,20 @@
+import { type AxiosAdapter } from "axios";
+
+import { type TokenRefreshHandlers } from "../token-refresher";
+
+type AccessToken = {
+  token: string;
+  expiresAt: string;
+};
+
+export type HttpClientAuth = TokenRefreshHandlers & {
+  getAccessToken: () => AccessToken | null;
+};
+
+export type CreateHttpClientOptions = {
+  baseUrl: string;
+  auth?: HttpClientAuth;
+  adapter?: AxiosAdapter;
+  now?: () => number;
+  expiryMarginMs?: number;
+};

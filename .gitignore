@@ -26,3 +26,5 @@ dist-ssr
 # Test artifacts
 .vitest
 coverage
+
+.env

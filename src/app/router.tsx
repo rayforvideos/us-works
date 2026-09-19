@@ -9,4 +9,6 @@ export const routes: RouteObject[] = [
   },
 ];
 
-export const router = createBrowserRouter(routes);
+export function createAppRouter() {
+  return createBrowserRouter(routes);
+}
