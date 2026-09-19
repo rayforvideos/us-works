@@ -1,10 +1,14 @@
 # us-works
 
-FE 과제(Us FE Developer Recruit Works) 저장소. React 19 + Vite 8 SPA이며 Feature-Sliced Design(FSD) 2.1 구조를 따른다. 결정 근거는 `adrs/`, 스캐폴딩 절차는 `docs/INITIALIZE.md`에 있다.
+FE 과제(Us FE Developer Recruit Works) 저장소. React 19 + Vite 8 SPA이며 Feature-Sliced Design(FSD) 2.1 구조를 따른다. 결정 근거는 `adrs/`, 기능 스펙은 `specs/`, 스캐폴딩 절차는 `docs/INITIALIZE.md`에 있다.
 
 ## 작업 방식
 
 - 커밋과 푸시는 매번 확인을 받은 뒤에만 실행한다. 메시지와 파일 목록을 먼저 보여준다.
+- 모든 변경은 ADR-0008의 흐름을 따른다. GitHub Issue를 만들고, `<이슈번호>-<짧은-영문-설명>` 브랜치에서만 작업하고, `main`으로 PR을 올린다. `main`에 직접 푸시하지 않는다.
+- 이슈 본문에는 대상 화면, 엔드포인트, 스펙 링크, 슬라이스 단위 작업 목록을 적고, 작업 목록은 코드를 쓰기 전에 확인을 받는다.
+- `feat` 이슈는 착수 전에 `specs/TEMPLATE.md` 형식으로 `specs/<이슈번호>-<이름>.md`를 쓴다. 규칙(`R-xx`)과 흐름(`S-xx`)의 ID를 테스트 이름에 그대로 쓰고, `[확인 필요]`가 남아 있으면 구현을 시작하지 않는다.
+- PR 본문 첫 줄에 `Closes #<이슈번호>`를 적고 템플릿의 완료 체크리스트를 모두 채운다. 체크하지 못하는 항목이 있으면 PR을 올리지 않는다. 합병은 CI 통과 후 merge commit으로 한다.
 - 답변 끝에 다음 단계나 후속 제안을 붙이지 않는다. 결과만 보고한다.
 - 한 파일을 여러 곳 고칠 때는 Edit을 쪼개지 않고 한 번에 다시 쓴다.
 - 의존성은 pnpm의 `minimumReleaseAge`(24시간) 정책을 따른다. 배포 직후 버전을 정확한 버전 지정으로 강제 설치하지 않고, `pnpm-workspace.yaml`에 `minimumReleaseAgeExclude`를 남기지 않는다.
