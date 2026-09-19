@@ -1,0 +1,69 @@
+# us-works
+
+FE 과제(Us FE Developer Recruit Works) 저장소. React 19 + Vite 8 SPA이며 Feature-Sliced Design(FSD) 2.1 구조를 따른다. 결정 근거는 `adrs/`, 스캐폴딩 절차는 `docs/INITIALIZE.md`에 있다.
+
+## 작업 방식
+
+- 커밋과 푸시는 매번 확인을 받은 뒤에만 실행한다. 메시지와 파일 목록을 먼저 보여준다.
+- 답변 끝에 다음 단계나 후속 제안을 붙이지 않는다. 결과만 보고한다.
+- 한 파일을 여러 곳 고칠 때는 Edit을 쪼개지 않고 한 번에 다시 쓴다.
+
+## ADR 규칙
+
+- `adrs/TEMPLATE.md`를 따른다. 섹션은 Status, Context, Decision, Consequences 네 개만 쓴다.
+- 제목과 섹션 헤더는 영어, 본문은 한국어.
+- Decision은 능동태 문장 목록이며 굵은 글씨를 쓰지 않는다. 고정 항목 열거만 `이름: 설명` 하위 목록으로 쓴다.
+- 새 ADR은 직전 ADR과 구조가 완전히 같아야 한다.
+
+## 커밋 메시지
+
+- Conventional Commits. 타입(`feat`, `fix`, `docs`, `chore`, `refactor`, `test`, `style`)은 영어, 설명은 한국어.
+- 예: `feat: 로그인 폼 유효성 검사 추가`, `docs: FSD 정적 검사 ADR 추가`
+
+## 디렉토리 구조 (FSD 2.1)
+
+```
+src/
+├── app/        # 앱 초기화: 프로바이더, 라우터, 전역 스타일
+├── pages/      # 라우트 단위 화면
+├── widgets/    # 독립적인 큰 UI 블록
+├── features/   # 사용자 행위 단위 기능
+├── entities/   # 비즈니스 엔티티
+└── shared/     # 도메인 지식이 없는 재사용 코드 (ui, api, lib, config)
+```
+
+### 레이어 규칙
+
+- 레이어 순서는 `app > pages > widgets > features > entities > shared`이며, 각 레이어는 자신보다 아래 레이어만 import한다.
+- `pages`, `widgets`, `features`, `entities`는 슬라이스(도메인 폴더)로 나누고, 같은 레이어의 슬라이스끼리는 import하지 않는다.
+- 같은 레이어 슬라이스 간 참조가 불가피하면 `entities` 레이어에서만 `@x` 표기법으로 허용한다. 공개하는 쪽이 `entities/<entity>/@x/<consumer>.ts`를 두고, 소비자는 `@/entities/<entity>/@x/<consumer>`로만 import한다.
+- 슬라이스 내부는 `ui`, `model`, `api`, `lib`, `config` 세그먼트로 나누되 필요한 것만 만든다.
+- 모든 슬라이스는 `index.ts`를 공개 API로 두고, 외부에서는 이 파일만 import한다. `export *`는 쓰지 않는다.
+- `shared/ui`와 `shared/lib`는 레이어 단일 index 대신 컴포넌트, 모듈별 `index.ts`를 둔다.
+- Jotai 아톰은 해당 슬라이스의 `model`에 둔다. 여러 기능이 공유하는 도메인 상태는 `entities/<엔티티>/model`에 두고, `shared`에는 도메인 상태를 두지 않는다.
+- TanStack Query 훅과 요청 함수는 `api` 세그먼트에 둔다.
+- 레이어 간 import는 `@/` 절대 경로 별칭을, 슬라이스 내부 import는 상대 경로를 사용한다.
+- 필요한 슬라이스만 만들며, 비어 있는 레이어 폴더는 만들지 않는다.
+- 위 규칙은 eslint-plugin-boundaries와 steiger가 강제한다. 위반은 린트 실패다.
+
+## 코드 컨벤션
+
+- 컴포넌트 파일명은 PascalCase(`Button.tsx`), 그 외는 camelCase 또는 kebab-case.
+- 컴포넌트는 named export를 기본으로 하고, 라우트 진입 컴포넌트만 default export를 허용한다.
+- 타입 전용 import는 `import type`으로 쓴다.
+- React Router의 DOM 전용 API(`RouterProvider` 등)는 `react-router/dom`에서, 그 외는 `react-router`에서 import한다.
+- React Compiler가 켜져 있다. `useMemo`, `useCallback`, `memo`를 수동으로 넣지 않고, 컴파일러 규칙(eslint-plugin-react-hooks)을 따른다.
+- 스타일은 Tailwind 유틸리티를 우선 사용하고, 반복되는 조합은 `shared/ui` 컴포넌트로 추출한다. 디자인 토큰은 `src/app/styles/globals.css`의 `@theme`에 정의한다.
+- 모든 ESLint 규칙은 `error` 또는 `off`다. 파일 단위 `eslint-disable`은 금지하고, 줄 단위 예외는 이유를 주석으로 남긴다.
+- 테스트는 Vitest + Testing Library. 사용자 관점의 역할 기반 쿼리(`getByRole`)를 우선 쓴다. Vitest 5는 `clearMocks`가 기본 true다.
+
+## 검증 명령
+
+| 명령               | 용도                                                    |
+| ------------------ | ------------------------------------------------------- |
+| `pnpm check`       | typecheck, lint, knip, 포맷 검사, 테스트를 한 번에 실행 |
+| `pnpm lint`        | ESLint(`--max-warnings 0`)와 steiger                    |
+| `pnpm lint:unused` | knip                                                    |
+| `pnpm test:run`    | Vitest 단발 실행                                        |
+
+커밋 전(lint-staged), 커밋 메시지(commitlint), 푸시 전(`pnpm check`)에 훅이 자동으로 실행된다.
