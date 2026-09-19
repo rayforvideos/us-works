@@ -1,0 +1,6 @@
+@import "tailwindcss";
+
+@theme {
+  --color-primary: #000000;
+  --font-sans: "Pretendard", system-ui, sans-serif;
+}

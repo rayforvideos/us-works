@@ -1,0 +1,7 @@
+pnpm-lock.yaml
+node_modules
+dist
+coverage
+.vitest
+# 승인된 ADR은 내용도 포맷도 바꾸지 않는다 (adrs/TEMPLATE.md 규칙)
+adrs/
