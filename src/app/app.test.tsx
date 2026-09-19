@@ -4,6 +4,7 @@ import { render, screen } from "@testing-library/react";
 
 import { App } from "./app";
 import { AppProviders } from "./app-providers";
+import { initializeSystem } from "./initialize-system";
 import { routes } from "./router";
 
 describe("App", () => {
@@ -13,11 +14,12 @@ describe("App", () => {
     expect(screen.getByRole("heading", { name: "US Alliance" })).toBeInTheDocument();
   });
 
-  it("프로바이더와 라우터를 통해 루트 경로가 렌더링된다", async () => {
+  it("초기화된 시스템과 라우터를 통해 루트 경로가 렌더링된다", async () => {
+    const system = initializeSystem({ queryClient: { queries: { retry: false } } });
     const router = createMemoryRouter(routes, { initialEntries: ["/"] });
 
     render(
-      <AppProviders>
+      <AppProviders {...system}>
         <RouterProvider router={router} />
       </AppProviders>,
     );

@@ -1,25 +1,17 @@
 import { type ReactNode } from "react";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { QueryClientProvider } from "@tanstack/react-query";
 import { Provider as JotaiProvider } from "jotai";
 
-const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      retry: 1,
-      staleTime: 30_000,
-      refetchOnWindowFocus: false,
-    },
-  },
-});
+import { type AppSystem } from "./initialize-system";
 
-type AppProvidersProps = {
+type AppProvidersProps = AppSystem & {
   children: ReactNode;
 };
 
-export function AppProviders({ children }: AppProvidersProps) {
+export function AppProviders({ store, queryClient, children }: AppProvidersProps) {
   return (
     <QueryClientProvider client={queryClient}>
-      <JotaiProvider>{children}</JotaiProvider>
+      <JotaiProvider store={store}>{children}</JotaiProvider>
     </QueryClientProvider>
   );
 }
