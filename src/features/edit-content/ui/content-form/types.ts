@@ -8,8 +8,3 @@ export type ContentFormProps = {
   requestError?: string;
   onValuesChange?: (values: ContentFormValues) => void;
 };
-
-export type ValuesWatcherProps = {
-  values: ContentFormValues;
-  onChange?: (values: ContentFormValues) => void;
-};

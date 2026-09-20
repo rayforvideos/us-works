@@ -3,6 +3,7 @@ export const TEXT_STYLE_TOKENS = [
   "12-m500",
   "12-sb600",
   "12-b700",
+  "14-r400",
   "14-m500",
   "14-sb600",
   "16-m500",

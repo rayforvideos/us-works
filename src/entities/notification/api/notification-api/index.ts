@@ -1,1 +1,7 @@
-export { fetchNotifications } from "./notification-api";
+export {
+  createNotification,
+  fetchNotification,
+  fetchNotifications,
+  updateNotification,
+  updateNotificationSchedule,
+} from "./notification-api";

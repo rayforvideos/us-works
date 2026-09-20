@@ -1,4 +1,4 @@
-import { type SendStatus, type SendStatusTone } from "./types";
+import { type SendStatus, type SendStatusTone, type TargetType } from "./types";
 
 export const SEND_STATUSES = ["pending", "sent", "failed"] as const;
 
@@ -6,6 +6,14 @@ export const SEND_STATUS_LABELS: Record<SendStatus, string> = {
   sent: "발송",
   pending: "예약",
   failed: "실패",
+};
+
+export const TARGET_TYPES = ["all", "follower", "member"] as const;
+
+export const TARGET_TYPE_LABELS: Record<TargetType, string> = {
+  all: "전체",
+  follower: "팔로워",
+  member: "멤버십",
 };
 
 export const SEND_STATUS_TONES: Record<SendStatus, SendStatusTone> = {
@@ -21,13 +29,3 @@ export const NOTIFICATION_LIST_PARAM_KEYS = {
 export const DEFAULT_PAGE_LIMIT = 10;
 
 export const MAX_PAGE = 9999;
-
-export const SCHEDULED_AT_FORMAT_OPTIONS: Intl.DateTimeFormatOptions = {
-  timeZone: "Asia/Seoul",
-  year: "numeric",
-  month: "2-digit",
-  day: "2-digit",
-  hour: "2-digit",
-  minute: "2-digit",
-  hour12: false,
-};

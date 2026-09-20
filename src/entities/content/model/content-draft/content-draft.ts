@@ -1,9 +1,7 @@
+import { toSeoulParts } from "@/shared/lib/seoul-time";
+
 import { CONTENT_CATEGORIES, type ContentCategory } from "../content";
-import {
-  CONTENT_DRAFT_KEY,
-  SAVED_AT_DATE_TIME_FORMAT_OPTIONS,
-  SAVED_AT_FORMAT_OPTIONS,
-} from "./constants";
+import { CONTENT_DRAFT_KEY } from "./constants";
 import { type ContentDraft, type ContentDraftValues } from "./types";
 
 function readString(source: Record<string, unknown>, key: string): string {
@@ -45,18 +43,6 @@ function isEmptyDraftValues(values: ContentDraftValues): boolean {
     values.linkUrl === "" &&
     values.categories.length === 0
   );
-}
-
-function parseSavedAt(iso: string): Date | null {
-  const saved = new Date(iso);
-  if (Number.isNaN(saved.getTime())) {
-    return null;
-  }
-  return saved;
-}
-
-function readPart(parts: Intl.DateTimeFormatPart[], type: Intl.DateTimeFormatPartTypes): string {
-  return parts.find((part) => part.type === type)?.value ?? "";
 }
 
 function readRawDraft(): string | null {
@@ -107,22 +93,17 @@ export function clearContentDraft(): void {
 }
 
 export function formatSavedAt(iso: string): string {
-  const saved = parseSavedAt(iso);
-  if (saved === null) {
+  const parts = toSeoulParts(new Date(iso));
+  if (parts === null) {
     return "";
   }
-  return new Intl.DateTimeFormat("ko-KR", SAVED_AT_FORMAT_OPTIONS).format(saved);
+  return `${parts.hour}:${parts.minute}`;
 }
 
 export function formatSavedAtDateTime(iso: string): string {
-  const saved = parseSavedAt(iso);
-  if (saved === null) {
+  const parts = toSeoulParts(new Date(iso));
+  if (parts === null) {
     return "";
   }
-  const parts = new Intl.DateTimeFormat("ko-KR", SAVED_AT_DATE_TIME_FORMAT_OPTIONS).formatToParts(
-    saved,
-  );
-  const date = `${readPart(parts, "year")}년 ${readPart(parts, "month")}월 ${readPart(parts, "day")}일`;
-
-  return `${date} ${readPart(parts, "hour")}:${readPart(parts, "minute")}`;
+  return `${parts.year}년 ${parts.month}월 ${parts.day}일 ${parts.hour}:${parts.minute}`;
 }

@@ -20,9 +20,20 @@ describe("TextField 변형", () => {
     expect(input).toHaveAccessibleDescription("필수 정보입니다.");
   });
 
+  it("invalid면 문구 없이 테두리만 오류 상태가 된다", () => {
+    render(<TextField aria-label="제목" invalid />);
+    expect(screen.getByRole("textbox", { name: "제목" })).toHaveAttribute("aria-invalid", "true");
+    expect(screen.getByTestId("error-text")).toBeEmptyDOMElement();
+  });
+
   it("error가 없어도 오류 문구 자리를 유지한다", () => {
     render(<TextField aria-label="제목" />);
     expect(screen.getByTestId("error-text")).toBeEmptyDOMElement();
+  });
+
+  it("reserveError가 false이고 오류가 없으면 오류 줄을 렌더링하지 않는다", () => {
+    render(<TextField aria-label="제목" reserveError={false} />);
+    expect(screen.queryByTestId("error-text")).not.toBeInTheDocument();
   });
 
   it("disabled면 비활성 상태가 된다", () => {

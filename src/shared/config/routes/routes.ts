@@ -12,4 +12,5 @@ export const ROUTES = {
   alarmNew: "/alarms/new",
   alarmNewForContent: (contentId: number) => `/alarms/new?contentId=${String(contentId)}`,
   alarmDetail: (id: number) => `/alarms/${String(id)}`,
+  alarmDetailPattern: "/alarms/:id",
 } as const;

@@ -7,5 +7,7 @@ export type TextFieldProps = Omit<ComponentPropsWithRef<"input">, "type" | "size
   clearable?: boolean;
   showCounter?: boolean;
   error?: ReactNode;
+  invalid?: boolean;
+  reserveError?: boolean;
   onClear?: () => void;
 };
