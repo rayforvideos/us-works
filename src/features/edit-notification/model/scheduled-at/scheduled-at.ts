@@ -1,6 +1,6 @@
 import { toSeoulParts } from "@/shared/lib/seoul-time";
 
-import { SCHEDULED_AT_MINUTE_PATTERN, SEOUL_OFFSET, STEP_MINUTES } from "./constants";
+import { SEOUL_OFFSET } from "./constants";
 
 function toSeoulDateTime(date: Date): string {
   const parts = toSeoulParts(date);
@@ -19,8 +19,13 @@ export function fromScheduledAt(iso: string): string {
   return toSeoulDateTime(new Date(iso));
 }
 
-export function toMinDateTime(now: Date): string {
-  return toSeoulDateTime(now);
+export function toMinDate(now: Date): string {
+  const parts = toSeoulParts(now);
+  if (parts === null) {
+    return "";
+  }
+
+  return `${parts.year}-${parts.month}-${parts.day}`;
 }
 
 export function isFutureScheduledAt(local: string, now: Date): boolean {
@@ -28,13 +33,6 @@ export function isFutureScheduledAt(local: string, now: Date): boolean {
   if (Number.isNaN(scheduled.getTime())) {
     return false;
   }
-  return scheduled.getTime() > now.getTime();
-}
 
-export function isHalfHourStep(local: string): boolean {
-  const matched = SCHEDULED_AT_MINUTE_PATTERN.exec(local);
-  if (matched === null) {
-    return false;
-  }
-  return Number(matched[1]) % STEP_MINUTES === 0;
+  return scheduled.getTime() > now.getTime();
 }

@@ -2,12 +2,11 @@ import { z } from "zod";
 
 import { TARGET_TYPES } from "@/entities/notification";
 
-import { isFutureScheduledAt, isHalfHourStep } from "../scheduled-at";
+import { isFutureScheduledAt } from "../scheduled-at";
 import {
   MAX_TITLE_LENGTH,
   PAST_TIME_MESSAGE,
   REQUIRED_MESSAGE,
-  STEP_TIME_MESSAGE,
   TITLE_MAX_MESSAGE,
 } from "./constants";
 
@@ -23,9 +22,5 @@ export const notificationInputSchema = z
     }
     if (!isFutureScheduledAt(values.scheduledAt, new Date())) {
       ctx.addIssue({ code: "custom", path: ["scheduledAt"], message: PAST_TIME_MESSAGE });
-      return;
-    }
-    if (!isHalfHourStep(values.scheduledAt)) {
-      ctx.addIssue({ code: "custom", path: ["scheduledAt"], message: STEP_TIME_MESSAGE });
     }
   });

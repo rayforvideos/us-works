@@ -32,16 +32,6 @@ describe("notificationInputSchema", () => {
     );
   });
 
-  it('R-06 시간의 분이 00 또는 30이 아니면 "30분 단위로 선택해주세요." 오류다', () => {
-    expect(readMessage({ ...VALID_VALUES, scheduledAt: "2099-12-31T14:15" }, "scheduledAt")).toBe(
-      "30분 단위로 선택해주세요.",
-    );
-    expect(
-      notificationInputSchema.safeParse({ ...VALID_VALUES, scheduledAt: "2099-12-31T14:00" })
-        .success,
-    ).toBe(true);
-  });
-
   it("모든 값이 유효하면 통과하고 제목은 50자까지 허용한다", () => {
     expect(notificationInputSchema.safeParse(VALID_VALUES).success).toBe(true);
     expect(

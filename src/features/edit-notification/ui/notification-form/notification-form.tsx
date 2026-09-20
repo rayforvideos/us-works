@@ -9,7 +9,7 @@ import { RadioGroup, RadioGroupItem } from "@/shared/ui/radio-group";
 import { TextField } from "@/shared/ui/text-field";
 
 import { MAX_TITLE_LENGTH, notificationInputSchema } from "../../model/notification-input-schema";
-import { toMinDateTime } from "../../model/scheduled-at";
+import { toMinDate } from "../../model/scheduled-at";
 import { SCHEDULED_AT_PLACEHOLDER, TITLE_PLACEHOLDER } from "./constants";
 import {
   fieldErrorClass,
@@ -122,7 +122,7 @@ export function NotificationForm({
                 aria-label="발송 시간"
                 aria-describedby={error === undefined ? undefined : scheduledAtErrorId}
                 placeholder={SCHEDULED_AT_PLACEHOLDER}
-                min={toMinDateTime(new Date())}
+                min={toMinDate(new Date())}
                 value={field.state.value}
                 onChange={(next) => {
                   field.handleChange(next);
