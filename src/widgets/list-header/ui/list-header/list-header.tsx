@@ -1,4 +1,4 @@
-import { NavLink } from "react-router";
+import { Link, NavLink } from "react-router";
 
 import { cn } from "@/shared/lib/cn";
 import { buttonVariants } from "@/shared/ui/button";
@@ -8,26 +8,27 @@ import { LogoIcon } from "@/shared/ui/icon";
 import {
   actionsClass,
   containerClass,
-  logoButtonClass,
+  headerClass,
+  logoLinkClass,
   tabActiveClass,
   tabListClass,
 } from "./list-header-variants";
 import { type ListHeaderProps } from "./types";
 
-export function ListHeader({ tabs, action }: ListHeaderProps) {
+export function ListHeader({ homeTo, tabs, action }: ListHeaderProps) {
   return (
-    <header>
+    <header className={headerClass()}>
       <Container className={containerClass()}>
-        <button
-          type="button"
-          aria-label="맨 위로"
-          className={logoButtonClass()}
+        <Link
+          to={homeTo}
+          aria-label="홈으로"
+          className={logoLinkClass()}
           onClick={() => {
             window.scrollTo({ top: 0, behavior: "smooth" });
           }}
         >
           <LogoIcon />
-        </button>
+        </Link>
         <nav aria-label="주요 메뉴">
           <ul className={tabListClass()}>
             {tabs.map((tab) => (

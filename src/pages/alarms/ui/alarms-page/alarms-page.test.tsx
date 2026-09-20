@@ -72,6 +72,18 @@ describe("AlarmsPage", () => {
     expect(screen.getByRole("link", { name: "알람" })).toHaveAttribute("aria-current", "page");
   });
 
+  it("S-09 Given 알람 탭 When 로고를 누르면 Then `/`로 이동하고 창 스크롤이 맨 위로 이동한다", async () => {
+    const scrollTo = vi.spyOn(window, "scrollTo").mockImplementation(() => undefined);
+    const { router } = renderAlarmsPage();
+
+    fireEvent.click(screen.getByRole("link", { name: "홈으로" }));
+
+    await waitFor(() => {
+      expect(router.state.location.pathname).toBe("/");
+    });
+    expect(scrollTo).toHaveBeenCalledWith({ top: 0, behavior: "smooth" });
+  });
+
   it("목록을 받으면 제목과 행, 페이지네이션을 보여준다", async () => {
     renderAlarmsPage();
 

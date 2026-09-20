@@ -1,10 +1,12 @@
 import { cva } from "class-variance-authority";
 
+export const headerClass = cva("sticky top-0 z-10 bg-white");
+
 export const containerClass = cva(
   "flex h-17.5 items-center gap-6 border-b border-grey-200 bg-white",
 );
 
-export const logoButtonClass = cva(
+export const logoLinkClass = cva(
   "flex w-30 shrink-0 cursor-pointer items-center outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-green-70",
 );
 
