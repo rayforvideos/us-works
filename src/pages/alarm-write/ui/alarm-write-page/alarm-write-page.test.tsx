@@ -57,13 +57,16 @@ function respondToEdit(notification: unknown) {
   return () => createOkResponse(notification);
 }
 
-function pickScheduledAt(value: string) {
-  fireEvent.change(screen.getByLabelText("발송 시간"), { target: { value } });
+async function pickScheduledAt(date: string, time: string) {
+  fireEvent.click(screen.getByRole("button", { name: "발송 시간" }));
+  await screen.findByRole("dialog");
+  fireEvent.change(screen.getByLabelText("발송 날짜"), { target: { value: date } });
+  fireEvent.click(screen.getByRole("option", { name: time }));
 }
 
-function fillForm() {
+async function fillForm() {
   fireEvent.change(screen.getByLabelText("제목"), { target: { value: "알림 제목" } });
-  pickScheduledAt("2099-12-31T14:30");
+  await pickScheduledAt("2099-12-31", "14:30");
 }
 
 function send() {
@@ -90,7 +93,7 @@ describe("AlarmWritePage 작성", () => {
     );
 
     await screen.findByLabelText("제목");
-    fillForm();
+    await fillForm();
     send();
 
     expect(await screen.findByText("알람 목록")).toBeInTheDocument();
@@ -112,7 +115,7 @@ describe("AlarmWritePage 작성", () => {
     );
 
     await screen.findByLabelText("제목");
-    fillForm();
+    await fillForm();
     send();
 
     expect(await screen.findByRole("alert")).toHaveTextContent("이미 알림이 있는 콘텐츠입니다.");
@@ -165,7 +168,7 @@ describe("AlarmWritePage 수정", () => {
     renderPage("/alarms/12", respondToEdit(SENT_NOTIFICATION));
 
     expect(await screen.findByLabelText("제목")).toBeDisabled();
-    expect(screen.getByLabelText("발송 시간")).toBeDisabled();
+    expect(screen.getByRole("button", { name: "발송 시간" })).toBeDisabled();
     expect(screen.queryByRole("button", { name: /발송하기/ })).not.toBeInTheDocument();
   });
 
@@ -187,7 +190,7 @@ describe("AlarmWritePage 수정", () => {
     const { calls } = renderPage("/alarms/12", respondToEdit(EDITED_NOTIFICATION));
 
     await screen.findByLabelText("제목");
-    pickScheduledAt("2099-10-01T14:30");
+    await pickScheduledAt("2099-10-01", "14:30");
     send();
 
     expect(await screen.findByText("알람 목록")).toBeInTheDocument();

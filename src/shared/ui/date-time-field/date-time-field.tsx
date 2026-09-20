@@ -1,16 +1,28 @@
-import { type ChangeEvent, type MouseEvent } from "react";
+import { useState } from "react";
+import { Popover } from "@base-ui/react/popover";
 
 import { cn } from "@/shared/lib/cn";
 
-import { boxVariants, overlayInputClass, valueVariants } from "./date-time-field-variants";
+import {
+  boxVariants,
+  dateInputClass,
+  popupClass,
+  positionerClass,
+  timeColumnClass,
+  timeHeaderClass,
+  timeListClass,
+  timeOptionVariants,
+  valueVariants,
+} from "./date-time-field-variants";
 import { formatDateTimeLabel } from "./format-date-time-label";
-import { snapToStep } from "./snap-to-step";
-import { type DateTimeFieldProps } from "./types";
+import { buildTimeOptions } from "./time-options";
+import { type DateTimeDraft, type DateTimeFieldProps } from "./types";
 
-/**
- * @constants
- */
-const HALF_HOUR_STEP = 1800;
+function scrollOptionIntoView(node: HTMLButtonElement | null) {
+  if (node !== null) {
+    node.scrollIntoView({ block: "nearest" });
+  }
+}
 
 export function DateTimeField({
   value,
@@ -19,49 +31,93 @@ export function DateTimeField({
   invalid = false,
   disabled = false,
   min,
-  step = HALF_HOUR_STEP,
   id,
   "aria-label": ariaLabel,
   "aria-labelledby": ariaLabelledby,
   "aria-describedby": ariaDescribedby,
   className,
 }: DateTimeFieldProps) {
+  const [open, setOpen] = useState(false);
+  const [draft, setDraft] = useState<DateTimeDraft>({ date: "", time: "" });
   const label = formatDateTimeLabel(value);
   const isFilled = label !== "";
 
-  function changeValue(event: ChangeEvent<HTMLInputElement>) {
-    onChange(snapToStep(event.target.value, step));
+  function changeOpen(next: boolean) {
+    if (next) {
+      const [date = "", time = ""] = value.split("T");
+      setDraft({ date, time });
+    }
+    setOpen(next);
   }
 
-  function openPicker(event: MouseEvent<HTMLInputElement>) {
-    const input = event.currentTarget;
-    try {
-      input.showPicker();
-    } catch {
-      input.focus();
+  function pickDraft(next: DateTimeDraft) {
+    setDraft(next);
+    if (next.date !== "" && next.time !== "") {
+      onChange(`${next.date}T${next.time}`);
+      setOpen(false);
     }
   }
 
   return (
-    <div className={cn(boxVariants({ disabled, invalid }), className)}>
-      <span aria-hidden="true" className={valueVariants({ filled: isFilled })}>
-        {isFilled ? label : placeholder}
-      </span>
-      <input
-        type="datetime-local"
+    <Popover.Root open={open} onOpenChange={changeOpen}>
+      <Popover.Trigger
         id={id}
         aria-label={ariaLabel}
         aria-labelledby={ariaLabelledby}
         aria-describedby={ariaDescribedby}
         aria-invalid={invalid || undefined}
-        value={value}
-        min={min}
-        step={step}
         disabled={disabled}
-        onChange={changeValue}
-        onClick={openPicker}
-        className={overlayInputClass()}
-      />
-    </div>
+        className={cn(boxVariants({ disabled, invalid }), className)}
+      >
+        <span className={valueVariants({ filled: isFilled })}>
+          {isFilled ? label : placeholder}
+        </span>
+      </Popover.Trigger>
+      <Popover.Portal>
+        <Popover.Positioner
+          side="bottom"
+          align="start"
+          sideOffset={8}
+          className={positionerClass()}
+        >
+          <Popover.Popup className={popupClass()}>
+            <input
+              type="date"
+              aria-label="발송 날짜"
+              min={min}
+              value={draft.date}
+              onChange={(event) => {
+                pickDraft({ ...draft, date: event.target.value });
+              }}
+              className={dateInputClass()}
+            />
+            <div className={timeColumnClass()}>
+              <p className={timeHeaderClass()}>Time</p>
+              <div role="listbox" aria-label="발송 시간" className={timeListClass()}>
+                {buildTimeOptions(draft.time).map((time) => {
+                  const selected = time === draft.time;
+
+                  return (
+                    <button
+                      key={time}
+                      type="button"
+                      role="option"
+                      aria-selected={selected}
+                      ref={selected ? scrollOptionIntoView : undefined}
+                      onClick={() => {
+                        pickDraft({ ...draft, time });
+                      }}
+                      className={timeOptionVariants({ selected })}
+                    >
+                      {time}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          </Popover.Popup>
+        </Popover.Positioner>
+      </Popover.Portal>
+    </Popover.Root>
   );
 }

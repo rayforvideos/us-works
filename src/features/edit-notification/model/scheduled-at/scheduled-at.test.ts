@@ -1,10 +1,4 @@
-import {
-  fromScheduledAt,
-  isFutureScheduledAt,
-  isHalfHourStep,
-  toMinDateTime,
-  toScheduledAt,
-} from ".";
+import { fromScheduledAt, isFutureScheduledAt, toMinDate, toScheduledAt } from ".";
 
 describe("toScheduledAt", () => {
   it("R-05 요청의 `scheduled_at`은 선택한 날짜·시간을 `+09:00` 오프셋의 ISO 8601로 만든다", () => {
@@ -24,9 +18,9 @@ describe("fromScheduledAt", () => {
   });
 });
 
-describe("toMinDateTime", () => {
-  it("지금을 서울 기준 `yyyy-MM-ddTHH:mm`으로 돌려준다", () => {
-    expect(toMinDateTime(new Date("2026-09-20T23:30:00Z"))).toBe("2026-09-21T08:30");
+describe("toMinDate", () => {
+  it("오늘을 서울 기준 `yyyy-MM-dd`로 돌려준다", () => {
+    expect(toMinDate(new Date("2026-09-20T23:30:00Z"))).toBe("2026-09-21");
   });
 });
 
@@ -37,14 +31,5 @@ describe("isFutureScheduledAt", () => {
     expect(isFutureScheduledAt("2026-09-20T10:30", now)).toBe(true);
     expect(isFutureScheduledAt("2026-09-20T09:30", now)).toBe(false);
     expect(isFutureScheduledAt("", now)).toBe(false);
-  });
-});
-
-describe("isHalfHourStep", () => {
-  it("분이 00 또는 30일 때만 참이다", () => {
-    expect(isHalfHourStep("2027-04-05T14:00")).toBe(true);
-    expect(isHalfHourStep("2027-04-05T14:30")).toBe(true);
-    expect(isHalfHourStep("2027-04-05T14:15")).toBe(false);
-    expect(isHalfHourStep("")).toBe(false);
   });
 });
