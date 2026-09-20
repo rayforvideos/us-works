@@ -27,8 +27,7 @@ dist-ssr
 .vitest
 coverage
 
-.env
-.env.local
-.env.*.local
+.env*
+!.env.example
 
 .claude/approve
