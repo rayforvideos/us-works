@@ -1,15 +1,6 @@
 import { type AxiosAdapter } from "axios";
 
-import { type TokenRefreshHandlers } from "../token-refresher";
-
-type AccessToken = {
-  token: string;
-  expiresAt: string;
-};
-
-export type HttpClientAuth = TokenRefreshHandlers & {
-  getAccessToken: () => AccessToken | null;
-};
+import { type HttpClientAuth } from "../auth-interceptor";
 
 export type CreateHttpClientOptions = {
   baseUrl: string;

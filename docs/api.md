@@ -13,17 +13,18 @@ HTTP 클라이언트의 동작과 API 호출 코드의 배치를 정한다. API�
 
 `shared/api` 아래 모듈과 역할이다. 각 모듈은 자기 계약만 테스트한다.
 
-| 모듈              | 역할                                                                                    | 테스트가 덮는 계약                                |
-| ----------------- | --------------------------------------------------------------------------------------- | ------------------------------------------------- |
-| `api-error`       | `ApiError` 클래스, 상태 코드 → `kind` 분류, axios 오류를 `ApiError`로 변환              | 분류표, 네트워크와 취소, 공통 응답 형식 아닌 본문 |
-| `token-refresher` | 갱신 단일 실행, 진행 중 Promise 조회, 실패 시 `onUnauthorized` 1회 알림                 | 동시 호출 1회 실행, 실패와 예외 처리, 알림 초기화 |
-| `http-client`     | axios 인스턴스 생성과 인터셉터 조립. 만료 확인, 헤더 부착, 401 재시도, 응답 데이터 추출 | 인증 흐름 전체와 동시 요청 시나리오               |
-| `query-client`    | `QueryClient` 팩토리와 `kind` 기반 재시도 정책                                          | 기본 옵션, 덮어쓰기, 재시도 대상 분류             |
+| 모듈               | 역할                                                                       | 테스트가 덮는 계약                                 |
+| ------------------ | -------------------------------------------------------------------------- | -------------------------------------------------- |
+| `api-error`        | `ApiError` 클래스, 상태 코드 → `kind` 분류, axios 오류를 `ApiError`로 변환 | 분류표, 네트워크와 취소, 공통 응답 형식 아닌 본문  |
+| `token-refresher`  | 갱신 단일 실행, 진행 중 Promise 조회, 실패 시 `onUnauthorized` 1회 알림    | 동시 호출 1회 실행, 실패와 예외 처리, 알림 초기화  |
+| `auth-interceptor` | 인증 요청에 헤더 부착, 만료 확인, 갱신 대기, 401 재시도                    | 인증 흐름 전체와 동시 요청 시나리오                |
+| `http-client`      | axios 인스턴스 생성과 인터셉터 조립. 응답 데이터 추출과 오류 정규화        | 기본 동작, 공통 응답 형식 처리, 인터셉터 등록 순서 |
+| `query-client`     | `QueryClient` 팩토리와 `kind` 기반 재시도 정책                             | 기본 옵션, 덮어쓰기, 재시도 대상 분류              |
 
 `http-client`는 인터셉터를 두 함수로 나눠 등록한다. axios 응답 인터셉터는 등록 순서대로 실행되므로 순서를 바꾸면 401 처리가 깨진다.
 
-1. `attachAuthInterceptors`: `auth` 옵션이 있을 때만 등록한다. 요청 인터셉터는 `runWhen`으로 `skipAuth` 요청을 건너뛰고, 만료 확인과 헤더 부착을 한다. 응답 오류 인터셉터는 원본 axios 오류의 401을 보고 갱신과 재시도를 한다.
-2. `attachResponseInterceptors`: 항상 등록한다. 공통 응답 형식에서 `data`를 추출하고, 남은 오류를 `ApiError`로 정규화한다. 인증 인터셉터보다 뒤에 있어야 401 판단 시점에 원본 오류가 남아 있다.
+1. `attachAuthInterceptors`: `shared/api/auth-interceptor/`에 있고 `auth` 옵션이 있을 때만 등록한다. 요청 인터셉터는 `runWhen`으로 `skipAuth` 요청을 건너뛰고, 만료 확인과 헤더 부착을 한다. 응답 오류 인터셉터는 원본 axios 오류의 401을 보고 갱신과 재시도를 한다. 요청 설정을 넓히는 `axios.d.ts`도 이 모듈에 있다.
+2. `attachResponseInterceptors`: `shared/api/http-client/`에 있고 항상 등록한다. 공통 응답 형식에서 `data`를 추출하고, 남은 오류를 `ApiError`로 정규화한다. 인증 인터셉터보다 뒤에 있어야 401 판단 시점에 원본 오류가 남아 있다.
 
 `auth`가 없는 클라이언트는 2번만 가진다.
 
@@ -109,7 +110,7 @@ HTTP 클라이언트의 동작과 API 호출 코드의 배치를 정한다. API�
 ### 인증 제외 요청
 
 - 로그인, 회원가입, 토큰 갱신 요청은 요청 설정에 `skipAuth: true`를 단다.
-- `skipAuth`와 내부 플래그(`authRetried`, `authExpiryChecked`)는 `shared/api/http-client/axios.d.ts`에서 axios의 `AxiosRequestConfig`를 모듈 확장으로 넓혀 추가한다. 모듈 확장은 원본과 같은 선언 형태(`interface`, 제네릭 `D = any`)를 써야 하므로 ESLint는 `**/*.d.ts`에 한해 `consistent-type-definitions`, `no-explicit-any`, `no-unused-vars`를 끈다. 내부 플래그를 설정 객체에 실어 보내는 이유는 axios가 재시도 시 설정을 새 객체로 복사하면서 알려지지 않은 키를 유지하기 때문이다.
+- `skipAuth`와 내부 플래그(`authRetried`, `authExpiryChecked`)는 `shared/api/auth-interceptor/axios.d.ts`에서 axios의 `AxiosRequestConfig`를 모듈 확장으로 넓혀 추가한다. 모듈 확장은 원본과 같은 선언 형태(`interface`, 제네릭 `D = any`)를 써야 하므로 ESLint는 `**/*.d.ts`에 한해 `consistent-type-definitions`, `no-explicit-any`, `no-unused-vars`를 끈다. 내부 플래그를 설정 객체에 실어 보내는 이유는 axios가 재시도 시 설정을 새 객체로 복사하면서 알려지지 않은 키를 유지하기 때문이다.
 - `skipAuth` 요청은 헤더를 붙이지 않고, 만료 확인과 갱신 대기에 들어가지 않으며, 401을 받아도 갱신을 시도하지 않고 `unauthorized` `ApiError`로 던진다.
 
 ## 서버 제약
