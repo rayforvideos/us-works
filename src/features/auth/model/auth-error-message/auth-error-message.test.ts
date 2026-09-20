@@ -18,7 +18,7 @@ describe("로그인", () => {
     );
   });
 
-  it('R-06 로그인 응답의 `kind`가 `network`면 "네트워크 연결을 확인해주세요."를, 그 외 실패면 "잠시 후 다시 시도해주세요."를 보인다', () => {
+  it('R-06 로그인 응답의 `kind`가 `network`면 "네트워크 연결을 확인해주세요."를, `server`면 "잠시 후 다시 시도해주세요."를 보인다', () => {
     expect(getAuthErrorMessage(createError("network"), "login")).toBe(
       "네트워크 연결을 확인해주세요.",
     );
@@ -33,7 +33,7 @@ describe("회원가입", () => {
     );
   });
 
-  it('R-06 회원가입 응답의 `kind`가 `network`면 "네트워크 연결을 확인해주세요."를, 그 외 실패면 "잠시 후 다시 시도해주세요."를 보인다', () => {
+  it('R-06 회원가입 응답의 `kind`가 `network`면 "네트워크 연결을 확인해주세요."를, `server`면 "잠시 후 다시 시도해주세요."를 보인다', () => {
     expect(getAuthErrorMessage(createError("network"), "register")).toBe(
       "네트워크 연결을 확인해주세요.",
     );
