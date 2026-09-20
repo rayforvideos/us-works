@@ -9,6 +9,7 @@ export const TEXT_STYLE_TOKENS = [
   "16-ex800",
   "18-sb600",
   "18-b700",
+  "32-b700",
 ] as const;
 
 export const RADIUS_TOKENS = ["4", "6", "8", "10", "12", "14"] as const;
