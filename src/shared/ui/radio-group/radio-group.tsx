@@ -1,7 +1,17 @@
 import { cn } from "@/shared/lib/cn";
 
 import { RadioGroupProvider, useRadioGroupContext } from "./radio-group-context";
-import { circleClass, dotClass, inputClass, itemClass } from "./radio-group-variants";
+import {
+  circleClass,
+  controlClass,
+  dotClass,
+  groupClass,
+  inputClass,
+  itemClass,
+  labelClass,
+  subLabelClass,
+  textsClass,
+} from "./radio-group-variants";
 import { type RadioGroupItemProps, type RadioGroupProps } from "./types";
 
 export function RadioGroup({
@@ -16,7 +26,7 @@ export function RadioGroup({
 }: RadioGroupProps) {
   return (
     <RadioGroupProvider value={{ name, value, defaultValue, disabled, onValueChange }}>
-      <div role="radiogroup" className={cn("flex flex-col", className)} {...rest}>
+      <div role="radiogroup" className={cn(groupClass(), className)} {...rest}>
         {children}
       </div>
     </RadioGroupProvider>
@@ -39,7 +49,7 @@ export function RadioGroupItem({
 
   return (
     <label className={cn(itemClass(), className)}>
-      <span className="relative inline-flex size-5 shrink-0 items-center justify-center">
+      <span className={controlClass()}>
         <input
           type="radio"
           data-lines={subLabel ? "2" : "1"}
@@ -53,9 +63,9 @@ export function RadioGroupItem({
         <span className={circleClass()} />
         <span className={dotClass()} />
       </span>
-      <span className="flex flex-col gap-1">
-        <span className="text-14-sb600 text-blue-grey-300">{label}</span>
-        {subLabel ? <span className="text-12-m500 text-grey-300">{subLabel}</span> : null}
+      <span className={textsClass()}>
+        <span className={labelClass()}>{label}</span>
+        {subLabel ? <span className={subLabelClass()}>{subLabel}</span> : null}
       </span>
     </label>
   );

@@ -26,3 +26,5 @@ export const closeClass = cva(
 );
 
 export const bodyClass = cva("px-6 py-2");
+
+export const footerClass = cva("flex justify-end gap-2 border-t border-grey-200 p-6");

@@ -7,6 +7,7 @@ import {
   backdropClass,
   bodyClass,
   closeClass,
+  footerClass,
   headerClass,
   popupClass,
   titleClass,
@@ -18,12 +19,17 @@ export function Dialog({
   onOpenChange,
   title,
   children,
+  footer,
+  disableOutsideClick = false,
   className,
+  headerClassName,
+  bodyClassName,
   finalFocus,
 }: DialogProps) {
   return (
     <BaseDialog.Root
       open={open}
+      disablePointerDismissal={disableOutsideClick}
       onOpenChange={(next) => {
         onOpenChange(next);
       }}
@@ -31,13 +37,14 @@ export function Dialog({
       <BaseDialog.Portal>
         <BaseDialog.Backdrop className={backdropClass()} />
         <BaseDialog.Popup finalFocus={finalFocus} className={cn(popupClass(), className)}>
-          <div className={headerClass()}>
+          <div className={cn(headerClass(), headerClassName)}>
             <BaseDialog.Title className={titleClass()}>{title}</BaseDialog.Title>
             <BaseDialog.Close aria-label="닫기" className={closeClass()}>
               <CancelIcon />
             </BaseDialog.Close>
           </div>
-          <div className={bodyClass()}>{children}</div>
+          <div className={cn(bodyClass(), bodyClassName)}>{children}</div>
+          {footer === undefined ? null : <div className={footerClass()}>{footer}</div>}
         </BaseDialog.Popup>
       </BaseDialog.Portal>
     </BaseDialog.Root>
