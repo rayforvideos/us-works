@@ -23,6 +23,7 @@ function assignRef<T>(ref: Ref<T> | undefined, node: T | null) {
 }
 
 export function TextField({
+  type = "text",
   clearable = false,
   showCounter = false,
   error,
@@ -66,7 +67,7 @@ export function TextField({
             inputRef.current = node;
             assignRef(ref, node);
           }}
-          type="text"
+          type={type}
           value={value}
           defaultValue={defaultValue}
           onChange={handleChange}
@@ -99,11 +100,9 @@ export function TextField({
           </span>
         ) : null}
       </div>
-      {isInvalid ? (
-        <p id={errorId} className={errorTextClass()}>
-          {error}
-        </p>
-      ) : null}
+      <p id={errorId} data-testid="error-text" className={errorTextClass()}>
+        {isInvalid ? error : null}
+      </p>
     </div>
   );
 }

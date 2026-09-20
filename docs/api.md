@@ -58,19 +58,19 @@ HTTP 클라이언트의 동작과 API 호출 코드의 배치를 정한다. API�
 
 `kind`는 HTTP 상태 코드로 정한다.
 
-| kind           | 조건                          | 화면의 기본 처리                                            |
-| -------------- | ----------------------------- | ----------------------------------------------------------- |
-| `network`      | 응답 없음(오프라인, 타임아웃) | "네트워크 연결을 확인해주세요"와 재시도 버튼                |
-| `canceled`     | `AbortSignal`로 취소          | 무시                                                        |
-| `unauthorized` | 401, 갱신까지 실패            | 클라이언트가 `onUnauthorized`를 호출한다. 화면은 처리 안 함 |
-| `forbidden`    | 403                           | 권한 안내                                                   |
-| `not_found`    | 404                           | 목록으로 이동 안내                                          |
-| `conflict`     | 409                           | 서버 문구 표시(알림 중복 등)                                |
-| `validation`   | 400                           | 서버 문구를 폼 오류로 표시                                  |
-| `server`       | 5xx                           | "잠시 후 다시 시도해주세요"                                 |
-| `unknown`      | 그 외                         | 일반 오류 문구                                              |
+| kind           | 조건                          | 화면의 기본 처리                                                        |
+| -------------- | ----------------------------- | ----------------------------------------------------------------------- |
+| `network`      | 응답 없음(오프라인, 타임아웃) | "네트워크 연결을 확인해주세요."                                         |
+| `canceled`     | `AbortSignal`로 취소          | 무시한다. 문구가 필요하면 공통 문구                                     |
+| `unauthorized` | 401, 갱신까지 실패            | 클라이언트가 `onUnauthorized`를 호출한다. 문구는 "로그인이 필요합니다." |
+| `forbidden`    | 403                           | "권한이 없습니다."                                                      |
+| `not_found`    | 404                           | "요청한 내용을 찾을 수 없습니다."                                       |
+| `conflict`     | 409                           | "이미 처리된 요청입니다."                                               |
+| `validation`   | 400                           | "입력값을 확인해주세요."                                                |
+| `server`       | 5xx                           | "잠시 후 다시 시도해주세요."                                            |
+| `unknown`      | 그 외                         | 공통 문구                                                               |
 
-- 사용자에게 보이는 문구는 `shared/lib/error-message/`의 `getErrorMessage(error)` 한 곳에서 만든다. `validation`과 `conflict`는 `serverMessage`를 그대로 쓰고, 나머지는 `kind`별 고정 문구다. 화면은 `serverMessage`나 `message`를 직접 출력하지 않는다.
+- 사용자에게 보이는 문구는 `shared/lib/error-message/`의 `getErrorMessage(error)` 한 곳에서 만든다. 모든 `kind`가 위 표의 고정 한국어 문구를 쓰며, `canceled`와 `unknown`, `ApiError`가 아닌 오류는 공통 문구 "오류가 발생했습니다. 잠시 후 다시 시도해주세요."를 쓴다. 기능은 필요한 `kind`만 자기 고정 문구로 덮어쓴다(예: 인증 화면의 `unauthorized`, `conflict`). 서버 문구는 영어라 화면에 쓰지 않으며, 화면은 `serverMessage`나 `message`를 직접 출력하지 않는다.
 - TanStack Query 재시도는 `kind`가 `network` 또는 `server`일 때만 한다. 나머지는 재시도하지 않는다. 이 정책은 `createQueryClient()`의 기본 `retry` 함수에 있다.
 
 ## 인증

@@ -3,6 +3,7 @@ import vitest from "@vitest/eslint-plugin";
 import prettier from "eslint-config-prettier";
 import boundaries from "eslint-plugin-boundaries";
 import noComments from "eslint-plugin-no-comments";
+import react from "eslint-plugin-react";
 import reactHooks from "eslint-plugin-react-hooks";
 import reactRefresh from "eslint-plugin-react-refresh";
 import simpleImportSort from "eslint-plugin-simple-import-sort";
@@ -137,6 +138,12 @@ export default defineConfig([
       ],
       "boundaries/no-unknown-files": "error",
     },
+  },
+
+  {
+    files: ["src/**/*.{ts,tsx}"],
+    plugins: { react },
+    rules: { "react/no-danger": "error" },
   },
 
   {

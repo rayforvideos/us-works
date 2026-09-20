@@ -16,6 +16,11 @@ describe("TextArea 변형", () => {
     expect(screen.getByTestId("counter")).toHaveTextContent("2/500");
   });
 
+  it("error가 없어도 오류 문구 자리를 유지한다", () => {
+    render(<TextArea aria-label="내용" />);
+    expect(screen.getByTestId("error-text")).toBeEmptyDOMElement();
+  });
+
   it("error가 있으면 aria-invalid와 오류 문구를 가진다", () => {
     render(<TextArea aria-label="내용" error="필수 정보입니다." />);
     const textarea = screen.getByRole("textbox", { name: "내용" });

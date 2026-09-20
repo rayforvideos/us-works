@@ -1,8 +1,8 @@
 import { type DefaultOptions, type QueryClient } from "@tanstack/react-query";
-import { type AxiosInstance } from "axios";
+import { type AxiosAdapter, type AxiosInstance } from "axios";
 import { type createStore } from "jotai";
 
-type AppStore = ReturnType<typeof createStore>;
+export type AppStore = ReturnType<typeof createStore>;
 
 export type AppSystem = {
   store: AppStore;
@@ -13,4 +13,5 @@ export type AppSystem = {
 export type InitializeSystemOptions = {
   apiBaseUrl?: string;
   queryClient?: DefaultOptions;
+  adapter?: AxiosAdapter;
 };
