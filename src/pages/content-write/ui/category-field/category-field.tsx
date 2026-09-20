@@ -1,18 +1,8 @@
-import { CONTENT_CATEGORIES, type ContentCategory, getCategoryLabel } from "@/entities/content";
+import { CONTENT_CATEGORIES, getCategoryLabel } from "@/entities/content";
 import { CheckboxChip } from "@/shared/ui/checkbox-chip";
 
-import { MAX_CATEGORIES } from "../../model/content-input-schema";
+import { toggleCategory } from "../../model/toggle-category";
 import { type CategoryFieldProps } from "./types";
-
-function toggleCategory(value: ContentCategory[], category: ContentCategory): ContentCategory[] {
-  if (value.includes(category)) {
-    return value.filter((selected) => selected !== category);
-  }
-  if (value.length >= MAX_CATEGORIES) {
-    return value;
-  }
-  return [...value, category];
-}
 
 export function CategoryField({ value, onChange, error, disabled = false }: CategoryFieldProps) {
   return (
