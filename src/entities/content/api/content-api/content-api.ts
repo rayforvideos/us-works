@@ -1,6 +1,7 @@
 import { type AxiosInstance } from "axios";
 
 import { type Notification } from "@/entities/notification/@x/content";
+import { type RequestOptions } from "@/shared/api";
 
 import {
   type Content,
@@ -23,6 +24,7 @@ function toSchedulePath(id: string): string {
 export async function fetchContents(
   client: AxiosInstance,
   params: ContentListParams,
+  options: RequestOptions = {},
 ): Promise<ContentListResponse> {
   const response = await client.get<ContentListResponse>("/api/v1/contents", {
     params: {
@@ -31,12 +33,17 @@ export async function fetchContents(
       category: params.category,
       publish_status: params.publishStatus,
     },
+    signal: options.signal,
   });
   return response.data;
 }
 
-export async function fetchContent(client: AxiosInstance, id: string): Promise<Content> {
-  const response = await client.get<Content>(toContentPath(id));
+export async function fetchContent(
+  client: AxiosInstance,
+  id: string,
+  options: RequestOptions = {},
+): Promise<Content> {
+  const response = await client.get<Content>(toContentPath(id), { signal: options.signal });
   return response.data;
 }
 
@@ -92,7 +99,10 @@ export async function deleteContentSchedule(
 export async function fetchContentNotification(
   client: AxiosInstance,
   id: string,
+  options: RequestOptions = {},
 ): Promise<Notification | null> {
-  const response = await client.get<Notification | null>(`${toContentPath(id)}/notification`);
+  const response = await client.get<Notification | null>(`${toContentPath(id)}/notification`, {
+    signal: options.signal,
+  });
   return response.data;
 }

@@ -9,6 +9,6 @@ export function useNotificationQuery(id: string) {
 
   return useQuery({
     queryKey: ["notifications", "detail", id],
-    queryFn: () => fetchNotification(client, id),
+    queryFn: ({ signal }) => fetchNotification(client, id, { signal }),
   });
 }
