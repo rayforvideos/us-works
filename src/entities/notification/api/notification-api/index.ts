@@ -1,5 +1,6 @@
 export {
   createNotification,
+  deleteNotification,
   fetchNotification,
   fetchNotifications,
   updateNotification,

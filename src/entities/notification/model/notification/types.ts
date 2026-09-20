@@ -36,7 +36,7 @@ export type NotificationInput = {
   content_id: number;
   title: string;
   target_type: TargetType;
-  scheduled_at: string;
+  scheduled_at?: string;
 };
 
 export type NotificationUpdateInput = {

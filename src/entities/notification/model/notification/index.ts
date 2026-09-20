@@ -19,4 +19,5 @@ export {
   type NotificationListResponse,
   type NotificationScheduleInput,
   type NotificationUpdateInput,
+  type TargetType,
 } from "./types";

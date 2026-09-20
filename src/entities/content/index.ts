@@ -1,4 +1,14 @@
-export { createContent, updateContent } from "./api/content-api";
+export {
+  changeContentStatus,
+  createContent,
+  deleteContentSchedule,
+  fetchContent,
+  fetchContentNotification,
+  scheduleContent,
+  updateContent,
+  updateContentSchedule,
+} from "./api/content-api";
+export { useContentNotificationQuery } from "./api/useContentNotificationQuery";
 export { useContentQuery } from "./api/useContentQuery";
 export { useContentsQuery } from "./api/useContentsQuery";
 export {
@@ -10,6 +20,7 @@ export {
   type ContentCategory,
   type ContentInput,
   type ContentListFilters,
+  type ContentVisibility,
   DRAFT_CONTENT_FIXTURE,
   formatPublishedAt,
   getCategoryLabel,

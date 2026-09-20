@@ -56,3 +56,7 @@ export async function updateNotificationSchedule(
   const response = await client.put<Notification>(`${toNotificationPath(id)}/schedule`, input);
   return response.data;
 }
+
+export async function deleteNotification(client: AxiosInstance, id: string): Promise<void> {
+  await client.delete(toNotificationPath(id));
+}

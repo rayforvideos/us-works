@@ -1,10 +1,28 @@
 import { createHttpClient } from "@/shared/api";
-import { createFakeAdapter, createOkResponse, readCallParams, readLastCall } from "@/shared/config";
+import {
+  createFailResponse,
+  createFakeAdapter,
+  createOkResponse,
+  readCallParams,
+  readLastCall,
+} from "@/shared/config";
 
 import { CONTENT_DETAIL_FIXTURE, CONTENT_FIXTURE, type ContentInput } from "../../model/content";
-import { createContent, fetchContent, fetchContents, updateContent } from ".";
+import {
+  changeContentStatus,
+  createContent,
+  deleteContentSchedule,
+  fetchContent,
+  fetchContentNotification,
+  fetchContents,
+  scheduleContent,
+  updateContent,
+  updateContentSchedule,
+} from ".";
 
 const LIST_RESPONSE = { contents: CONTENT_FIXTURE, total: 25, page: 1, limit: 10 };
+
+const NOTIFICATION_RESPONSE = { id: 12, content_id: 136, title: "알림 제목" };
 
 const CONTENT_INPUT: ContentInput = {
   title: "새 콘텐츠",
@@ -91,5 +109,89 @@ describe("updateContent", () => {
     expect(readLastCall(calls).method).toBe("put");
     expect(readLastCall(calls).url).toBe("/api/v1/contents/136");
     expect(readLastCall(calls).data).toBe(JSON.stringify({ ...CONTENT_INPUT, link_url: "" }));
+  });
+});
+
+describe("changeContentStatus", () => {
+  it("공개 상태 경로에 상태를 본문으로 담아 PATCH 요청을 보낸다", async () => {
+    const { adapter, calls } = createFakeAdapter(() => createOkResponse(CONTENT_DETAIL_FIXTURE));
+    const client = createHttpClient({ baseUrl: "http://api.test", adapter });
+
+    await changeContentStatus(client, "136", "private");
+
+    expect(readLastCall(calls).method).toBe("patch");
+    expect(readLastCall(calls).url).toBe("/api/v1/contents/136/status");
+    expect(readLastCall(calls).data).toBe(JSON.stringify({ status: "private" }));
+  });
+});
+
+describe("scheduleContent", () => {
+  it("예약 경로에 예약 시각을 본문으로 담아 POST 요청을 보낸다", async () => {
+    const { adapter, calls } = createFakeAdapter(() => createOkResponse(CONTENT_DETAIL_FIXTURE));
+    const client = createHttpClient({ baseUrl: "http://api.test", adapter });
+
+    await scheduleContent(client, "136", { published_at: "2027-04-05T14:35:00+09:00" });
+
+    expect(readLastCall(calls).method).toBe("post");
+    expect(readLastCall(calls).url).toBe("/api/v1/contents/136/schedule");
+    expect(readLastCall(calls).data).toBe(
+      JSON.stringify({ published_at: "2027-04-05T14:35:00+09:00" }),
+    );
+  });
+});
+
+describe("updateContentSchedule", () => {
+  it("예약 경로에 바뀐 예약 시각을 본문으로 담아 PUT 요청을 보낸다", async () => {
+    const { adapter, calls } = createFakeAdapter(() => createOkResponse(CONTENT_DETAIL_FIXTURE));
+    const client = createHttpClient({ baseUrl: "http://api.test", adapter });
+
+    await updateContentSchedule(client, "136", { published_at: "2027-04-06T09:00:00+09:00" });
+
+    expect(readLastCall(calls).method).toBe("put");
+    expect(readLastCall(calls).url).toBe("/api/v1/contents/136/schedule");
+    expect(readLastCall(calls).data).toBe(
+      JSON.stringify({ published_at: "2027-04-06T09:00:00+09:00" }),
+    );
+  });
+});
+
+describe("deleteContentSchedule", () => {
+  it("예약 경로에 DELETE 요청을 보낸다", async () => {
+    const { adapter, calls } = createFakeAdapter(() =>
+      createOkResponse({ content_id: 136, is_scheduled: false }),
+    );
+    const client = createHttpClient({ baseUrl: "http://api.test", adapter });
+
+    await deleteContentSchedule(client, "136");
+
+    expect(readLastCall(calls).method).toBe("delete");
+    expect(readLastCall(calls).url).toBe("/api/v1/contents/136/schedule");
+  });
+});
+
+describe("fetchContentNotification", () => {
+  it("콘텐츠의 알림 경로로 GET 요청을 보낸다", async () => {
+    const { adapter, calls } = createFakeAdapter(() => createOkResponse(NOTIFICATION_RESPONSE));
+    const client = createHttpClient({ baseUrl: "http://api.test", adapter });
+
+    const result = await fetchContentNotification(client, "136");
+
+    expect(readLastCall(calls).method).toBe("get");
+    expect(readLastCall(calls).url).toBe("/api/v1/contents/136/notification");
+    expect(result?.id).toBe(NOTIFICATION_RESPONSE.id);
+  });
+
+  it("알림이 없으면 null을 돌려준다", async () => {
+    const { adapter } = createFakeAdapter(() => createFailResponse(404, "notification not found"));
+    const client = createHttpClient({ baseUrl: "http://api.test", adapter });
+
+    await expect(fetchContentNotification(client, "136")).resolves.toBeNull();
+  });
+
+  it("알림 조회가 다른 이유로 실패하면 오류를 그대로 던진다", async () => {
+    const { adapter } = createFakeAdapter(() => createFailResponse(500, "server error"));
+    const client = createHttpClient({ baseUrl: "http://api.test", adapter });
+
+    await expect(fetchContentNotification(client, "136")).rejects.toThrow();
   });
 });

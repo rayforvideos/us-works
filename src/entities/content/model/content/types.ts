@@ -6,7 +6,7 @@ export type PublishStatus = (typeof PUBLISH_STATUSES)[number];
 
 export type PublishStatusTone = "green" | "yellow" | "grey";
 
-type ContentVisibility = "public" | "private";
+export type ContentVisibility = "public" | "private";
 
 type NotificationSendStatus = "pending" | "sent" | "failed";
 
@@ -42,6 +42,16 @@ export type ContentInput = {
   body: string;
   categories: ContentCategory[];
   link_url?: string;
+};
+
+export type ContentScheduleInput = {
+  published_at: string;
+};
+
+export type ContentSchedule = {
+  content_id: number;
+  is_scheduled: boolean;
+  published_at?: string;
 };
 
 export type ContentListResponse = {

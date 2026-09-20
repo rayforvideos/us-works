@@ -8,6 +8,7 @@ import {
 } from "../../model/notification";
 import {
   createNotification,
+  deleteNotification,
   fetchNotification,
   fetchNotifications,
   updateNotification,
@@ -109,5 +110,17 @@ describe("updateNotificationSchedule", () => {
     expect(JSON.parse(String(readLastCall(calls).data))).toEqual({
       scheduled_at: "2026-12-20T10:00:00+09:00",
     });
+  });
+});
+
+describe("deleteNotification", () => {
+  it("알림 삭제 요청을 상세 경로로 보낸다", async () => {
+    const { adapter, calls } = createFakeAdapter(() => createOkResponse(null));
+    const client = createHttpClient({ baseUrl: "http://api.test", adapter });
+
+    await deleteNotification(client, "12");
+
+    expect(readLastCall(calls).method).toBe("delete");
+    expect(readLastCall(calls).url).toBe("/api/v1/notifications/12");
   });
 });
