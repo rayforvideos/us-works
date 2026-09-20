@@ -11,8 +11,3 @@ export type DateTimeFieldProps = {
   "aria-describedby"?: string;
   className?: string;
 };
-
-export type DateTimeDraft = {
-  date: string;
-  time: string;
-};

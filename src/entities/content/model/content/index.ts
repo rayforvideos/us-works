@@ -24,5 +24,8 @@ export {
   type ContentListFilters,
   type ContentListParams,
   type ContentListResponse,
+  type ContentSchedule,
+  type ContentScheduleInput,
+  type ContentVisibility,
   type PublishStatus,
 } from "./types";

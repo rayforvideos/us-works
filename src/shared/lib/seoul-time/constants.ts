@@ -7,3 +7,5 @@ export const SEOUL_TIME_FORMAT_OPTIONS: Intl.DateTimeFormatOptions = {
   minute: "2-digit",
   hourCycle: "h23",
 };
+
+export const SEOUL_OFFSET = "+09:00";

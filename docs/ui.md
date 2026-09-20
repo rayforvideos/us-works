@@ -30,7 +30,7 @@
 ## 구조
 
 - 네이티브 요소를 우선 쓴다. `button`, `input`은 그대로 두고 시각 요소는 `peer`(형제)나 `has-*`(부모)로 그린다. 프리미티브는 Base UI Select와 Dialog에만 쓴다(ADR-0015).
-- 날짜·시간은 `DateTimeField` 팝오버에서 고른다. 날짜는 브라우저 기본 `input type="date"`, 시간은 30분 간격 목록이라 목록 밖의 분은 입력할 수 없다.
+- 날짜·시간은 `DateTimeField` 하나로 고른다. 브라우저 기본 `datetime-local` 선택기를 열고 분 단위로 고르며, 달력 UI를 직접 만들거나 라이브러리를 더하지 않는다.
 - 변형은 `data-variant`, `data-size` 같은 `data-*` 속성으로 드러낸다. 역할을 가진 요소(`input`, `button`)에 붙인다.
 - 아이콘은 `shared/ui/icon`의 인라인 SVG를 쓰고 색은 `currentColor`를 따른다.
 - 오류 문구 자리는 항상 예약한다. 입력 컴포넌트는 오류가 없어도 문구 한 줄 높이를 유지해 오류가 나타날 때 아래 요소가 밀리지 않는다. 오류 문구를 라벨 옆처럼 다른 곳에 두는 폼은 `TextField`의 `reserveError={false}`로 아래 슬롯을 끄고, 문구를 스스로 갖지 않는 입력(`DateTimeField`)은 `invalid`로 테두리만 바꾼다.

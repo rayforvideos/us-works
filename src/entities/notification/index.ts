@@ -1,5 +1,6 @@
 export {
   createNotification,
+  deleteNotification,
   updateNotification,
   updateNotificationSchedule,
 } from "./api/notification-api";
@@ -21,4 +22,5 @@ export {
   PENDING_NOTIFICATION_FIXTURE,
   SENT_NOTIFICATION_FIXTURE,
   TARGET_TYPES,
+  type TargetType,
 } from "./model/notification";

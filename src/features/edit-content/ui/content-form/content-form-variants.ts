@@ -11,5 +11,3 @@ export const headingClass = cva("text-20-sb600 text-blue-grey-300");
 export const helperClass = cva("text-12-m500 text-grey-400");
 
 export const dividerClass = cva("border-t-2 border-grey-200");
-
-export const requestErrorClass = cva("min-h-3.5 text-14-sb600 text-red-100");

@@ -1,1 +1,11 @@
-export { createContent, fetchContent, fetchContents, updateContent } from "./content-api";
+export {
+  changeContentStatus,
+  createContent,
+  deleteContentSchedule,
+  fetchContent,
+  fetchContentNotification,
+  fetchContents,
+  scheduleContent,
+  updateContent,
+  updateContentSchedule,
+} from "./content-api";

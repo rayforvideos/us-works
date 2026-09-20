@@ -4,12 +4,12 @@ import { useForm } from "@tanstack/react-form";
 import { getTargetTypeLabel, TARGET_TYPES } from "@/entities/notification";
 import { readFieldError } from "@/shared/lib/field-error";
 import { FormValuesWatcher } from "@/shared/lib/form-values-watcher";
+import { toMinDateTime } from "@/shared/lib/seoul-time";
 import { DateTimeField } from "@/shared/ui/date-time-field";
 import { RadioGroup, RadioGroupItem } from "@/shared/ui/radio-group";
 import { TextField } from "@/shared/ui/text-field";
 
 import { MAX_TITLE_LENGTH, notificationInputSchema } from "../../model/notification-input-schema";
-import { toMinDate } from "../../model/scheduled-at";
 import { SCHEDULED_AT_PLACEHOLDER, TITLE_PLACEHOLDER } from "./constants";
 import {
   fieldErrorClass,
@@ -122,7 +122,7 @@ export function NotificationForm({
                 aria-label="발송 시간"
                 aria-describedby={error === undefined ? undefined : scheduledAtErrorId}
                 placeholder={SCHEDULED_AT_PLACEHOLDER}
-                min={toMinDate(new Date())}
+                min={toMinDateTime(new Date())}
                 value={field.state.value}
                 onChange={(next) => {
                   field.handleChange(next);

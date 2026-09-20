@@ -1,8 +1,8 @@
 import { z } from "zod";
 
 import { TARGET_TYPES } from "@/entities/notification";
+import { isFutureDateTime } from "@/shared/lib/seoul-time";
 
-import { isFutureScheduledAt } from "../scheduled-at";
 import {
   MAX_TITLE_LENGTH,
   PAST_TIME_MESSAGE,
@@ -20,7 +20,7 @@ export const notificationInputSchema = z
     if (values.scheduledAt === "") {
       return;
     }
-    if (!isFutureScheduledAt(values.scheduledAt, new Date())) {
+    if (!isFutureDateTime(values.scheduledAt, new Date())) {
       ctx.addIssue({ code: "custom", path: ["scheduledAt"], message: PAST_TIME_MESSAGE });
     }
   });
