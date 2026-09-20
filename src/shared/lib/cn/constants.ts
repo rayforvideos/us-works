@@ -9,6 +9,7 @@ export const TEXT_STYLE_TOKENS = [
   "16-ex800",
   "18-sb600",
   "18-b700",
+  "20-sb600",
   "32-b700",
 ] as const;
 
