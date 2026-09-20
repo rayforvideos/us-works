@@ -2,9 +2,20 @@ import { Button } from "@/shared/ui/button";
 import { Checkbox } from "@/shared/ui/checkbox";
 import { CheckboxChip } from "@/shared/ui/checkbox-chip";
 import { RadioGroup, RadioGroupItem } from "@/shared/ui/radio-group";
+import { Select } from "@/shared/ui/select";
 import { StatusBadge } from "@/shared/ui/status-badge";
 import { TextArea } from "@/shared/ui/text-area";
 import { TextField } from "@/shared/ui/text-field";
+
+/**
+ * @constants
+ */
+const CATEGORY_ITEMS = [
+  { value: "notice", label: "공지사항" },
+  { value: "guide", label: "거래안내" },
+  { value: "support", label: "고객센터" },
+  { value: "off", label: "비활성", disabled: true },
+];
 
 export function App() {
   return (
@@ -82,6 +93,18 @@ export function App() {
           placeholder="내용을 입력해주세요. (최대 500자)"
           showCounter
           maxLength={500}
+        />
+        <Select
+          aria-label="카테고리"
+          placeholder="카테고리를 선택해주세요."
+          items={CATEGORY_ITEMS}
+        />
+        <Select aria-label="카테고리 선택됨" items={CATEGORY_ITEMS} defaultValue="guide" />
+        <Select
+          aria-label="카테고리 비활성"
+          placeholder="카테고리를 선택해주세요."
+          items={CATEGORY_ITEMS}
+          disabled
         />
       </div>
       <RadioGroup name="plan" aria-label="요금제" defaultValue="pro" className="gap-1">
