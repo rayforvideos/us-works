@@ -149,6 +149,9 @@ export default defineConfig([
   {
     files: ["**/*.test.{ts,tsx}"],
     extends: [vitest.configs.recommended, testingLibrary.configs["flat/react"]],
+    rules: {
+      "vitest/expect-expect": ["error", { assertFunctionNames: ["expect", "expectTypeOf"] }],
+    },
   },
 
   {
