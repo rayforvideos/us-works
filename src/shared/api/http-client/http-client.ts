@@ -10,8 +10,9 @@ import { ApiError, extractServerMessage, getErrorKind, toApiError } from "../api
 import { createTokenRefresher } from "../token-refresher";
 import { type CreateHttpClientOptions, type HttpClientAuth } from "./types";
 
-const DEFAULT_EXPIRY_MARGIN_MS = 60_000;
-
+/**
+ * @types
+ */
 type AuthOptions = {
   auth: HttpClientAuth;
   now: () => number;
@@ -19,6 +20,11 @@ type AuthOptions = {
 };
 
 type ApiResponseBody = { success: boolean; data: unknown; error?: unknown };
+
+/**
+ * @constants
+ */
+const DEFAULT_EXPIRY_MARGIN_MS = 60_000;
 
 function isApiResponseBody(value: unknown): value is ApiResponseBody {
   return (

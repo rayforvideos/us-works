@@ -4,6 +4,9 @@ import { Provider as JotaiProvider } from "jotai";
 
 import { type AppSystem } from "./initialize-system";
 
+/**
+ * @types
+ */
 type AppProvidersProps = AppSystem & {
   children: ReactNode;
 };

@@ -10,6 +10,8 @@ import testingLibrary from "eslint-plugin-testing-library";
 import { defineConfig, globalIgnores } from "eslint/config";
 import tseslint from "typescript-eslint";
 
+import { sectionMarkers } from "./eslint/rules/section-markers/index.js";
+
 const SLICED_LAYERS = ["pages", "widgets", "features", "entities"];
 
 export default defineConfig([
@@ -138,6 +140,13 @@ export default defineConfig([
   },
 
   {
+    files: ["src/**/*.{ts,tsx}"],
+    ignores: ["**/*.test.{ts,tsx}", "**/*.d.ts", "**/types.ts", "**/constants.ts"],
+    plugins: { local: { rules: { "section-markers": sectionMarkers } } },
+    rules: { "local/section-markers": "error" },
+  },
+
+  {
     files: ["**/*.test.{ts,tsx}"],
     extends: [vitest.configs.recommended, testingLibrary.configs["flat/react"]],
   },
@@ -161,7 +170,12 @@ export default defineConfig([
   {
     files: ["**/*.{ts,tsx,js}"],
     plugins: { "no-comments": noComments },
-    rules: { "no-comments/disallowComments": ["error", { allow: ["eslint", "global"] }] },
+    rules: {
+      "no-comments/disallowComments": [
+        "error",
+        { allow: ["eslint", "global", "\\*\\n \\* @(types|constants)\\n $"] },
+      ],
+    },
   },
 
   prettier,

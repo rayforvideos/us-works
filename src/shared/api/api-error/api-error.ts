@@ -2,6 +2,9 @@ import { isAxiosError, isCancel } from "axios";
 
 import { type ApiErrorKind } from "./types";
 
+/**
+ * @types
+ */
 type ApiErrorInit = {
   kind: ApiErrorKind;
   status: number | null;
