@@ -28,4 +28,5 @@ export type ButtonProps = ButtonVariantProps &
     leftIcon?: ReactNode;
     rightIcon?: ReactNode;
     loading?: boolean;
+    fullWidth?: boolean;
   };
