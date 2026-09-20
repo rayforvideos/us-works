@@ -9,3 +9,7 @@ export type CreateHttpClientOptions = {
   now?: () => number;
   expiryMarginMs?: number;
 };
+
+export type RequestOptions = {
+  signal?: AbortSignal;
+};

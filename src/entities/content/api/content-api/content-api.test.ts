@@ -181,6 +181,28 @@ describe("fetchContentNotification", () => {
     expect(result?.id).toBe(NOTIFICATION_RESPONSE.id);
   });
 
+  it("취소 신호를 넘기면 요청 설정에 그대로 실린다", async () => {
+    const { adapter, calls } = createFakeAdapter(() => createOkResponse(CONTENT_DETAIL_FIXTURE));
+    const client = createHttpClient({ baseUrl: "http://api.test", adapter });
+    const controller = new AbortController();
+
+    await fetchContent(client, "136", { signal: controller.signal });
+
+    expect(readLastCall(calls).signal).toBe(controller.signal);
+  });
+
+  it("이미 취소된 신호를 넘기면 요청을 보내지 않고 취소 오류가 된다", async () => {
+    const { adapter, calls } = createFakeAdapter(() => createOkResponse(CONTENT_DETAIL_FIXTURE));
+    const client = createHttpClient({ baseUrl: "http://api.test", adapter });
+    const controller = new AbortController();
+    controller.abort();
+
+    await expect(fetchContent(client, "136", { signal: controller.signal })).rejects.toMatchObject({
+      kind: "canceled",
+    });
+    expect(calls).toHaveLength(0);
+  });
+
   it("알림이 없으면 서버가 빈 값을 주고 null을 돌려준다", async () => {
     const { adapter } = createFakeAdapter(() => createOkResponse(null));
     const client = createHttpClient({ baseUrl: "http://api.test", adapter });

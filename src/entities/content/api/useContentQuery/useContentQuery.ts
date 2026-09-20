@@ -9,6 +9,6 @@ export function useContentQuery(id: string) {
 
   return useQuery({
     queryKey: ["contents", "detail", id],
-    queryFn: () => fetchContent(client, id),
+    queryFn: ({ signal }) => fetchContent(client, id, { signal }),
   });
 }

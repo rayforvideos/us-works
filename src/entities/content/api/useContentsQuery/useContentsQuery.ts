@@ -10,7 +10,7 @@ export function useContentsQuery(params: ContentListParams) {
 
   return useQuery({
     queryKey: ["contents", "list", params],
-    queryFn: () => fetchContents(client, params),
+    queryFn: ({ signal }) => fetchContents(client, params, { signal }),
     placeholderData: keepPreviousData,
   });
 }

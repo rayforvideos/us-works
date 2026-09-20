@@ -1,5 +1,7 @@
 import { type AxiosInstance } from "axios";
 
+import { type RequestOptions } from "@/shared/api";
+
 import {
   type Notification,
   type NotificationInput,
@@ -17,18 +19,26 @@ function toNotificationPath(id: string): string {
 export async function fetchNotifications(
   client: AxiosInstance,
   params: NotificationListParams,
+  options: RequestOptions = {},
 ): Promise<NotificationListResponse> {
   const response = await client.get<NotificationListResponse>("/api/v1/notifications", {
     params: {
       page: params.page,
       limit: params.limit,
     },
+    signal: options.signal,
   });
   return response.data;
 }
 
-export async function fetchNotification(client: AxiosInstance, id: string): Promise<Notification> {
-  const response = await client.get<Notification>(toNotificationPath(id));
+export async function fetchNotification(
+  client: AxiosInstance,
+  id: string,
+  options: RequestOptions = {},
+): Promise<Notification> {
+  const response = await client.get<Notification>(toNotificationPath(id), {
+    signal: options.signal,
+  });
   return response.data;
 }
 

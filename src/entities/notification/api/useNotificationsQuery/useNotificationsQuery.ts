@@ -10,7 +10,7 @@ export function useNotificationsQuery(params: NotificationListParams) {
 
   return useQuery({
     queryKey: ["notifications", "list", params],
-    queryFn: () => fetchNotifications(client, params),
+    queryFn: ({ signal }) => fetchNotifications(client, params, { signal }),
     placeholderData: keepPreviousData,
   });
 }
