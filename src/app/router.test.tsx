@@ -10,8 +10,10 @@ import { initializeSystem } from "./initialize-system";
 import { routes } from "./router";
 
 function openRoute(pathname: string, { hasSession }: { hasSession: boolean }) {
-  const { adapter } = createFakeAdapter(() =>
-    createOkResponse({ contents: [], total: 0, page: 1, limit: 10 }),
+  const { adapter } = createFakeAdapter((config) =>
+    config.url === "/api/v1/notifications"
+      ? createOkResponse({ notifications: [], total: 0, page: 1, limit: 10 })
+      : createOkResponse({ contents: [], total: 0, page: 1, limit: 10 }),
   );
   const system = initializeSystem({ adapter, queryClient: { queries: { retry: false } } });
   if (hasSession) {
@@ -60,6 +62,13 @@ describe("라우터 보호", () => {
 
     expect(await screen.findByRole("heading", { name: "콘텐츠" })).toBeInTheDocument();
     expect(router.state.location.pathname).toBe("/");
+  });
+
+  it("세션이 있으면 /alarms에서 알람 목록 헤딩이 보인다", async () => {
+    const router = openRoute("/alarms", { hasSession: true });
+
+    expect(await screen.findByRole("heading", { name: "알람" })).toBeInTheDocument();
+    expect(router.state.location.pathname).toBe("/alarms");
   });
 
   it('알 수 없는 경로는 "/"로 보낸다', async () => {

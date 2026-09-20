@@ -1,3 +1,5 @@
+import { parsePage } from "@/shared/lib/pagination-params";
+
 import {
   CATEGORY_LABELS,
   CONTENT_CATEGORIES,
@@ -27,14 +29,6 @@ function isPublishStatus(value: string): value is PublishStatus {
 
 function readPart(parts: Intl.DateTimeFormatPart[], type: Intl.DateTimeFormatPartTypes): string {
   return parts.find((part) => part.type === type)?.value ?? "";
-}
-
-function parsePage(value: string | null): number {
-  const page = Number(value);
-  if (!Number.isInteger(page) || page < 1) {
-    return 1;
-  }
-  return Math.min(page, MAX_PAGE);
 }
 
 function parseCategory(value: string | null): ContentCategory | undefined {
@@ -80,16 +74,9 @@ export function formatPublishedAt(iso: string | undefined): PublishedAtParts | n
   };
 }
 
-export function getPageCount(total: number, limit: number): number {
-  if (limit <= 0) {
-    return 1;
-  }
-  return Math.max(Math.ceil(total / limit), 1);
-}
-
 export function parseContentListParams(searchParams: URLSearchParams): ContentListParams {
   return {
-    page: parsePage(searchParams.get(CONTENT_LIST_PARAM_KEYS.page)),
+    page: parsePage(searchParams.get(CONTENT_LIST_PARAM_KEYS.page), MAX_PAGE),
     limit: DEFAULT_PAGE_LIMIT,
     category: parseCategory(searchParams.get(CONTENT_LIST_PARAM_KEYS.category)),
     publishStatus: parsePublishStatus(searchParams.get(CONTENT_LIST_PARAM_KEYS.publishStatus)),

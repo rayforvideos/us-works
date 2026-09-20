@@ -3,19 +3,26 @@ import { useSearchParams } from "react-router";
 import {
   CONTENT_LIST_PARAM_KEYS,
   type ContentListFilters,
-  getPageCount,
   parseContentListParams,
   useContentsQuery,
 } from "@/entities/content";
-import { ContentFilters } from "@/features/filter-contents";
+import { ROUTES } from "@/shared/config";
+import { getPageCount } from "@/shared/lib/pagination-params";
 import { Container } from "@/shared/ui/container";
 import { Pagination } from "@/shared/ui/pagination";
-import { ContentTable } from "@/widgets/content-table";
-import { ListHeader } from "@/widgets/list-header";
+import { ListHeader, type ListHeaderTab } from "@/widgets/list-header";
+
+import { ContentFilters } from "../content-filters";
+import { ContentTable } from "../content-table";
 
 /**
  * @constants
  */
+const LIST_TABS: readonly ListHeaderTab[] = [
+  { label: "콘텐츠", to: ROUTES.contents, end: true },
+  { label: "알람", to: ROUTES.alarms },
+];
+
 const EMPTY_MESSAGE = "콘텐츠가 없습니다.";
 
 const FILTERED_EMPTY_MESSAGE = "조건에 맞는 콘텐츠가 없습니다.";
@@ -52,7 +59,7 @@ export function ContentsPage() {
 
   return (
     <>
-      <ListHeader />
+      <ListHeader tabs={LIST_TABS} />
       <Container as="main" className="flex flex-col gap-6 py-10">
         <h1 className="text-32-b700 text-blue-grey-300">콘텐츠</h1>
         <ContentFilters

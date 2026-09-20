@@ -1,7 +1,6 @@
 import {
   formatPublishedAt,
   getCategoryLabel,
-  getPageCount,
   getPublishStatusBadge,
   parseContentListParams,
 } from ".";
@@ -34,12 +33,6 @@ describe("콘텐츠 모델", () => {
   it("공개일자가 날짜로 읽히지 않으면 null이다", () => {
     expect(formatPublishedAt("not-a-date")).toBeNull();
     expect(formatPublishedAt("")).toBeNull();
-  });
-
-  it("R-04 페이지 수는 `total`을 `limit`으로 나눠 올림한 값이며 최소 1이다", () => {
-    expect(getPageCount(25, 10)).toBe(3);
-    expect(getPageCount(20, 10)).toBe(2);
-    expect(getPageCount(0, 10)).toBe(1);
   });
 
   it("R-05 URL의 `page`가 1 미만이거나 숫자가 아니면 1로, `category`·`publish_status`가 enum에 없으면 없는 것으로 읽는다", () => {

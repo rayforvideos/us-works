@@ -9,7 +9,6 @@ export {
   DRAFT_CONTENT_FIXTURE,
   formatPublishedAt,
   getCategoryLabel,
-  getPageCount,
   getPublishStatusBadge,
   parseContentListParams,
   PUBLISH_STATUS_LABELS,

@@ -1,5 +1,7 @@
 import { useLocation, useNavigate } from "react-router";
 
+import { ROUTES } from "@/shared/config";
+
 import { useLoginMutation } from "../../api/useAuthMutations";
 import { getAuthErrorMessage } from "../../model/auth-error-message";
 import { type Credentials } from "../../model/validate-credentials";
@@ -25,7 +27,7 @@ export function LoginForm() {
   function handleSubmit(values: Credentials) {
     mutation.mutate(values, {
       onSuccess: () => {
-        void navigate(readRedirectPath(location.state) ?? "/", { replace: true });
+        void navigate(readRedirectPath(location.state) ?? ROUTES.contents, { replace: true });
       },
     });
   }
