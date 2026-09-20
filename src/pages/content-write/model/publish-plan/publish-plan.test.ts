@@ -1,4 +1,8 @@
-import { DRAFT_CONTENT_FIXTURE, SCHEDULED_CONTENT_FIXTURE } from "@/entities/content";
+import {
+  DRAFT_CONTENT_FIXTURE,
+  PUBLISHED_CONTENT_FIXTURE,
+  SCHEDULED_CONTENT_FIXTURE,
+} from "@/entities/content";
 import { PENDING_NOTIFICATION_FIXTURE, SENT_NOTIFICATION_FIXTURE } from "@/entities/notification";
 
 import { type PublishOptionsValues } from "../publish-options-schema";
@@ -28,12 +32,24 @@ function buildPlan(
 }
 
 describe("buildPublishPlan", () => {
-  it("R-08 요청 계획: 목표 상태와 현재 상태의 차이로만 요청을 만든다. 공개 → `PATCH public`. 비공개 → 예약이 있으면 `DELETE schedule` 뒤 `PATCH private`, 없으면 `PATCH private`. 예약 → 예약이 없으면 `POST schedule`, 시각이 바뀌었으면 `PUT schedule`. 알림: 발송이고 없으면 `POST`(예약이면 `scheduled_at` 포함), 있으면 바뀐 부분만 `PUT`, 미발송이고 있으면 `DELETE`", () => {
+  it("R-08 요청 계획은 목표 상태와 현재 상태의 차이로만 만들어서, 공개면 `PATCH public`, 비공개면 예약이 있을 때 `DELETE schedule` 뒤 `PATCH private`·없을 때 `PATCH private`, 예약 발행이면 예약이 없을 때 `POST schedule`·시각이 바뀌었을 때 `PUT schedule`이고, 목표가 현재와 같으면 아무 요청도 만들지 않는다", () => {
     expect(buildPlan({ visibility: "public" })).toEqual([{ kind: "status", status: "public" }]);
     expect(
       buildPlan({ visibility: "public" }, { content: DRAFT_CONTENT_FIXTURE, notification: null }),
     ).toEqual([{ kind: "status", status: "public" }]);
+    expect(
+      buildPlan(
+        { visibility: "public" },
+        { content: PUBLISHED_CONTENT_FIXTURE, notification: null },
+      ),
+    ).toEqual([]);
     expect(buildPlan({ visibility: "private" })).toEqual([]);
+    expect(
+      buildPlan(
+        { visibility: "private" },
+        { content: PUBLISHED_CONTENT_FIXTURE, notification: null },
+      ),
+    ).toEqual([{ kind: "status", status: "private" }]);
     expect(
       buildPlan(
         { visibility: "private" },
@@ -55,6 +71,9 @@ describe("buildPublishPlan", () => {
         { content: SCHEDULED_CONTENT_FIXTURE, notification: null },
       ),
     ).toEqual([]);
+  });
+
+  it("R-09 알림은 발송이고 없으면 `POST`(예약이면 `scheduled_at` 포함), 발송이고 있으면 바뀐 부분만 `PUT`, 미발송이고 있으면 `DELETE`를 보낸다", () => {
     expect(buildPlan({ notify: true, notificationTitle: "알람 내용" })).toEqual([
       { kind: "status", status: "public" },
       {
@@ -96,12 +115,6 @@ describe("buildPublishPlan", () => {
     ]);
     expect(
       buildPlan(
-        { notify: true, notificationTitle: "두 번째 알림", targetType: "follower" },
-        { content: SCHEDULED_CONTENT_FIXTURE, notification: PENDING_NOTIFICATION_FIXTURE },
-      ),
-    ).toEqual([{ kind: "status", status: "public" }]);
-    expect(
-      buildPlan(
         { notify: false },
         { content: SCHEDULED_CONTENT_FIXTURE, notification: PENDING_NOTIFICATION_FIXTURE },
       ),
@@ -111,16 +124,7 @@ describe("buildPublishPlan", () => {
     ]);
   });
 
-  it("비공개로 발행하면 발송을 골랐어도 기존 알림을 지운다", () => {
-    expect(
-      buildPlan(
-        { visibility: "private", notify: true, notificationTitle: "알람 내용" },
-        { content: DRAFT_CONTENT_FIXTURE, notification: PENDING_NOTIFICATION_FIXTURE },
-      ),
-    ).toEqual([{ kind: "notification-delete", id: PENDING_NOTIFICATION_FIXTURE.id }]);
-  });
-
-  it("이미 발송된 알림에는 삭제도 수정도 보내지 않는다", () => {
+  it("R-10 알림이 발송 완료(`sent`)면 어떤 요청도 보내지 않고, 공개로 바꿀 때는 기존 알림의 예약 시각을 그대로 둔다(알림 예약을 지우는 API가 없다)", () => {
     expect(
       buildPlan(
         { visibility: "private" },
@@ -139,6 +143,21 @@ describe("buildPublishPlan", () => {
         { content: SCHEDULED_CONTENT_FIXTURE, notification: SENT_NOTIFICATION_FIXTURE },
       ),
     ).toEqual([{ kind: "schedule-update", publishedAt: "2027-04-05T14:35:00+09:00" }]);
+    expect(
+      buildPlan(
+        { notify: true, notificationTitle: "두 번째 알림", targetType: "follower" },
+        { content: SCHEDULED_CONTENT_FIXTURE, notification: PENDING_NOTIFICATION_FIXTURE },
+      ),
+    ).toEqual([{ kind: "status", status: "public" }]);
+  });
+
+  it("비공개로 발행하면 발송을 골랐어도 기존 알림을 지운다", () => {
+    expect(
+      buildPlan(
+        { visibility: "private", notify: true, notificationTitle: "알람 내용" },
+        { content: DRAFT_CONTENT_FIXTURE, notification: PENDING_NOTIFICATION_FIXTURE },
+      ),
+    ).toEqual([{ kind: "notification-delete", id: PENDING_NOTIFICATION_FIXTURE.id }]);
   });
 
   it("콘텐츠 제목 사용을 체크하면 알람 내용 대신 콘텐츠 제목을 보낸다", () => {

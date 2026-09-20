@@ -39,7 +39,7 @@ function renderListHeader(
 }
 
 describe("ListHeader", () => {
-  it('S-10 Given 콘텐츠 탭 When "알람" 탭을 누르면 Then `/alarms`로 이동한다', async () => {
+  it('30 S-10 Given 콘텐츠 탭 When "알람" 탭을 누르면 Then `/alarms`로 이동한다', async () => {
     const { router } = renderListHeader("/");
 
     fireEvent.click(screen.getByRole("link", { name: "알람" }));
@@ -49,7 +49,7 @@ describe("ListHeader", () => {
     });
   });
 
-  it("S-11 Given 아래로 스크롤된 콘텐츠 목록 When 로고를 누르면 Then `/`로 이동하고 창 스크롤이 맨 위로 이동한다", async () => {
+  it("30 S-11 Given 아래로 스크롤된 콘텐츠 목록 When 로고를 누르면 Then `/`로 이동하고 창 스크롤이 맨 위로 이동한다", async () => {
     const scrollTo = vi.spyOn(window, "scrollTo").mockImplementation(() => undefined);
     const { router } = renderListHeader("/?page=2");
 

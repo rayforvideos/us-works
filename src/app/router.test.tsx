@@ -51,14 +51,14 @@ describe("라우터 보호", () => {
     localStorage.clear();
   });
 
-  it("S-07 Given 세션이 있는 상태 When `/login`에 접근하면 Then `/`로 이동한다", async () => {
+  it("26 S-07 Given 세션이 있는 상태 When `/login`에 접근하면 Then `/`로 이동한다", async () => {
     const router = openRoute("/login", { hasSession: true });
 
     expect(await screen.findByRole("heading", { name: "콘텐츠" })).toBeInTheDocument();
     expect(router.state.location.pathname).toBe("/");
   });
 
-  it("S-08 Given 세션이 없는 상태 When 보호 경로에 접근하면 Then `/login`으로 이동한다", async () => {
+  it("26 S-08 Given 세션이 없는 상태 When 보호 경로에 접근하면 Then `/login`으로 이동한다", async () => {
     const router = openRoute("/", { hasSession: false });
 
     expect(await screen.findByRole("heading", { name: "US Alliance" })).toBeInTheDocument();
@@ -66,7 +66,7 @@ describe("라우터 보호", () => {
     expect(readRedirectFrom(router.state.location.state)).toBe("/");
   });
 
-  it("S-06 Given 세션이 있는 상태 When `/register`에 접근하면 Then `/`로 이동한다", async () => {
+  it("26 S-06 Given 세션이 있는 상태 When `/register`에 접근하면 Then `/`로 이동한다", async () => {
     const router = openRoute("/register", { hasSession: true });
 
     expect(await screen.findByRole("heading", { name: "콘텐츠" })).toBeInTheDocument();

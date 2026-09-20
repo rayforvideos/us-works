@@ -89,7 +89,9 @@ describe("ContentsPage", () => {
   it('37 S-01 Given 목록 페이지 When "새 글쓰기"를 누르면 Then "새글쓰기" 다이얼로그가 열린다', () => {
     renderContentsPage();
 
-    expect(screen.getByRole("button", { name: "새 글쓰기" })).toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button", { name: "새 글쓰기" }));
+
+    expect(screen.getByRole("dialog", { name: "새글쓰기" })).toBeInTheDocument();
   });
 
   it("목록을 받으면 제목과 행, 페이지네이션을 보여준다", async () => {
