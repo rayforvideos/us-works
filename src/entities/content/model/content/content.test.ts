@@ -35,7 +35,7 @@ describe("콘텐츠 모델", () => {
     expect(formatPublishedAt("")).toBeNull();
   });
 
-  it("30 R-05 URL의 `page`가 1 미만이거나 숫자가 아니면 1로, `category`·`publish_status`가 enum에 없으면 없는 것으로 읽는다", () => {
+  it("30 R-05 URL의 `page`가 1 미만이거나 숫자가 아니면 1로, 9999를 넘으면 9999로, `category`·`publish_status`가 enum에 없으면 없는 것으로 읽는다", () => {
     expect(parseContentListParams(new URLSearchParams("page=0"))).toEqual({
       page: 1,
       limit: 10,
@@ -43,6 +43,7 @@ describe("콘텐츠 모델", () => {
       publishStatus: undefined,
     });
     expect(parseContentListParams(new URLSearchParams("page=abc")).page).toBe(1);
+    expect(parseContentListParams(new URLSearchParams("page=10000")).page).toBe(9999);
     expect(parseContentListParams(new URLSearchParams("category=없는값")).category).toBeUndefined();
     expect(
       parseContentListParams(new URLSearchParams("publish_status=없는값")).publishStatus,
