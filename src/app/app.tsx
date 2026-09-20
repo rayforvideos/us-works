@@ -3,6 +3,8 @@ import { Checkbox } from "@/shared/ui/checkbox";
 import { CheckboxChip } from "@/shared/ui/checkbox-chip";
 import { RadioGroup, RadioGroupItem } from "@/shared/ui/radio-group";
 import { StatusBadge } from "@/shared/ui/status-badge";
+import { TextArea } from "@/shared/ui/text-area";
+import { TextField } from "@/shared/ui/text-field";
 
 export function App() {
   return (
@@ -50,6 +52,37 @@ export function App() {
         <StatusBadge tone="green" showDot={false}>
           공개
         </StatusBadge>
+      </div>
+      <div className="flex w-160 flex-col gap-3">
+        <TextField aria-label="제목" placeholder="제목을 입력해주세요. (최대 50자)" clearable />
+        <TextField
+          aria-label="제목 입력됨"
+          defaultValue="제목을 입력해주세요. (최대 50자)"
+          clearable
+        />
+        <TextField
+          aria-label="제목 카운터"
+          placeholder="제목을 입력해주세요. (최대 50자)"
+          showCounter
+          maxLength={50}
+        />
+        <TextField
+          aria-label="제목 오류"
+          placeholder="제목을 입력해주세요. (최대 50자)"
+          clearable
+          error="필수 정보입니다."
+        />
+        <TextField
+          aria-label="제목 비활성"
+          placeholder="제목을 입력해주세요. (최대 50자)"
+          disabled
+        />
+        <TextArea
+          aria-label="내용"
+          placeholder="내용을 입력해주세요. (최대 500자)"
+          showCounter
+          maxLength={500}
+        />
       </div>
       <RadioGroup name="plan" aria-label="요금제" defaultValue="pro" className="gap-1">
         <RadioGroupItem value="basic" label="레이블" />
