@@ -113,8 +113,12 @@ function fillForm() {
   fireEvent.change(screen.getByLabelText("내용"), { target: { value: "내용" } });
 }
 
+function readPublishButton(): HTMLElement {
+  return within(screen.getByRole("banner")).getByRole("button", { name: /발행하기/ });
+}
+
 function openPublishOptions() {
-  fireEvent.click(within(screen.getByRole("banner")).getByRole("button", { name: /발행하기/ }));
+  fireEvent.click(readPublishButton());
 }
 
 function submitPublishOptions() {
@@ -156,7 +160,7 @@ describe("ContentWritePage 작성", () => {
     expect(screen.getByRole("radio", { name: "전체" })).toBeChecked();
   });
 
-  it("S-15 Given 작성 페이지의 빈 폼 When 발행하기를 누르면 Then 모달이 열리지 않고 폼 오류가 보인다", () => {
+  it("43 S-15 Given 작성 페이지의 빈 폼 When 발행하기를 누르면 Then 모달이 열리지 않고 폼 오류가 보인다", () => {
     renderPage("/contents/new");
 
     openPublishOptions();
@@ -364,6 +368,21 @@ describe("ContentWritePage 수정", () => {
       `delete /api/v1/notifications/${String(CONTENT_NOTIFICATION.id)}`,
     ]);
     expect(readBody(calls, "patch /api/v1/contents/136/status")).toEqual({ status: "private" });
+  });
+
+  it("알림 조회가 끝나기 전에는 발행 모달을 열지 않고 발행하기 버튼이 로딩 상태로 남는다", async () => {
+    renderPage("/contents/136", {
+      "get /api/v1/contents/136": createOkResponse(SCHEDULED_CONTENT),
+      "get /api/v1/contents/136/notification": "pending",
+    });
+
+    await screen.findByLabelText("제목");
+    openPublishOptions();
+
+    await waitFor(() => {
+      expect(readPublishButton()).toHaveAttribute("aria-busy", "true");
+    });
+    expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
   });
 
   it("43 S-11 Given 한 번 공개된 콘텐츠의 수정 화면 When 모달을 열면 Then 예약 발행이 비활성이다", async () => {

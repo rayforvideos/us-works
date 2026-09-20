@@ -34,6 +34,7 @@ export function ContentEditView({ id }: ContentEditViewProps) {
   const notificationQuery = useContentNotificationQuery(id);
   const [publishValues, setPublishValues] = useState<ContentFormValues | null>(null);
   const mutation = usePublishContentMutation();
+  const isWaitingNotification = publishValues !== null && notificationQuery.isPending;
 
   function publishContent(options: PublishOptionsValues) {
     if (publishValues === null || mutation.isPending) {
@@ -68,7 +69,7 @@ export function ContentEditView({ id }: ContentEditViewProps) {
               size="medium"
               type="submit"
               form={CONTENT_FORM_ID}
-              loading={mutation.isPending}
+              loading={mutation.isPending || isWaitingNotification}
             >
               발행하기
             </Button>
@@ -93,7 +94,7 @@ export function ContentEditView({ id }: ContentEditViewProps) {
           />
         ) : null}
       </Container>
-      {data && publishValues !== null ? (
+      {data && publishValues !== null && !notificationQuery.isPending ? (
         <PublishOptionsDialog
           open
           onOpenChange={() => {
