@@ -2,12 +2,6 @@ import { cva } from "class-variance-authority";
 
 export const rowClass = cva("group cursor-pointer");
 
-export const cellClass = cva(
-  "h-22.5 px-3 text-16-m500 text-blue-grey-300 group-focus-within:bg-grey-000 group-hover:bg-grey-000 first:rounded-l-12 last:rounded-r-12",
-);
-
-export const centeredCellClass = cva("px-0 text-center");
-
 export const titleRowClass = cva("flex items-center gap-2");
 
 export const titleLinkClass = cva(

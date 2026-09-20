@@ -4,9 +4,23 @@ import { RouterProvider } from "react-router/dom";
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 
 import { ListHeader } from ".";
+import { type ListHeaderTab } from "./types";
 
-function renderListHeader(pathname: string, action?: ReactNode) {
-  const element = <ListHeader action={action} />;
+const LIST_TABS: readonly ListHeaderTab[] = [
+  { label: "콘텐츠", to: "/", end: true },
+  { label: "알람", to: "/alarms" },
+];
+
+const CUSTOM_TABS: readonly ListHeaderTab[] = [
+  { label: "첫 번째", to: "/" },
+  { label: "두 번째", to: "/alarms" },
+];
+
+function renderListHeader(
+  pathname: string,
+  { action, tabs = LIST_TABS }: { action?: ReactNode; tabs?: readonly ListHeaderTab[] } = {},
+) {
+  const element = <ListHeader tabs={tabs} action={action} />;
   const router = createMemoryRouter(
     [
       { path: "/", element },
@@ -40,6 +54,14 @@ describe("ListHeader", () => {
     expect(scrollTo).toHaveBeenCalledWith({ top: 0, behavior: "smooth" });
   });
 
+  it("넘긴 탭 목록을 그대로 그린다", () => {
+    renderListHeader("/", { tabs: CUSTOM_TABS });
+
+    expect(screen.getByRole("link", { name: "첫 번째" })).toHaveAttribute("href", "/");
+    expect(screen.getByRole("link", { name: "두 번째" })).toHaveAttribute("href", "/alarms");
+    expect(screen.queryByRole("link", { name: "콘텐츠" })).toBeNull();
+  });
+
   it("현재 경로의 탭이 선택 상태다", () => {
     renderListHeader("/alarms");
 
@@ -48,7 +70,7 @@ describe("ListHeader", () => {
   });
 
   it("action을 주면 오른쪽 자리에 렌더링한다", () => {
-    renderListHeader("/", <button type="button">새 글쓰기</button>);
+    renderListHeader("/", { action: <button type="button">새 글쓰기</button> });
 
     expect(screen.getByRole("button", { name: "새 글쓰기" })).toBeInTheDocument();
   });

@@ -1,4 +1,3 @@
-import { type ReactNode } from "react";
 import { NavLink } from "react-router";
 
 import { cn } from "@/shared/lib/cn";
@@ -13,23 +12,9 @@ import {
   tabActiveClass,
   tabListClass,
 } from "./list-header-variants";
+import { type ListHeaderProps } from "./types";
 
-/**
- * @types
- */
-type ListHeaderProps = {
-  action?: ReactNode;
-};
-
-/**
- * @constants
- */
-const TABS = [
-  { to: "/", label: "콘텐츠", end: true },
-  { to: "/alarms", label: "알람", end: false },
-];
-
-export function ListHeader({ action }: ListHeaderProps) {
+export function ListHeader({ tabs, action }: ListHeaderProps) {
   return (
     <header>
       <Container className={containerClass()}>
@@ -45,7 +30,7 @@ export function ListHeader({ action }: ListHeaderProps) {
         </button>
         <nav aria-label="주요 메뉴">
           <ul className={tabListClass()}>
-            {TABS.map((tab) => (
+            {tabs.map((tab) => (
               <li key={tab.to}>
                 <NavLink
                   to={tab.to}
