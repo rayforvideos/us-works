@@ -30,7 +30,7 @@ describe("임시저장", () => {
     localStorage.clear();
   });
 
-  it("R-06 임시저장 값은 제목, 내용, 카테고리, 링크, 저장 시각으로 저장되고, 네 필드가 모두 비어 있으면 저장하지 않는다", () => {
+  it("35 R-06 임시저장 값은 제목, 내용, 카테고리, 링크, 저장 시각으로 저장되고, 네 필드가 모두 비어 있으면 저장하지 않는다", () => {
     const savedAt = writeContentDraft(FILLED_VALUES);
 
     expect(readStoredDraft()).toEqual({ ...FILLED_VALUES, savedAt });
@@ -94,7 +94,7 @@ describe("임시저장", () => {
     expect(formatSavedAt("2026-09-20T07:41:00.000Z")).toBe("16:41");
   });
 
-  it('R-01 저장 시각은 Asia/Seoul 기준 "YYYY년 MM월 DD일 HH:mm"으로 표시한다', () => {
+  it('37 R-01 저장 시각은 Asia/Seoul 기준 "YYYY년 MM월 DD일 HH:mm"으로 표시한다', () => {
     expect(formatSavedAtDateTime("2026-09-20T07:41:00.000Z")).toBe("2026년 09월 20일 16:41");
     expect(formatSavedAtDateTime("2026-01-05T15:00:00.000Z")).toBe("2026년 01월 06일 00:00");
   });

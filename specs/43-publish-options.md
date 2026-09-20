@@ -47,7 +47,9 @@
 - R-05 콘텐츠 제목 사용을 체크하면 알람 내용이 콘텐츠 제목이 되고, 해제하면 빈 값이 된다
 - R-06 `publish_status`가 `scheduled`가 아니면서 `published_at`이 있는 콘텐츠(한 번 공개된 콘텐츠)는 예약 발행을 고를 수 없다
 - R-07 초기값은 콘텐츠 상태에서 정한다: `publish_status`가 `scheduled`면 예약 발행과 그 시각, `status`가 `public`이면 공개, 그 외는 비공개. 알림이 있으면 발송과 그 대상자·제목, 없으면 미발송
-- R-08 요청 계획: 목표 상태와 현재 상태의 차이로만 요청을 만든다. 공개 → `PATCH public`. 비공개 → 예약이 있으면 `DELETE schedule` 뒤 `PATCH private`, 없으면 `PATCH private`. 예약 → 예약이 없으면 `POST schedule`, 시각이 바뀌었으면 `PUT schedule`. 알림: 발송이고 없으면 `POST`(예약이면 `scheduled_at` 포함), 있으면 바뀐 부분만 `PUT`, 미발송이고 있으면 `DELETE`. 공개로 바꿀 때 기존 알림의 예약 시각은 그대로 둔다(알림 예약을 지우는 API가 없다). 발송 완료(`sent`)된 알림은 어떤 요청도 보내지 않는다
+- R-08 요청 계획은 목표 상태와 현재 상태의 차이로만 만들어서, 공개면 `PATCH public`, 비공개면 예약이 있을 때 `DELETE schedule` 뒤 `PATCH private`·없을 때 `PATCH private`, 예약 발행이면 예약이 없을 때 `POST schedule`·시각이 바뀌었을 때 `PUT schedule`이고, 목표가 현재와 같으면 아무 요청도 만들지 않는다
+- R-09 알림은 발송이고 없으면 `POST`(예약이면 `scheduled_at` 포함), 발송이고 있으면 바뀐 부분만 `PUT`, 미발송이고 있으면 `DELETE`를 보낸다
+- R-10 알림이 발송 완료(`sent`)면 어떤 요청도 보내지 않고, 공개로 바꿀 때는 기존 알림의 예약 시각을 그대로 둔다(알림 예약을 지우는 API가 없다)
 
 ## 흐름
 

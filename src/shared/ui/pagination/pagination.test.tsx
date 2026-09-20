@@ -3,7 +3,7 @@ import { fireEvent, render, screen } from "@testing-library/react";
 import { Pagination } from ".";
 
 describe("Pagination", () => {
-  it("R-06 페이지네이션은 현재 페이지를 가운데 둔 최대 5개 번호를 보이고, 첫 페이지에서 이전, 마지막 페이지에서 다음이 비활성이다", () => {
+  it("30 R-06 페이지네이션은 현재 페이지를 가운데 둔 최대 5개 번호를 보이고, 첫 페이지에서 이전, 마지막 페이지에서 다음이 비활성이다", () => {
     const { rerender } = render(<Pagination page={1} pageCount={10} onPageChange={vi.fn()} />);
 
     expect(screen.getByRole("button", { name: "1페이지" })).toHaveAttribute("aria-current", "page");

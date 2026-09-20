@@ -22,7 +22,7 @@ describe("buildNewPostOptions", () => {
     ]);
   });
 
-  it('R-01 저장 시각은 Asia/Seoul 기준 "YYYY년 MM월 DD일 HH:mm"으로 표시한다', () => {
+  it("이어쓰기 항목에 저장 시각 문구를 넣는다", () => {
     const options = buildNewPostOptions(DRAFT);
 
     expect(options).toHaveLength(2);

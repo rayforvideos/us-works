@@ -1,7 +1,7 @@
 import { getPageCount, parsePage } from ".";
 
 describe("페이지 파라미터", () => {
-  it("R-04 페이지 수는 `total`을 `limit`으로 나눠 올림한 값이며 최소 1이다", () => {
+  it("30 R-04 페이지 수는 `total`을 `limit`으로 나눠 올림한 값이며 최소 1이다", () => {
     expect(getPageCount(25, 10)).toBe(3);
     expect(getPageCount(20, 10)).toBe(2);
     expect(getPageCount(0, 10)).toBe(1);

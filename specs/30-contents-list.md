@@ -53,8 +53,8 @@
 - S-05 Given 2페이지를 보고 있을 때 When 상태 필터를 "공개"로 바꾸면 Then URL이 `?publish_status=published`가 되고 1페이지를 요청한다
 - S-06 Given 1페이지를 보고 있을 때 When 2페이지를 누르면 Then URL이 `?page=2`가 되고 2페이지를 요청한다
 - S-07 Given 목록 행이 있을 때 When 행을 클릭하면 Then `/contents/<id>`로 이동한다
-- S-08 Given 알림이 없는 콘텐츠 행 When 행에 포커스하고 "푸시알림 생성"을 누르면 Then `/alarms/new?contentId=<id>`로 이동하고 행 클릭 이동은 일어나지 않는다
-- S-09 Given 알림이 있는 콘텐츠 행 When 행에 포커스하면 Then "푸시알림 생성" 버튼이 없다
+- S-08 Given 알림이 없는 콘텐츠 행 When "푸시알림 생성"을 누르면 Then `/alarms/new?contentId=<id>`로 이동하고 행 클릭 이동은 일어나지 않는다
+- S-09 Given 알림이 있는 콘텐츠 행 When 보면 Then "푸시알림 생성" 버튼이 없다
 - S-10 Given 콘텐츠 탭 When "알람" 탭을 누르면 Then `/alarms`로 이동한다
 - S-11 Given 아래로 스크롤된 콘텐츠 목록 When 로고를 누르면 Then `/`로 이동하고 창 스크롤이 맨 위로 이동한다
 

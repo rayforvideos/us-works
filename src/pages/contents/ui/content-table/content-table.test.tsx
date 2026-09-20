@@ -96,7 +96,7 @@ describe("ContentTable", () => {
     });
   });
 
-  it('S-08 Given 알림이 없는 콘텐츠 행 When 행에 포커스하고 "푸시알림 생성"을 누르면 Then `/alarms/new?contentId=<id>`로 이동하고 행 클릭 이동은 일어나지 않는다', async () => {
+  it('S-08 Given 알림이 없는 콘텐츠 행 When "푸시알림 생성"을 누르면 Then `/alarms/new?contentId=<id>`로 이동하고 행 클릭 이동은 일어나지 않는다', async () => {
     const { router } = renderContentTable();
 
     const publishedRow = getRow(PUBLISHED_CONTENT_FIXTURE.title);
@@ -108,14 +108,14 @@ describe("ContentTable", () => {
     expect(router.state.location.search).toBe("?contentId=1");
   });
 
-  it('S-09 Given 알림이 있는 콘텐츠 행 When 행에 포커스하면 Then "푸시알림 생성" 버튼이 없다', () => {
+  it('S-09 Given 알림이 있는 콘텐츠 행 When 보면 Then "푸시알림 생성" 버튼이 없다', () => {
     renderContentTable();
 
     const scheduledRow = getRow(SCHEDULED_CONTENT_FIXTURE.title);
     expect(within(scheduledRow).queryByRole("link", { name: "푸시알림 생성" })).toBeNull();
   });
 
-  it('S-14 Given 콘텐츠 목록의 비공개 콘텐츠 행 When 보면 Then "푸시알림 생성" 버튼이 없다', () => {
+  it('43 S-14 Given 콘텐츠 목록의 비공개 콘텐츠 행 When 보면 Then "푸시알림 생성" 버튼이 없다', () => {
     const hiddenScheduledContent = {
       ...DRAFT_CONTENT_FIXTURE,
       id: 4,
