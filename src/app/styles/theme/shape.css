@@ -1,0 +1,12 @@
+@theme {
+  --radius-*: initial;
+  --radius-4: 4px;
+  --radius-6: 6px;
+  --radius-8: 8px;
+  --radius-10: 10px;
+  --radius-12: 12px;
+  --radius-14: 14px;
+
+  --shadow-*: initial;
+  --shadow-100: 0 1px 15px 0 rgb(28 45 79 / 0.13);
+}
