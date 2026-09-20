@@ -57,16 +57,13 @@ function respondToEdit(notification: unknown) {
   return () => createOkResponse(notification);
 }
 
-async function pickScheduledAt(date: string, time: string) {
-  fireEvent.click(screen.getByRole("button", { name: "발송 시간" }));
-  await screen.findByRole("dialog");
-  fireEvent.change(screen.getByLabelText("발송 날짜"), { target: { value: date } });
-  fireEvent.click(screen.getByRole("option", { name: time }));
+function pickScheduledAt(value: string) {
+  fireEvent.change(screen.getByLabelText("발송 시간"), { target: { value } });
 }
 
-async function fillForm() {
+function fillForm() {
   fireEvent.change(screen.getByLabelText("제목"), { target: { value: "알림 제목" } });
-  await pickScheduledAt("2099-12-31", "14:30");
+  pickScheduledAt("2099-12-31T14:35");
 }
 
 function send() {
@@ -93,7 +90,7 @@ describe("AlarmWritePage 작성", () => {
     );
 
     await screen.findByLabelText("제목");
-    await fillForm();
+    fillForm();
     send();
 
     expect(await screen.findByText("알람 목록")).toBeInTheDocument();
@@ -104,7 +101,7 @@ describe("AlarmWritePage 작성", () => {
       content_id: 147,
       title: "알림 제목",
       target_type: "all",
-      scheduled_at: "2099-12-31T14:30:00+09:00",
+      scheduled_at: "2099-12-31T14:35:00+09:00",
     });
   });
 
@@ -115,12 +112,12 @@ describe("AlarmWritePage 작성", () => {
     );
 
     await screen.findByLabelText("제목");
-    await fillForm();
+    fillForm();
     send();
 
     expect(await screen.findByRole("alert")).toHaveTextContent("이미 알림이 있는 콘텐츠입니다.");
     expect(screen.getByLabelText("제목")).toHaveValue("알림 제목");
-    expect(screen.getByText("2099년 12월 31일 14시 30분")).toBeInTheDocument();
+    expect(screen.getByText("2099년 12월 31일 14시 35분")).toBeInTheDocument();
   });
 
   it("S-12 Given `/alarms/new`(contentId 없음) When 페이지가 열리면 Then `/`로 이동한다", async () => {
@@ -168,7 +165,7 @@ describe("AlarmWritePage 수정", () => {
     renderPage("/alarms/12", respondToEdit(SENT_NOTIFICATION));
 
     expect(await screen.findByLabelText("제목")).toBeDisabled();
-    expect(screen.getByRole("button", { name: "발송 시간" })).toBeDisabled();
+    expect(screen.getByLabelText("발송 시간")).toBeDisabled();
     expect(screen.queryByRole("button", { name: /발송하기/ })).not.toBeInTheDocument();
   });
 
@@ -190,14 +187,14 @@ describe("AlarmWritePage 수정", () => {
     const { calls } = renderPage("/alarms/12", respondToEdit(EDITED_NOTIFICATION));
 
     await screen.findByLabelText("제목");
-    await pickScheduledAt("2099-10-01", "14:30");
+    pickScheduledAt("2099-10-01T14:35");
     send();
 
     expect(await screen.findByText("알람 목록")).toBeInTheDocument();
     const writes = readWrites(calls);
     expect(writes).toHaveLength(1);
     expect(writes[0]?.url).toBe("/api/v1/notifications/12/schedule");
-    expect(readBody(writes[0]?.data)).toEqual({ scheduled_at: "2099-10-01T14:30:00+09:00" });
+    expect(readBody(writes[0]?.data)).toEqual({ scheduled_at: "2099-10-01T14:35:00+09:00" });
   });
 
   it("수정 화면은 불러오는 동안 스피너를 보이고 실패하면 목록 링크를 보인다", async () => {

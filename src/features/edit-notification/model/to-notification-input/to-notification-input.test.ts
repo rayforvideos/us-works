@@ -15,7 +15,7 @@ const VALUES: NotificationFormValues = {
 };
 
 describe("toNotificationInput", () => {
-  it("폼 값과 콘텐츠 번호로 생성 요청 본문을 만든다", () => {
+  it("R-05 요청의 `scheduled_at`은 선택한 날짜·시간을 `+09:00` 오프셋의 ISO 8601로 만든다", () => {
     expect(toNotificationInput(VALUES, 147)).toEqual({
       content_id: 147,
       title: "알림 제목",
@@ -43,7 +43,7 @@ describe("isSameNotificationValues", () => {
 });
 
 describe("diffNotificationUpdate", () => {
-  it("R-08 수정 요청은 제목·대상자가 바뀌었을 때만 `PUT /notifications/{id}`를, 시간이 바뀌었을 때만 `PUT /notifications/{id}/schedule`을 보낸다", () => {
+  it("R-07 수정 요청은 제목·대상자가 바뀌었을 때만 `PUT /notifications/{id}`를, 시간이 바뀌었을 때만 `PUT /notifications/{id}/schedule`을 보낸다", () => {
     expect(diffNotificationUpdate(VALUES, { ...VALUES, title: "바뀐 제목" })).toEqual({
       detail: { title: "바뀐 제목", target_type: "all" },
       schedule: undefined,

@@ -1,7 +1,7 @@
 import { type Notification, type NotificationInput } from "@/entities/notification";
+import { fromSeoulIso, toSeoulIso } from "@/shared/lib/seoul-time";
 
 import { type NotificationFormValues } from "../notification-input-schema";
-import { fromScheduledAt, toScheduledAt } from "../scheduled-at";
 import { type NotificationUpdate } from "./types";
 
 export function toNotificationInput(
@@ -12,7 +12,7 @@ export function toNotificationInput(
     content_id: contentId,
     title: values.title,
     target_type: values.targetType,
-    scheduled_at: toScheduledAt(values.scheduledAt),
+    scheduled_at: toSeoulIso(values.scheduledAt),
   };
 }
 
@@ -20,7 +20,7 @@ export function toNotificationFormValues(notification: Notification): Notificati
   return {
     targetType: notification.target_type,
     title: notification.title,
-    scheduledAt: fromScheduledAt(notification.scheduled_at),
+    scheduledAt: fromSeoulIso(notification.scheduled_at),
   };
 }
 
@@ -45,6 +45,6 @@ export function diffNotificationUpdate(
 
   return {
     detail: isDetailChanged ? { title: current.title, target_type: current.targetType } : undefined,
-    schedule: isScheduleChanged ? { scheduled_at: toScheduledAt(current.scheduledAt) } : undefined,
+    schedule: isScheduleChanged ? { scheduled_at: toSeoulIso(current.scheduledAt) } : undefined,
   };
 }

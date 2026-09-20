@@ -33,11 +33,8 @@ function submitForm() {
   fireEvent.click(screen.getByRole("button", { name: "발송하기" }));
 }
 
-async function pickScheduledAt(date: string, time: string) {
-  fireEvent.click(screen.getByRole("button", { name: "발송 시간" }));
-  await screen.findByRole("dialog");
-  fireEvent.change(screen.getByLabelText("발송 날짜"), { target: { value: date } });
-  fireEvent.click(screen.getByRole("option", { name: time }));
+function pickScheduledAt(value: string) {
+  fireEvent.change(screen.getByLabelText("발송 시간"), { target: { value } });
 }
 
 describe("NotificationForm", () => {
@@ -48,32 +45,29 @@ describe("NotificationForm", () => {
 
     expect(screen.getAllByText("필수 정보입니다.")).toHaveLength(2);
     expect(screen.getByLabelText("제목")).toHaveAccessibleDescription("필수 정보입니다.");
-    expect(screen.getByRole("button", { name: "발송 시간" })).toHaveAccessibleDescription(
-      "필수 정보입니다.",
-    );
+    expect(screen.getByLabelText("발송 시간")).toHaveAccessibleDescription("필수 정보입니다.");
     expect(onSubmit).not.toHaveBeenCalled();
   });
 
-  it('S-02 Given 빈 시간 필드 When 팝오버에서 날짜 2027-04-05와 시간 14:30을 고르면 Then 팝오버가 닫히고 필드에 "2027년 04월 05일 14시 30분"이 보인다', async () => {
+  it('S-02 Given 빈 시간 필드 When 선택기에서 2027-04-05 14:35를 고르면 Then 필드에 "2027년 04월 05일 14시 35분"이 보인다', () => {
     renderNotificationForm();
 
-    await pickScheduledAt("2027-04-05", "14:30");
+    pickScheduledAt("2027-04-05T14:35");
 
-    expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
-    expect(screen.getByText("2027년 04월 05일 14시 30분")).toBeInTheDocument();
+    expect(screen.getByText("2027년 04월 05일 14시 35분")).toBeInTheDocument();
   });
 
   it("고른 시간은 제출 값에 그대로 담긴다", async () => {
     const { onSubmit } = renderNotificationForm({ ...EMPTY_VALUES, title: "알림 제목" });
 
-    await pickScheduledAt("2099-12-31", "14:30");
+    pickScheduledAt("2099-12-31T14:35");
     submitForm();
 
     await waitFor(() => {
       expect(onSubmit).toHaveBeenCalledWith({
         targetType: "all",
         title: "알림 제목",
-        scheduledAt: "2099-12-31T14:30",
+        scheduledAt: "2099-12-31T14:35",
       });
     });
   });
@@ -104,6 +98,6 @@ describe("NotificationForm", () => {
 
     expect(screen.getByRole("radio", { name: "전체" })).toBeDisabled();
     expect(screen.getByLabelText("제목")).toBeDisabled();
-    expect(screen.getByRole("button", { name: "발송 시간" })).toBeDisabled();
+    expect(screen.getByLabelText("발송 시간")).toBeDisabled();
   });
 });
