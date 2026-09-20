@@ -40,7 +40,7 @@ header/
 
 ## FSD 세그먼트 아래에서의 적용
 
-세그먼트(`ui`, `model`, `api`, `lib`) 바로 아래에 모듈 디렉토리를 둔다. 슬라이스의 `index.ts`는 외부가 쓰는 모듈 `index.ts`만 다시 export한다.
+세그먼트(`ui`, `model`, `api`, `lib`, `config`) 바로 아래에 모듈 디렉토리를 둔다. `config`는 ADR-0002가 허용하는 세그먼트지만 지금은 `shared/config`에만 있고 슬라이스에서 쓰는 곳이 없다. 슬라이스의 `index.ts`는 외부가 쓰는 모듈 `index.ts`만 다시 export한다.
 
 ```
 pages/content-write/
