@@ -12,7 +12,7 @@ type ResolvedButtonVariant = {
 };
 
 const buttonVariantClasses = cva(
-  "inline-flex cursor-pointer items-center justify-center gap-2.5 whitespace-nowrap outline-none transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-green-70 disabled:cursor-not-allowed",
+  "inline-flex cursor-pointer items-center justify-center gap-2.5 whitespace-nowrap transition-colors outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-green-70 disabled:cursor-not-allowed",
   {
     variants: {
       variant: {
