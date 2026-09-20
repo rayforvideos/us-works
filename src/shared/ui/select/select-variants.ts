@@ -1,7 +1,7 @@
 import { cva } from "class-variance-authority";
 
 export const triggerClass = cva(
-  "group flex h-11 w-full cursor-pointer items-center justify-between gap-5 rounded-12 border border-grey-300 bg-white px-4 text-16-m500 text-blue-grey-300 transition-colors outline-none focus-visible:border-grey-400 data-disabled:cursor-not-allowed data-disabled:border-grey-200 data-disabled:bg-grey-100 data-disabled:text-grey-300 data-placeholder:text-grey-200 data-popup-open:border-grey-400",
+  "group flex h-11 w-full cursor-pointer items-center justify-between gap-2 rounded-12 border border-grey-300 bg-white px-3 text-16-m500 text-blue-grey-300 transition-colors outline-none focus-visible:border-grey-400 data-disabled:cursor-not-allowed data-disabled:border-grey-200 data-disabled:bg-grey-100 data-disabled:text-grey-300 data-placeholder:text-grey-200 data-popup-open:border-grey-400",
 );
 
 export const valueClass = cva("truncate");

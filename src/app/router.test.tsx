@@ -3,14 +3,17 @@ import { RouterProvider } from "react-router/dom";
 import { render, screen } from "@testing-library/react";
 
 import { persistedSessionAtom } from "@/entities/session";
-import { PERSISTED_SESSION_FIXTURE } from "@/shared/config";
+import { createFakeAdapter, createOkResponse, PERSISTED_SESSION_FIXTURE } from "@/shared/config";
 
 import { AppProviders } from "./app-providers";
 import { initializeSystem } from "./initialize-system";
 import { routes } from "./router";
 
 function openRoute(pathname: string, { hasSession }: { hasSession: boolean }) {
-  const system = initializeSystem({ queryClient: { queries: { retry: false } } });
+  const { adapter } = createFakeAdapter(() =>
+    createOkResponse({ contents: [], total: 0, page: 1, limit: 10 }),
+  );
+  const system = initializeSystem({ adapter, queryClient: { queries: { retry: false } } });
   if (hasSession) {
     system.store.set(persistedSessionAtom, PERSISTED_SESSION_FIXTURE);
   }

@@ -39,3 +39,19 @@ export function createOkResponse(data: unknown, status = 200): FakeResponse {
 export function createFailResponse(status: number, error: string): FakeResponse {
   return { status, data: { success: false, data: null, error } };
 }
+
+export function readLastCall(calls: InternalAxiosRequestConfig[]): InternalAxiosRequestConfig {
+  const call = calls.at(-1);
+  if (!call) {
+    throw new Error("기록된 요청이 없습니다");
+  }
+  return call;
+}
+
+export function readCallParams(calls: InternalAxiosRequestConfig[]): Record<string, unknown> {
+  const params: unknown = readLastCall(calls).params;
+  if (typeof params !== "object" || params === null) {
+    return {};
+  }
+  return params as Record<string, unknown>;
+}
