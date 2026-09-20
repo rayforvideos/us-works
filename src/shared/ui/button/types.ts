@@ -11,7 +11,7 @@ type SolidVariantProps = {
 type OutlineVariantProps = {
   variant: "outline";
   importance?: ButtonImportance;
-  size?: "large" | "small";
+  size?: "large" | "medium" | "small";
 };
 
 type TextVariantProps = {

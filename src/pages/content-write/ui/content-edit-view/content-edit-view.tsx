@@ -1,4 +1,4 @@
-import { Link, useNavigate } from "react-router";
+import { useNavigate } from "react-router";
 
 import { type Content, useContentQuery } from "@/entities/content";
 import {
@@ -12,6 +12,7 @@ import { ROUTES } from "@/shared/config";
 import { getErrorMessage } from "@/shared/lib/error-message";
 import { Button } from "@/shared/ui/button";
 import { Container } from "@/shared/ui/container";
+import { LinkNotice } from "@/shared/ui/link-notice";
 import { Spinner } from "@/shared/ui/spinner";
 import { Gnb } from "@/widgets/gnb";
 
@@ -59,12 +60,7 @@ export function ContentEditView({ id }: ContentEditViewProps) {
           </div>
         ) : null}
         {error === null ? null : (
-          <div className="flex flex-col items-center gap-4">
-            <p className="text-14-sb600 text-grey-500">{getErrorMessage(error)}</p>
-            <Link to={ROUTES.contents} className="text-14-sb600 text-blue-green-90 underline">
-              목록으로
-            </Link>
-          </div>
+          <LinkNotice message={getErrorMessage(error)} linkLabel="목록으로" to={ROUTES.contents} />
         )}
         {data ? (
           <ContentForm

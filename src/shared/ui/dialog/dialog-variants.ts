@@ -5,7 +5,16 @@ export const backdropClass = cva(
 );
 
 export const popupClass = cva(
-  "fixed top-1/2 left-1/2 w-121 max-w-[calc(100vw-2rem)] -translate-x-1/2 -translate-y-1/2 rounded-20 bg-white shadow-200 transition-[opacity,scale] duration-150 outline-none data-ending-style:scale-95 data-ending-style:opacity-0 data-starting-style:scale-95 data-starting-style:opacity-0",
+  "fixed top-1/2 left-1/2 max-w-[calc(100vw-2rem)] -translate-x-1/2 -translate-y-1/2 rounded-20 bg-white shadow-200 transition-[opacity,scale] duration-150 outline-none data-ending-style:scale-95 data-ending-style:opacity-0 data-starting-style:scale-95 data-starting-style:opacity-0",
+  {
+    variants: {
+      width: {
+        default: "w-121",
+        narrow: "w-90",
+      },
+    },
+    defaultVariants: { width: "default" },
+  },
 );
 
 export const headerClass = cva("flex items-center justify-between border-b border-grey-200 p-6");

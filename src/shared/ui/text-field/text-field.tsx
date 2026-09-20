@@ -27,6 +27,8 @@ export function TextField({
   clearable = false,
   showCounter = false,
   error,
+  invalid = false,
+  reserveError = true,
   onClear,
   className,
   value,
@@ -42,7 +44,8 @@ export function TextField({
   const [innerLength, setInnerLength] = useState(String(defaultValue ?? "").length);
   const length = value === undefined ? innerLength : String(value).length;
   const isFilled = length > 0;
-  const isInvalid = error !== undefined && error !== null && error !== false;
+  const hasError = error !== undefined && error !== null && error !== false;
+  const isInvalid = hasError || invalid;
   const trailing = clearable ? "clear" : showCounter ? "counter" : "none";
 
   function handleChange(event: ChangeEvent<HTMLInputElement>) {
@@ -74,7 +77,7 @@ export function TextField({
           maxLength={maxLength}
           disabled={disabled}
           aria-invalid={isInvalid || undefined}
-          aria-describedby={isInvalid ? errorId : undefined}
+          aria-describedby={hasError ? errorId : undefined}
           data-filled={isFilled ? "true" : "false"}
           className={inputVariants({ filled: isFilled, invalid: isInvalid, trailing })}
           {...rest}
@@ -100,9 +103,11 @@ export function TextField({
           </span>
         ) : null}
       </div>
-      <p id={errorId} data-testid="error-text" className={errorTextClass()}>
-        {isInvalid ? error : null}
-      </p>
+      {hasError || reserveError ? (
+        <p id={errorId} data-testid="error-text" className={errorTextClass()}>
+          {hasError ? error : null}
+        </p>
+      ) : null}
     </div>
   );
 }

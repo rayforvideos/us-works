@@ -32,6 +32,7 @@ describe("Button 변형", () => {
 
   it.each([
     ["primary", "large"],
+    ["primary", "medium"],
     ["primary", "small"],
     ["secondary", "large"],
     ["secondary", "small"],
@@ -126,9 +127,9 @@ describe("Button 동작", () => {
 
 describe("Button 타입", () => {
   it("Figma에 없는 조합은 타입에서 막힌다", () => {
-    expectTypeOf<{ variant: "outline"; size: "medium" }>().not.toExtend<ButtonVariantProps>();
     expectTypeOf<{ variant: "solid"; size: "small" }>().not.toExtend<ButtonVariantProps>();
     expectTypeOf<{ variant: "text"; importance: "primary" }>().not.toExtend<ButtonVariantProps>();
     expectTypeOf<{ variant: "outline"; size: "small" }>().toExtend<ButtonVariantProps>();
+    expectTypeOf<{ variant: "outline"; size: "medium" }>().toExtend<ButtonVariantProps>();
   });
 });
