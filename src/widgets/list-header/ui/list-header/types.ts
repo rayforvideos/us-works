@@ -7,6 +7,7 @@ export type ListHeaderTab = {
 };
 
 export type ListHeaderProps = {
+  homeTo: string;
   tabs: readonly ListHeaderTab[];
   action?: ReactNode;
 };

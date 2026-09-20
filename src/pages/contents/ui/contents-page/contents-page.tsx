@@ -60,7 +60,7 @@ export function ContentsPage() {
 
   return (
     <>
-      <ListHeader tabs={LIST_TABS} action={<NewPostButton />} />
+      <ListHeader homeTo={ROUTES.contents} tabs={LIST_TABS} action={<NewPostButton />} />
       <Container as="main" className="flex flex-col gap-6 py-10">
         <h1 className="text-32-b700 text-blue-grey-300">콘텐츠</h1>
         <ContentFilters
