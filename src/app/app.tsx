@@ -6,6 +6,7 @@ import { Select } from "@/shared/ui/select";
 import { StatusBadge } from "@/shared/ui/status-badge";
 import { TextArea } from "@/shared/ui/text-area";
 import { TextField } from "@/shared/ui/text-field";
+import { Gnb } from "@/widgets/gnb";
 
 /**
  * @constants
@@ -17,9 +18,38 @@ const CATEGORY_ITEMS = [
   { value: "off", label: "비활성", disabled: true },
 ];
 
+function goBack() {
+  return undefined;
+}
+
 export function App() {
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center gap-6">
+    <main className="flex min-h-screen flex-col items-center gap-6 pb-10">
+      <Gnb
+        title="커뮤니티 쓰기"
+        message="해당 글이 임시 저장되었습니다 16:41"
+        onBack={goBack}
+        actions={
+          <>
+            <Button importance="secondary" size="medium">
+              임시저장
+            </Button>
+            <Button size="medium">발행하기</Button>
+          </>
+        }
+      />
+      <Gnb
+        title="커뮤니티 쓰기"
+        onBack={goBack}
+        actions={
+          <>
+            <Button importance="secondary" size="medium" loading>
+              임시저장
+            </Button>
+            <Button size="medium">발행하기</Button>
+          </>
+        }
+      />
       <h1 className="text-18-b700">US Alliance</h1>
       <div className="flex items-center gap-3">
         <Button>발행하기</Button>

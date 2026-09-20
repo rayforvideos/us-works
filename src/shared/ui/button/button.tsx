@@ -1,8 +1,15 @@
 import { type ReactNode } from "react";
 
 import { cn } from "@/shared/lib/cn";
+import { Spinner } from "@/shared/ui/spinner";
 
-import { buttonVariants, resolveButtonVariant } from "./button-variants";
+import {
+  buttonVariants,
+  labelClass,
+  loadingClass,
+  resolveButtonVariant,
+  spinnerSlotClass,
+} from "./button-variants";
 import { type ButtonProps, type ButtonVariantProps } from "./types";
 
 function IconSlot({ children }: { children: ReactNode }) {
@@ -22,8 +29,10 @@ export function Button({
   size,
   leftIcon,
   rightIcon,
+  loading = false,
   className,
   type = "button",
+  onClick,
   children,
   ...rest
 }: ButtonProps) {
@@ -36,12 +45,22 @@ export function Button({
       data-variant={resolved.variant}
       data-importance={resolved.importance}
       data-size={resolved.size ?? undefined}
-      className={cn(buttonVariants(variantProps), className)}
+      data-loading={loading ? "true" : undefined}
+      aria-busy={loading || undefined}
+      className={cn(buttonVariants(variantProps), loading && loadingClass(), className)}
+      onClick={loading ? undefined : onClick}
       {...rest}
     >
-      {leftIcon ? <IconSlot>{leftIcon}</IconSlot> : null}
-      {children}
-      {rightIcon ? <IconSlot>{rightIcon}</IconSlot> : null}
+      <span data-slot="content" className={labelClass({ loading })}>
+        {leftIcon ? <IconSlot>{leftIcon}</IconSlot> : null}
+        {children}
+        {rightIcon ? <IconSlot>{rightIcon}</IconSlot> : null}
+      </span>
+      {loading ? (
+        <span className={spinnerSlotClass()}>
+          <Spinner />
+        </span>
+      ) : null}
     </button>
   );
 }

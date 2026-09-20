@@ -27,4 +27,5 @@ export type ButtonProps = ButtonVariantProps &
     children: ReactNode;
     leftIcon?: ReactNode;
     rightIcon?: ReactNode;
+    loading?: boolean;
   };
