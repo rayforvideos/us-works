@@ -1,7 +1,6 @@
 {
   "$schema": "https://unpkg.com/knip@6/schema.json",
   "entry": ["steiger.config.ts"],
-  "ignore": ["src/widgets/gnb/index.ts"],
   "project": ["src/**/*.{ts,tsx}"],
   "ignoreDependencies": ["pretendard", "tailwindcss"]
 }
