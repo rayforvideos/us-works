@@ -34,4 +34,6 @@ Accepted
 - 섹션은 위 네 개만 쓰고 추가하지 않는다. 대안 비교, 후속 과제 등은 Context나 Consequences 문장 안에 녹인다.
 - Status는 `Proposed`, `Accepted`, `Deprecated`, `Superseded by ADR-NNNN` 중 하나만 쓴다.
 - 이미 승인된 ADR의 내용은 고치지 않는다. 결정이 바뀌면 새 ADR을 쓰고 이전 ADR의 Status를 `Superseded by`로 바꾼다.
+- 결정의 일부만 바뀌면 새 ADR을 쓰고, 이전 ADR의 해당 항목 끝에 `ADR-NNNN이 이 항목을 대체한다.`만 덧붙인다. Status는 그대로 둔다.
+- Consequences의 마지막 줄에 `다시 볼 조건:`으로 시작하는 한 줄을 적는다. 그 줄은 `docs/refactoring.md`가 모은다.
 - 다른 ADR을 언급할 때는 `ADR-NNNN` 표기를 쓴다.

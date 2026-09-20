@@ -26,7 +26,7 @@ Accepted
 - 로그인, 회원가입, 토큰 갱신 요청은 `skipAuth` 표시를 달아 헤더 부착, 만료 확인, 갱신 대기, 401 재시도에서 모두 제외한다. 갱신 요청 자체가 갱신 흐름에 들어가는 순환을 막기 위해서다.
 - 클라이언트를 통과한 모든 실패는 `ApiError` 하나로 정규화한다. `kind`(분류), `status`(HTTP 상태 코드, 응답이 없으면 null), `message`(응답의 `error` 필드, 없으면 null), `cause`(원본 오류)를 가진다. 네트워크 실패와 취소도 `ApiError`로 감싼다.
 - `kind`는 HTTP 상태 코드로 정한다. 응답 없음은 `network`, 취소는 `canceled`, 401은 `unauthorized`, 403은 `forbidden`, 404는 `not_found`, 409는 `conflict`, 400은 `validation`, 5xx는 `server`, 그 외는 `unknown`이다.
-- 사용자에게 보이는 문구는 `shared/lib`의 한 함수가 `kind`로 결정한다. `validation`과 `conflict`만 서버 문구를 그대로 쓰고 나머지는 고정 문구다. 화면은 `ApiError.message`를 직접 출력하지 않는다.
+- 사용자에게 보이는 문구는 `shared/lib`의 한 함수가 `kind`로 결정한다. `validation`과 `conflict`만 서버 문구를 그대로 쓰고 나머지는 고정 문구다. 화면은 `ApiError.message`를 직접 출력하지 않는다. ADR-0012가 이 항목을 대체한다.
 - TanStack Query의 재시도는 `kind`가 `network` 또는 `server`일 때만 한다. `validation`, `conflict`, `not_found`, `forbidden`, `unauthorized`, `canceled`는 재시도하지 않는다. 이 정책은 `createQueryClient()`의 기본 `retry` 함수에 둔다.
 - 단일 실행, 대기, 실패 전파, 만료 확인, 오류 분류는 테스트로 증명한다. 동시에 N개 요청이 401을 받을 때 갱신 호출은 1회, 재시도는 각 1회, 갱신 실패 시 인증 실패 핸들러 호출은 1회여야 한다.
 

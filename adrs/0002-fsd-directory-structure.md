@@ -16,7 +16,7 @@ ADR-0001에서 React + Vite 기반 SPA를 결정했다. 과제에는 폼, 어드
 - 디렉토리 구조로 Feature-Sliced Design(FSD) 2.1을 채택한다.
 - `src/` 아래에 다음 여섯 레이어를 둔다. 위가 상위 레이어이며, 각 레이어는 자신보다 아래 레이어만 import한다.
   - `app`: 앱 초기화. 프로바이더(TanStack Query, Jotai), 라우터, 전역 스타일
-  - `pages`: 라우트 단위 화면 조합
+  - `pages`: 라우트 단위 화면 조합. ADR-0017이 이 항목을 대체한다.
   - `widgets`: 독립적으로 동작하는 큰 UI 블록(헤더, 사이드바, 대시보드 카드 그룹)
   - `features`: 사용자 행위 단위 기능(필터 적용, 폼 제출, 로그인)
   - `entities`: 비즈니스 엔티티(user, order 등)의 타입, API, 표시용 UI
