@@ -1,7 +1,6 @@
 import { type AxiosInstance } from "axios";
 
 import { type Notification } from "@/entities/notification/@x/content";
-import { isApiError } from "@/shared/api";
 
 import {
   type Content,
@@ -77,8 +76,8 @@ export async function updateContentSchedule(
   client: AxiosInstance,
   id: string,
   input: ContentScheduleInput,
-): Promise<Content> {
-  const response = await client.put<Content>(toSchedulePath(id), input);
+): Promise<ContentSchedule> {
+  const response = await client.put<ContentSchedule>(toSchedulePath(id), input);
   return response.data;
 }
 
@@ -94,13 +93,6 @@ export async function fetchContentNotification(
   client: AxiosInstance,
   id: string,
 ): Promise<Notification | null> {
-  try {
-    const response = await client.get<Notification>(`${toContentPath(id)}/notification`);
-    return response.data;
-  } catch (error) {
-    if (isApiError(error) && error.kind === "not_found") {
-      return null;
-    }
-    throw error;
-  }
+  const response = await client.get<Notification | null>(`${toContentPath(id)}/notification`);
+  return response.data;
 }

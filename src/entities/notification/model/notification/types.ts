@@ -8,7 +8,7 @@ export type TargetType = (typeof TARGET_TYPES)[number];
 
 export type SendStatusTone = "green" | "yellow" | "red";
 
-type ContentVisibility = "public" | "private";
+type NotificationVisibility = "public" | "private";
 
 export type NotificationStats = {
   success_count: number;
@@ -20,8 +20,8 @@ export type NotificationStatKey = keyof NotificationStats;
 export type Notification = {
   id: number;
   content_id: number;
-  content: Content;
-  content_status: ContentVisibility;
+  content?: Content;
+  content_status: NotificationVisibility;
   title: string;
   target_type: TargetType;
   send_status: SendStatus;
@@ -46,6 +46,12 @@ export type NotificationUpdateInput = {
 
 export type NotificationScheduleInput = {
   scheduled_at: string;
+};
+
+export type NotificationSchedule = {
+  notification_id: number;
+  is_scheduled: boolean;
+  scheduled_at?: string;
 };
 
 export type NotificationListResponse = {

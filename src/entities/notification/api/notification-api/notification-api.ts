@@ -5,6 +5,7 @@ import {
   type NotificationInput,
   type NotificationListParams,
   type NotificationListResponse,
+  type NotificationSchedule,
   type NotificationScheduleInput,
   type NotificationUpdateInput,
 } from "../../model/notification";
@@ -52,8 +53,11 @@ export async function updateNotificationSchedule(
   client: AxiosInstance,
   id: string,
   input: NotificationScheduleInput,
-): Promise<Notification> {
-  const response = await client.put<Notification>(`${toNotificationPath(id)}/schedule`, input);
+): Promise<NotificationSchedule> {
+  const response = await client.put<NotificationSchedule>(
+    `${toNotificationPath(id)}/schedule`,
+    input,
+  );
   return response.data;
 }
 

@@ -181,11 +181,18 @@ describe("fetchContentNotification", () => {
     expect(result?.id).toBe(NOTIFICATION_RESPONSE.id);
   });
 
-  it("알림이 없으면 null을 돌려준다", async () => {
-    const { adapter } = createFakeAdapter(() => createFailResponse(404, "notification not found"));
+  it("알림이 없으면 서버가 빈 값을 주고 null을 돌려준다", async () => {
+    const { adapter } = createFakeAdapter(() => createOkResponse(null));
     const client = createHttpClient({ baseUrl: "http://api.test", adapter });
 
     await expect(fetchContentNotification(client, "136")).resolves.toBeNull();
+  });
+
+  it("없는 콘텐츠의 알림을 조회하면 오류를 던진다", async () => {
+    const { adapter } = createFakeAdapter(() => createFailResponse(404, "content not found"));
+    const client = createHttpClient({ baseUrl: "http://api.test", adapter });
+
+    await expect(fetchContentNotification(client, "999")).rejects.toThrow();
   });
 
   it("알림 조회가 다른 이유로 실패하면 오류를 그대로 던진다", async () => {
