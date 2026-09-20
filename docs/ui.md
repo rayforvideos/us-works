@@ -33,6 +33,7 @@
 - 날짜·시간은 `DateTimeField` 하나로 고른다. 브라우저 기본 `datetime-local` 선택기를 열고 분 단위로 고르며, 달력 UI를 직접 만들거나 라이브러리를 더하지 않는다.
 - 변형은 `data-variant`, `data-size` 같은 `data-*` 속성으로 드러낸다. 역할을 가진 요소(`input`, `button`)에 붙인다.
 - 아이콘은 `shared/ui/icon`의 인라인 SVG를 쓰고 색은 `currentColor`를 따른다.
+- 비활성 입력에는 지우기 버튼을 그리지 않는다. 누를 수 없는 버튼이 남아 있으면 상태를 잘못 읽게 한다.
 - 오류 문구 자리는 항상 예약한다. 입력 컴포넌트는 오류가 없어도 문구 한 줄 높이를 유지해 오류가 나타날 때 아래 요소가 밀리지 않는다. 오류 문구를 라벨 옆처럼 다른 곳에 두는 폼은 `TextField`의 `reserveError={false}`로 아래 슬롯을 끄고, 문구를 스스로 갖지 않는 입력(`DateTimeField`)은 `invalid`로 테두리만 바꾼다.
 - Base UI 팝업(Select, Dialog)의 열림·닫힘 전환은 `transition-[opacity,scale]`처럼 속성을 한정한다. Tailwind `transition` 단축은 `display`, `pointer-events` 같은 이산 속성을 포함해 Base UI가 닫힘 전환의 완료를 기다리다 팝업을 언마운트하지 못한다.
 - 화면 위에 고정하는 블록(목록 헤더, GNB)은 `sticky top-0`과 `z-10`, 배경색을 함께 준다. Base UI 팝업(Select, Dialog)은 body로 포털되며 자체 z-index를 최상단에 두므로 페이지의 `z-*`와 겹치지 않는다.
