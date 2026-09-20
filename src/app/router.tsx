@@ -1,11 +1,25 @@
-import { createBrowserRouter, type RouteObject } from "react-router";
+import { createBrowserRouter, Navigate, type RouteObject } from "react-router";
 
-import { App } from "./app";
+import { ContentsPage } from "@/pages/contents";
+import { LoginPage } from "@/pages/login";
+import { RegisterPage } from "@/pages/register";
+
+import { RedirectIfSession, RequireSession } from "./route-guards";
 
 export const routes: RouteObject[] = [
   {
-    path: "/",
-    Component: App,
+    Component: RedirectIfSession,
+    children: [
+      { path: "/login", Component: LoginPage },
+      { path: "/register", Component: RegisterPage },
+    ],
+  },
+  {
+    Component: RequireSession,
+    children: [
+      { path: "/", Component: ContentsPage },
+      { path: "*", element: <Navigate to="/" replace /> },
+    ],
   },
 ];
 
