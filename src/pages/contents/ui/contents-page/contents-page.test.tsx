@@ -28,7 +28,31 @@ function renderContentsPage(initialEntries: InitialEntry[] = ["/"]) {
   return { router, calls };
 }
 
+function renderEmptyContentsPage() {
+  const { adapter } = createFakeAdapter(() =>
+    createOkResponse({ contents: [], total: 0, page: 1, limit: 10 }),
+  );
+  const router = createMemoryRouter([{ path: "/", element: <ContentsPage /> }], {
+    initialEntries: ["/"],
+  });
+
+  render(
+    <QueryClientProvider client={createQueryClient({ queries: { retry: false } })}>
+      <HttpClientProvider client={createHttpClient({ baseUrl: "http://api.test", adapter })}>
+        <RouterProvider router={router} />
+      </HttpClientProvider>
+    </QueryClientProvider>,
+  );
+}
+
 describe("ContentsPage", () => {
+  it("목록이 비어 있으면 페이지네이션을 그리지 않는다", async () => {
+    renderEmptyContentsPage();
+
+    expect(await screen.findByText("콘텐츠가 없습니다.")).toBeInTheDocument();
+    expect(screen.queryByRole("navigation", { name: "페이지" })).not.toBeInTheDocument();
+  });
+
   it('S-05 Given 2페이지를 보고 있을 때 When 상태 필터를 "공개"로 바꾸면 Then URL이 `?publish_status=published`가 되고 1페이지를 요청한다', async () => {
     const { router, calls } = renderContentsPage(["/?page=2"]);
 

@@ -46,7 +46,7 @@ export function TextField({
   const isFilled = length > 0;
   const hasError = error !== undefined && error !== null && error !== false;
   const isInvalid = hasError || invalid;
-  const trailing = clearable ? "clear" : showCounter ? "counter" : "none";
+  const trailing = clearable && disabled !== true ? "clear" : showCounter ? "counter" : "none";
 
   function handleChange(event: ChangeEvent<HTMLInputElement>) {
     setInnerLength(event.target.value.length);

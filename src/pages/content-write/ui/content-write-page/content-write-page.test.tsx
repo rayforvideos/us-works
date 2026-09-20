@@ -495,5 +495,6 @@ describe("ContentWritePage 콘텐츠 저장", () => {
 
     expect(await screen.findByText("요청한 내용을 찾을 수 없습니다.")).toBeInTheDocument();
     expect(screen.getByRole("link", { name: "목록으로" })).toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: "발행하기" })).not.toBeInTheDocument();
   });
 });

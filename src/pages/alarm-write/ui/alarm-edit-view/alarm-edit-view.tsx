@@ -18,6 +18,7 @@ import {
 } from "../../model/to-notification-input";
 import { AlarmWriteLayout } from "../alarm-write-layout";
 import { NOTIFICATION_FORM_ID, NotificationForm } from "../notification-form";
+import { SENT_NOTIFICATION_TEXT } from "./constants";
 import { type AlarmEditViewProps } from "./types";
 
 export function AlarmEditView({ id }: AlarmEditViewProps) {
@@ -71,6 +72,11 @@ export function AlarmEditView({ id }: AlarmEditViewProps) {
       {error === null ? null : (
         <LinkNotice message={getErrorMessage(error)} linkLabel="목록으로" to={ROUTES.alarms} />
       )}
+      {initialValues !== null && !isEditable ? (
+        <p className="mx-auto w-full max-w-165 pb-6 text-12-m500 text-grey-300">
+          {SENT_NOTIFICATION_TEXT}
+        </p>
+      ) : null}
       {initialValues === null ? null : (
         <NotificationForm
           formId={NOTIFICATION_FORM_ID}

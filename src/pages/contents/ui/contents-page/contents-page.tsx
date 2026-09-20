@@ -78,7 +78,7 @@ export function ContentsPage() {
             void refetch();
           }}
         />
-        {data ? (
+        {data && data.total > 0 ? (
           <Pagination
             page={params.page}
             pageCount={getPageCount(data.total, data.limit)}

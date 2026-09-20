@@ -167,6 +167,7 @@ describe("AlarmWritePage 수정", () => {
     expect(await screen.findByLabelText("제목")).toBeDisabled();
     expect(screen.getByLabelText("발송 시간")).toBeDisabled();
     expect(screen.queryByRole("button", { name: /발송하기/ })).not.toBeInTheDocument();
+    expect(screen.getByText("이미 발송된 알림입니다.")).toBeInTheDocument();
   });
 
   it("S-07 Given 제목만 바꾼 수정 폼 When 발송하기를 누르면 Then `PUT /api/v1/notifications/12`만 보내고 성공하면 `/alarms`로 이동한다", async () => {
