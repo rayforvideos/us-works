@@ -5,10 +5,14 @@ export type DateTimeFieldProps = {
   invalid?: boolean;
   disabled?: boolean;
   min?: string;
-  step?: number;
   id?: string;
   "aria-label"?: string;
   "aria-labelledby"?: string;
   "aria-describedby"?: string;
   className?: string;
+};
+
+export type DateTimeDraft = {
+  date: string;
+  time: string;
 };
