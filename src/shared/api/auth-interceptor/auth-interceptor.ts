@@ -76,7 +76,7 @@ export function attachAuthInterceptors(
 
   function applyToken(config: InternalAxiosRequestConfig): InternalAxiosRequestConfig {
     const token = auth.getAccessToken();
-    if (token) {
+    if (token && token.token.length > 0) {
       config.headers.set("Authorization", `Bearer ${token.token}`);
     }
     return config;

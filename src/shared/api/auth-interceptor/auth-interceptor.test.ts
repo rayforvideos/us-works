@@ -126,6 +126,17 @@ describe("attachAuthInterceptors: 인증 헤더와 만료 확인", () => {
     expect(refreshMock).not.toHaveBeenCalled();
   });
 
+  it("토큰이 빈 문자열이면 Authorization 헤더를 붙이지 않는다", async () => {
+    const { auth, refreshMock } = createAuth("", 900);
+    const { adapter, calls } = createFakeAdapter(() => createOkResponse(null));
+    const client = createHttpClient({ baseUrl: BASE_URL, adapter, auth, now: () => NOW });
+
+    await client.get("/x");
+
+    expect(getAuthorization(getCallAt(calls, 0))).toBeUndefined();
+    expect(refreshMock).not.toHaveBeenCalled();
+  });
+
   it("토큰이 60초 안에 만료되면 요청 전에 갱신하고 새 토큰으로 보낸다", async () => {
     const { auth, refreshMock } = createAuth("old-token", 30);
     const { adapter, calls } = createFakeAdapter(() => createOkResponse(null));
