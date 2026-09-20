@@ -5,11 +5,7 @@ export default defineConfig([
   ...fsd.configs.recommended,
   { files: ["./src/shared/**"], rules: { "fsd/public-api": "off" } },
   {
-    files: [
-      "./src/widgets/gnb/**",
-      "./src/features/edit-content/**",
-      "./src/entities/notification/**",
-    ],
+    files: ["./src/features/edit-content/**", "./src/features/edit-notification/**"],
     rules: { "fsd/insignificant-slice": "off" },
   },
 ]);
