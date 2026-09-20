@@ -2,6 +2,7 @@ import { Button } from "@/shared/ui/button";
 import { Checkbox } from "@/shared/ui/checkbox";
 import { CheckboxChip } from "@/shared/ui/checkbox-chip";
 import { RadioGroup, RadioGroupItem } from "@/shared/ui/radio-group";
+import { StatusBadge } from "@/shared/ui/status-badge";
 
 export function App() {
   return (
@@ -40,6 +41,15 @@ export function App() {
         <CheckboxChip shape="solid">거래안내</CheckboxChip>
         <CheckboxChip>공지사항</CheckboxChip>
         <CheckboxChip disabled>비활성</CheckboxChip>
+      </div>
+      <div className="flex items-center gap-2">
+        <StatusBadge tone="green">발송</StatusBadge>
+        <StatusBadge tone="grey">미발송</StatusBadge>
+        <StatusBadge tone="yellow">예약</StatusBadge>
+        <StatusBadge tone="red">실패</StatusBadge>
+        <StatusBadge tone="green" showDot={false}>
+          공개
+        </StatusBadge>
       </div>
       <RadioGroup name="plan" aria-label="요금제" defaultValue="pro" className="gap-1">
         <RadioGroupItem value="basic" label="레이블" />
