@@ -20,6 +20,11 @@ describe("TextField 변형", () => {
     expect(input).toHaveAccessibleDescription("필수 정보입니다.");
   });
 
+  it("error가 없어도 오류 문구 자리를 유지한다", () => {
+    render(<TextField aria-label="제목" />);
+    expect(screen.getByTestId("error-text")).toBeEmptyDOMElement();
+  });
+
   it("disabled면 비활성 상태가 된다", () => {
     render(<TextField aria-label="제목" disabled />);
     expect(screen.getByRole("textbox", { name: "제목" })).toBeDisabled();
@@ -69,6 +74,11 @@ describe("TextField 동작", () => {
     expect(input).toHaveValue("안내");
     fireEvent.change(input, { target: { value: "안내문" } });
     expect(onChange).toHaveBeenCalledTimes(1);
+  });
+
+  it("type을 password로 줄 수 있다", () => {
+    render(<TextField aria-label="비밀번호" type="password" />);
+    expect(screen.getByLabelText("비밀번호")).toHaveAttribute("type", "password");
   });
 
   it("maxLength를 input에 전달한다", () => {

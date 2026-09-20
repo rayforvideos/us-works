@@ -51,11 +51,9 @@ export function TextArea({
           </span>
         ) : null}
       </div>
-      {isInvalid ? (
-        <p id={errorId} className={errorTextClass()}>
-          {error}
-        </p>
-      ) : null}
+      <p id={errorId} data-testid="error-text" className={errorTextClass()}>
+        {isInvalid ? error : null}
+      </p>
     </div>
   );
 }

@@ -20,4 +20,4 @@ export const textareaClass = cva(
 
 export const counterClass = cva("text-right text-16-m500 text-grey-300");
 
-export const errorTextClass = cva("text-12-r400 text-red-100");
+export const errorTextClass = cva("min-h-3 text-12-r400 text-red-100");
