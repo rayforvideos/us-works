@@ -99,4 +99,6 @@ export const labelClass = cva("inline-flex items-center gap-2.5", {
 
 export const loadingClass = cva("pointer-events-none relative");
 
+export const fullWidthClass = cva("w-full");
+
 export const spinnerSlotClass = cva("absolute inset-0 flex items-center justify-center");

@@ -5,6 +5,7 @@ import { Spinner } from "@/shared/ui/spinner";
 
 import {
   buttonVariants,
+  fullWidthClass,
   labelClass,
   loadingClass,
   resolveButtonVariant,
@@ -30,6 +31,7 @@ export function Button({
   leftIcon,
   rightIcon,
   loading = false,
+  fullWidth = false,
   className,
   type = "button",
   onClick,
@@ -46,8 +48,14 @@ export function Button({
       data-importance={resolved.importance}
       data-size={resolved.size ?? undefined}
       data-loading={loading ? "true" : undefined}
+      data-full-width={fullWidth ? "true" : undefined}
       aria-busy={loading || undefined}
-      className={cn(buttonVariants(variantProps), loading && loadingClass(), className)}
+      className={cn(
+        buttonVariants(variantProps),
+        fullWidth && fullWidthClass(),
+        loading && loadingClass(),
+        className,
+      )}
       onClick={loading ? undefined : onClick}
       {...rest}
     >

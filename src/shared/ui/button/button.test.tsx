@@ -103,6 +103,11 @@ describe("Button 동작", () => {
     expect(onClick).not.toHaveBeenCalled();
   });
 
+  it("fullWidth면 data-full-width 속성을 가진다", () => {
+    render(<Button fullWidth>저장</Button>);
+    expect(screen.getByRole("button", { name: "저장" })).toHaveAttribute("data-full-width", "true");
+  });
+
   it("loading이어도 라벨 텍스트는 유지되어 너비가 바뀌지 않는다", () => {
     render(<Button loading>임시저장</Button>);
     expect(screen.getByRole("button")).toHaveTextContent("임시저장");
