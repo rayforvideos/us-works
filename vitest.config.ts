@@ -10,6 +10,7 @@ export default mergeConfig(
       globals: true,
       setupFiles: ["./src/shared/config/test-setup.ts"],
       env: { VITE_API_BASE_URL: "http://api.test" },
+      css: { include: [/styles\/theme\/.*\.css/] },
     },
   }),
 );
