@@ -1,3 +1,6 @@
+/**
+ * @types
+ */
 type AppEnv = {
   apiBaseUrl: string;
 };
