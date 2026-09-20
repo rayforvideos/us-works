@@ -1,6 +1,6 @@
 @import "tailwindcss";
-
-@theme {
-  --color-primary: #000000;
-  --font-sans: "Pretendard", system-ui, sans-serif;
-}
+@import "pretendard/dist/web/variable/pretendardvariable-dynamic-subset.css";
+@import "./theme/colors.css";
+@import "./theme/typography.css";
+@import "./theme/shape.css";
+@import "./base.css";
