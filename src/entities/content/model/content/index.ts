@@ -7,7 +7,6 @@ export {
 export {
   formatPublishedAt,
   getCategoryLabel,
-  getPageCount,
   getPublishStatusBadge,
   parseContentListParams,
 } from "./content";

@@ -1,6 +1,7 @@
 import { Navigate, Outlet, useLocation } from "react-router";
 
 import { useIsAuthenticated } from "@/entities/session";
+import { ROUTES } from "@/shared/config";
 
 export function RequireSession() {
   const isAuthenticated = useIsAuthenticated();
@@ -9,14 +10,16 @@ export function RequireSession() {
   if (isAuthenticated) {
     return <Outlet />;
   }
-  return <Navigate to="/login" replace state={{ from: location.pathname + location.search }} />;
+  return (
+    <Navigate to={ROUTES.login} replace state={{ from: location.pathname + location.search }} />
+  );
 }
 
 export function RedirectIfSession() {
   const isAuthenticated = useIsAuthenticated();
 
   if (isAuthenticated) {
-    return <Navigate to="/" replace />;
+    return <Navigate to={ROUTES.contents} replace />;
   }
   return <Outlet />;
 }

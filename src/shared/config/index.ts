@@ -1,4 +1,5 @@
 export { readEnv } from "./env";
+export { ROUTES } from "./routes";
 export {
   AUTH_RESPONSE_FIXTURE,
   createFailResponse,

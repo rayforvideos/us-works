@@ -1,5 +1,7 @@
 import { useNavigate } from "react-router";
 
+import { ROUTES } from "@/shared/config";
+
 import { useRegisterMutation } from "../../api/useAuthMutations";
 import { getAuthErrorMessage } from "../../model/auth-error-message";
 import { type Credentials } from "../../model/validate-credentials";
@@ -12,7 +14,7 @@ export function RegisterForm() {
   function handleSubmit(values: Credentials) {
     mutation.mutate(values, {
       onSuccess: () => {
-        void navigate("/", { replace: true });
+        void navigate(ROUTES.contents, { replace: true });
       },
     });
   }
