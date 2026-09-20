@@ -12,7 +12,7 @@ type ResolvedButtonVariant = {
 };
 
 const buttonVariantClasses = cva(
-  "inline-flex cursor-pointer items-center justify-center gap-2.5 whitespace-nowrap transition-colors outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-green-70 disabled:cursor-not-allowed",
+  "inline-flex cursor-pointer items-center justify-center whitespace-nowrap transition-colors outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-green-70 disabled:cursor-not-allowed",
   {
     variants: {
       variant: {
@@ -86,3 +86,17 @@ export function resolveButtonVariant({
 export function buttonVariants(props: ButtonVariantProps = {}): string {
   return buttonVariantClasses(resolveButtonVariant(props));
 }
+
+export const labelClass = cva("inline-flex items-center gap-2.5", {
+  variants: {
+    loading: {
+      true: "invisible",
+      false: "",
+    },
+  },
+  defaultVariants: { loading: false },
+});
+
+export const loadingClass = cva("pointer-events-none relative");
+
+export const spinnerSlotClass = cva("absolute inset-0 flex items-center justify-center");

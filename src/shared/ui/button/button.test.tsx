@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/react";
+import { fireEvent, render, screen } from "@testing-library/react";
 
 import { Button, type ButtonVariantProps, buttonVariants } from ".";
 
@@ -78,6 +78,34 @@ describe("Button 동작", () => {
     expect(screen.getByRole("button", { name: "저장" })).toBeInTheDocument();
     expect(screen.getByTestId("left")).toBeInTheDocument();
     expect(screen.getByTestId("right")).toBeInTheDocument();
+  });
+
+  it("loading이면 aria-busy가 켜지고 스피너가 보인다", () => {
+    render(
+      <Button importance="secondary" size="medium" loading>
+        임시저장
+      </Button>,
+    );
+    expect(screen.getByRole("button")).toHaveAttribute("aria-busy", "true");
+    expect(screen.getByRole("status", { name: "로딩 중" })).toBeInTheDocument();
+  });
+
+  it("loading이면 클릭해도 onClick이 호출되지 않는다", () => {
+    const onClick = vi.fn();
+    render(
+      <Button loading onClick={onClick}>
+        임시저장
+      </Button>,
+    );
+
+    fireEvent.click(screen.getByRole("button"));
+
+    expect(onClick).not.toHaveBeenCalled();
+  });
+
+  it("loading이어도 라벨 텍스트는 유지되어 너비가 바뀌지 않는다", () => {
+    render(<Button loading>임시저장</Button>);
+    expect(screen.getByRole("button")).toHaveTextContent("임시저장");
   });
 
   it("buttonVariants는 링크에 쓸 클래스 문자열을 돌려준다", () => {
