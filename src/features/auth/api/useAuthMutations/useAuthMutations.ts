@@ -3,7 +3,7 @@ import { useMutation } from "@tanstack/react-query";
 import { useSetSession } from "@/entities/session";
 import { useHttpClient } from "@/shared/api";
 
-import { type Credentials } from "../../model/validate-credentials";
+import { type Credentials } from "../../model/credentials-schema";
 import { login, register } from "../auth-api";
 
 export function useLoginMutation() {
