@@ -34,7 +34,7 @@ export type Content = {
   created_at: string;
   updated_at: string;
   stats: ContentStats;
-  notification_status: ContentNotificationStatus;
+  notification_status?: ContentNotificationStatus;
 };
 
 export type ContentInput = {

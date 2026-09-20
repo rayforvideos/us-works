@@ -28,7 +28,7 @@ export function ContentRow({ content }: ContentRowProps) {
   const publishedAt = formatPublishedAt(content.published_at);
   const badge = getPublishStatusBadge(content.publish_status);
   const isNotifiable =
-    !content.notification_status.has_notification && content.publish_status !== "draft";
+    content.notification_status?.has_notification !== true && content.publish_status !== "draft";
 
   return (
     <tr

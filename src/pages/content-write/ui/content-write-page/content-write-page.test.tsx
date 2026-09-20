@@ -43,7 +43,7 @@ const SCHEDULED_CONTENT = { ...SCHEDULED_CONTENT_FIXTURE, id: 136 };
 
 const CONTENT_NOTIFICATION = { ...PENDING_NOTIFICATION_FIXTURE, content_id: 136 };
 
-const NOT_FOUND_NOTIFICATION = createFailResponse(404, "notification not found");
+const NO_NOTIFICATION = createOkResponse(null);
 
 const CREATED_CONTENT = { ...DRAFT_CONTENT_FIXTURE, id: 136 };
 
@@ -52,7 +52,7 @@ const PUBLIC_CONTENT = { ...PUBLISHED_CONTENT_FIXTURE, id: 136 };
 const CREATE_ROUTES: Record<string, FakeRoute> = {
   "post /api/v1/contents": createOkResponse(CREATED_CONTENT),
   "get /api/v1/contents/136": createOkResponse(CREATED_CONTENT),
-  "get /api/v1/contents/136/notification": NOT_FOUND_NOTIFICATION,
+  "get /api/v1/contents/136/notification": NO_NOTIFICATION,
 };
 
 function renderPage(pathname: string, routes: Record<string, FakeRoute> = {}) {
@@ -369,7 +369,7 @@ describe("ContentWritePage 수정", () => {
   it("43 S-11 Given 한 번 공개된 콘텐츠의 수정 화면 When 모달을 열면 Then 예약 발행이 비활성이다", async () => {
     renderPage("/contents/136", {
       "get /api/v1/contents/136": createOkResponse({ ...PUBLISHED_CONTENT_FIXTURE, id: 136 }),
-      "get /api/v1/contents/136/notification": NOT_FOUND_NOTIFICATION,
+      "get /api/v1/contents/136/notification": NO_NOTIFICATION,
     });
 
     await screen.findByLabelText("제목");
@@ -435,7 +435,7 @@ describe("ContentWritePage 콘텐츠 저장", () => {
 
   it("35 S-10 Given `/contents/136` When 페이지가 열리면 Then `GET /api/v1/contents/136` 값으로 폼이 채워지고 임시저장 버튼이 없다", async () => {
     const { calls } = renderPage("/contents/136", {
-      "get /api/v1/contents/136/notification": NOT_FOUND_NOTIFICATION,
+      "get /api/v1/contents/136/notification": NO_NOTIFICATION,
     });
 
     expect(await screen.findByLabelText("제목")).toHaveValue(CONTENT_DETAIL_FIXTURE.title);
@@ -445,7 +445,7 @@ describe("ContentWritePage 콘텐츠 저장", () => {
 
   it("35 S-11 Given 수정 폼 When 모달에서 발행하기를 누르면 Then `PUT /api/v1/contents/136`을 보내고 성공하면 `/`로 이동한다", async () => {
     const { calls } = renderPage("/contents/136", {
-      "get /api/v1/contents/136/notification": NOT_FOUND_NOTIFICATION,
+      "get /api/v1/contents/136/notification": NO_NOTIFICATION,
     });
 
     await screen.findByLabelText("제목");
@@ -488,7 +488,7 @@ describe("ContentWritePage 콘텐츠 저장", () => {
   it("수정 화면은 불러오는 동안 스피너를 보이고 실패하면 목록 링크를 보인다", async () => {
     renderPage("/contents/136", {
       "get /api/v1/contents/136": createFailResponse(404, "not found"),
-      "get /api/v1/contents/136/notification": NOT_FOUND_NOTIFICATION,
+      "get /api/v1/contents/136/notification": NO_NOTIFICATION,
     });
 
     expect(screen.getByRole("status", { name: "콘텐츠 불러오는 중" })).toBeInTheDocument();

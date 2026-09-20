@@ -17,6 +17,7 @@ export {
   type NotificationInput,
   type NotificationListParams,
   type NotificationListResponse,
+  type NotificationSchedule,
   type NotificationScheduleInput,
   type NotificationUpdateInput,
   type TargetType,
