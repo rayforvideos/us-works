@@ -32,6 +32,7 @@
 - 네이티브 요소를 우선 쓴다. `button`, `input`은 그대로 두고 시각 요소는 `peer`(형제)나 `has-*`(부모)로 그린다. 프리미티브는 Base UI Select에만 쓴다.
 - 변형은 `data-variant`, `data-size` 같은 `data-*` 속성으로 드러낸다. 역할을 가진 요소(`input`, `button`)에 붙인다.
 - 아이콘은 `shared/ui/icon`의 인라인 SVG를 쓰고 색은 `currentColor`를 따른다.
+- 오류 문구 자리는 항상 예약한다. 입력 컴포넌트는 오류가 없어도 문구 한 줄 높이를 유지해 오류가 나타날 때 아래 요소가 밀리지 않는다.
 
 ## 테스트
 
