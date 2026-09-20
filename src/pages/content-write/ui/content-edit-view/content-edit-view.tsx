@@ -2,17 +2,6 @@ import { useRef, useState } from "react";
 import { useNavigate } from "react-router";
 
 import { type Content, useContentNotificationQuery, useContentQuery } from "@/entities/content";
-import {
-  CONTENT_FORM_ID,
-  ContentForm,
-  type ContentFormValues,
-  toContentInput,
-} from "@/features/edit-content";
-import {
-  PublishOptionsDialog,
-  type PublishOptionsValues,
-  usePublishContentMutation,
-} from "@/features/publish-content";
 import { ROUTES } from "@/shared/config";
 import { getErrorMessage } from "@/shared/lib/error-message";
 import { Button } from "@/shared/ui/button";
@@ -21,6 +10,12 @@ import { LinkNotice } from "@/shared/ui/link-notice";
 import { Spinner } from "@/shared/ui/spinner";
 import { Gnb } from "@/widgets/gnb";
 
+import { usePublishContentMutation } from "../../api/usePublishContentMutation";
+import { type ContentFormValues } from "../../model/content-input-schema";
+import { type PublishOptionsValues } from "../../model/publish-options-schema";
+import { toContentInput } from "../../model/to-content-input";
+import { CONTENT_FORM_ID, ContentForm } from "../content-form";
+import { PublishOptionsDialog } from "../publish-options-dialog";
 import { type ContentEditViewProps } from "./types";
 
 function toFormValues(content: Content): ContentFormValues {
