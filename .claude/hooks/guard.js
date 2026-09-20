@@ -104,10 +104,24 @@ function guardBash(input, projectDir) {
   const lines = [
     `🔒 승인 필요 · ${labels}`,
     branch ? `현재 브랜치: ${branch}` : null,
-    "커밋 전 체크포인트입니다. 변경 파일, 검증 방법, 커밋 분할과 메시지를 보고하고 멈추세요.",
-    "AskUserQuestion(header `🔒 체크포인트`, 선택지 `승인` / `수정 필요`)을 띄우세요. 질문 첫 줄에 어떤 체크포인트인지와 승인 시 실행되는 명령을 적습니다. 사용자가 승인을 고르면 커밋, 푸시, PR 생성까지 통과하고 PR 생성에서 토큰이 닫힙니다. 합병은 별도 승인입니다.",
+    describeCheckpoint(matched),
+    "AskUserQuestion(header `🔒 체크포인트`, 선택지 `승인` / `수정 필요`)을 띄우세요. 질문 첫 줄에 어떤 체크포인트인지와 승인 시 실행되는 명령을 적습니다. 사용자가 승인을 고르면 토큰이 생기고, PR 생성·합병·닫기에서 닫힙니다.",
   ].filter(Boolean);
   respond("deny", lines.join("\n"));
+}
+
+function describeCheckpoint(matched) {
+  const labels = new Set(matched.map((rule) => rule.label));
+  if (labels.has("PR 합병")) {
+    return "합병 체크포인트입니다. CI 결과를 보고하고 멈추세요.";
+  }
+  if (labels.has("PR 닫기")) {
+    return "PR 닫기는 사용자가 지시했을 때만 합니다. 이유를 보고하고 멈추세요.";
+  }
+  if (labels.has("리셋") || labels.has("브랜치 삭제")) {
+    return "이력을 되돌리거나 브랜치를 지우는 작업입니다. 무엇을 왜 되돌리는지 보고하고 멈추세요.";
+  }
+  return "커밋 전 체크포인트입니다. 변경 파일, 검증 방법, 커밋 분할과 메시지를 보고하고 멈추세요.";
 }
 
 function main() {
