@@ -1,6 +1,6 @@
 import { cva } from "class-variance-authority";
 
-export const gnbClass = cva("w-full");
+export const gnbClass = cva("sticky top-0 z-10 w-full bg-white");
 
 export const containerClass = cva(
   "flex min-h-17.5 items-center border-b border-grey-200 bg-white py-3 xl:px-9",
