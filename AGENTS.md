@@ -1,6 +1,6 @@
 # us-works
 
-FE 과제(Us FE Developer Recruit Works) 저장소. React 19 + Vite 8 SPA이며 Feature-Sliced Design(FSD) 2.1 구조를 따른다. 결정 근거는 `adrs/`, 기능 스펙은 `specs/`, 스캐폴딩 절차는 `docs/INITIALIZE.md`에 있다.
+FE 과제(Us FE Developer Recruit Works) 저장소. React 19 + Vite 8 SPA이며 Feature-Sliced Design(FSD) 2.1 구조를 따른다. 결정 근거는 `adrs/`, 기능 스펙은 `specs/`에 있다.
 
 ## 작업 방식
 

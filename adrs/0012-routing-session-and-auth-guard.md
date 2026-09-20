@@ -15,6 +15,7 @@ Accepted
   - `/alarms`: 알람 목록
   - `/contents/new`, `/contents/:id`: 콘텐츠 작성과 수정
   - `/alarms/new`, `/alarms/:id`: 알람 작성과 수정
+  - `*`: 위에 없는 경로는 `/`로 보낸다. 보호 레이아웃 아래에 있어 세션이 없으면 `/login`으로 간다
 - 세션은 `entities/session/model`의 Jotai 아톰에 둔다. access token과 그 만료 시각은 메모리에만 있고, refresh token과 그 만료 시각, 사용자는 localStorage에 저장한다. 새로고침 뒤에는 저장된 refresh token으로 access token을 다시 받는다.
 - `initializeSystem()`이 HTTP 클라이언트의 `auth` 훅을 이 아톰에 연결한다. `getAccessToken`은 아톰을 읽고, `refreshAccessToken`은 `POST /api/v1/auth/refresh`로 갱신해 아톰을 쓰고, `onUnauthorized`는 아톰을 비운다.
 - 보호는 라우터에서 한다. `app/router.tsx`의 레이아웃 라우트가 세션이 없으면 `/login`으로 보내며 원래 경로를 `state`로 넘기고, 로그인 후 그 경로로 돌아간다. 세션이 있는 상태로 `/login`, `/register`에 오면 `/`로 보낸다.
@@ -22,7 +23,7 @@ Accepted
 - 인증 화면의 오류 문구는 `ApiError.kind`별 한국어 고정 문구를 쓴다. 서버 문구는 영어라 화면에 쓰지 않으며, 형식 오류는 클라이언트 검증으로 먼저 막는다. `docs/api.md`의 오류 규격을 이에 맞게 고친다.
 - 토큰을 스크립트가 읽을 수 있는 저장소에 두므로 XSS 취약점을 만들지 않는 것을 전제로 한다. HTML을 문자열로 주입하지 않고(`dangerouslySetInnerHTML` 금지, ESLint `react/no-danger`), 사용자 입력과 서버 문구는 React 텍스트 노드로만 렌더링하며, 외부에서 받은 링크는 `http(s)` 스킴만 허용하고 `rel="noopener noreferrer"`로 연다.
 - 이 결정은 ADR-0006의 "`validation`과 `conflict`만 서버 문구를 그대로 쓴다"를 대체한다. 모든 `kind`는 `getErrorMessage`의 한국어 고정 문구를 쓰고 기능이 필요하면 `kind`별로 덮어쓴다.
-- 임시 화면 `app.tsx`는 첫 페이지와 함께 삭제한다. 로그인 뒤 착지 페이지 `/`는 콘텐츠 목록 이슈 전까지 제목만 있는 빈 페이지다.
+- 임시 화면 `app.tsx`는 첫 페이지와 함께 삭제한다. 로그인 뒤 착지 페이지 `/`는 콘텐츠 목록 이슈 전까지 제목만 있는 빈 페이지다. ADR-0013이 이 항목을 대체한다.
 
 ## Consequences
 

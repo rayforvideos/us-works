@@ -33,7 +33,7 @@ ESLint 10 기준으로 typescript-eslint, eslint-plugin-react-hooks, eslint-plug
   - `commit-msg`: commitlint로 Conventional Commits 형식 검사
   - `pre-push`: `pnpm check` 전체 실행
 - 커밋 메시지는 commitlint의 `config-conventional`을 따르되 `subject-case` 규칙은 끈다. 타입(`feat`, `fix`, `docs`, `chore`, `refactor`, `test`, `style`)은 영어, 설명은 한국어로 쓴다.
-- `check` 스크립트는 `typecheck`, `lint`(ESLint, steiger), `lint:unused`(knip), `test:run`을 순서대로 실행하며, 하나라도 실패하면 중단한다.
+- `check` 스크립트는 `typecheck`, `lint`(ESLint, steiger), `lint:unused`(knip), `format:check`(Prettier), `test:run`을 순서대로 실행하며, 하나라도 실패하면 중단한다.
 - eslint-plugin-jsx-a11y는 ESLint 10 peer 범위 밖이라 채택하지 않는다. 접근성은 shared/ui 컴포넌트에 시맨틱 요소와 ARIA 속성을 직접 적용하고 Testing Library의 역할 기반 쿼리로 검증한다. 플러그인이 ESLint 10을 지원하면 재검토한다.
 - Biome(2.5 기준)은 채택하지 않는다. 린트와 포맷을 한 도구로 처리하고 `overrides`와 `noRestrictedImports`로 FSD 경계도 표현할 수 있지만, 자체 타입 추론 엔진이 typescript-eslint의 `strictTypeChecked` 규칙 폭을 대체하지 못하고(`no-unsafe-*`, `no-unnecessary-condition` 등 대응물 없음, `noFloatingPromises`는 약 75% 커버), Tailwind 클래스 정렬 규칙이 nursery 단계로 Tailwind 4의 `@theme`와 스크린 variant를 인식하지 못하며, vitest와 testing-library 규칙이 없다. 타입 안전성과 Tailwind 4가 핵심인 이 과제에서는 손실이 이점보다 크다.
 - `exactOptionalPropertyTypes`는 켜지 않는다. React와 서드파티 라이브러리의 props 타입이 `undefined` 할당을 전제하는 경우가 많아 오탐이 잦다.
