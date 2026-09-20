@@ -64,7 +64,8 @@ src/
 - `app` 레이어에서 `providers/`, `hooks/` 같은 폴더 이름은 steiger가 거부한다. 프로바이더와 라우터는 `app` 루트 파일(`app-providers.tsx`, `router.tsx`)로 둔다.
 - React Router의 DOM 전용 API(`RouterProvider` 등)는 `react-router/dom`에서, 그 외는 `react-router`에서 import한다.
 - React Compiler가 켜져 있다. `useMemo`, `useCallback`, `memo`를 수동으로 넣지 않고, 컴파일러 규칙(eslint-plugin-react-hooks)을 따른다.
-- 스타일은 Tailwind 유틸리티를 우선 사용하고, 반복되는 조합은 `shared/ui` 컴포넌트로 추출한다. 디자인 토큰은 `src/app/styles/globals.css`의 `@theme`에 정의한다.
+- 스타일은 Tailwind 유틸리티를 우선 사용하고, 반복되는 조합은 `shared/ui` 컴포넌트로 추출한다. 디자인 토큰은 `src/app/styles/theme/`의 `@theme`에 정의한다.
+- `shared/ui` 컴포넌트의 클래스 문자열은 `<이름>-variants.ts`의 `cva()` 안에만 두고 컴포넌트 파일에는 JSX만 둔다. 상세는 `docs/ui.md`.
 - 코드 파일(`ts`, `tsx`, `js`, 설정 파일 포함)에는 주석을 쓰지 않는다. 결정과 근거는 ADR과 `docs/`에만 있다. 예외는 `eslint-disable-next-line`처럼 도구가 요구하는 지시문과 세 줄 JSDoc 구역 표시 `@types`, `@constants`만이며, 지시문의 이유는 커밋 메시지나 문서에 남긴다. ESLint `no-comments/disallowComments`가 강제한다.
 - 구현 파일은 import, 타입, UPPER_CASE 상수, 함수 순서로 쓰고 타입과 상수 구역의 첫 선언 위에 표시를 둔다. ESLint `local/section-markers`가 강제한다. 상세는 `docs/code-quality.md`.
 - 모든 ESLint 규칙은 `error` 또는 `off`다. 파일 단위 `eslint-disable`은 금지한다.

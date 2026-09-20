@@ -1,4 +1,7 @@
 import { Button } from "@/shared/ui/button";
+import { Checkbox } from "@/shared/ui/checkbox";
+import { CheckboxChip } from "@/shared/ui/checkbox-chip";
+import { RadioGroup, RadioGroupItem } from "@/shared/ui/radio-group";
 
 export function App() {
   return (
@@ -24,6 +27,25 @@ export function App() {
         </Button>
         <Button variant="text">더보기</Button>
       </div>
+      <div className="flex items-center gap-4">
+        <Checkbox aria-label="medium" />
+        <Checkbox aria-label="medium checked" defaultChecked />
+        <Checkbox aria-label="large" size="large" />
+        <Checkbox aria-label="large checked" size="large" defaultChecked />
+        <Checkbox aria-label="disabled" disabled />
+        <Checkbox aria-label="disabled checked" disabled defaultChecked />
+      </div>
+      <div className="flex items-center gap-2">
+        <CheckboxChip defaultChecked>고객센터</CheckboxChip>
+        <CheckboxChip shape="solid">거래안내</CheckboxChip>
+        <CheckboxChip>공지사항</CheckboxChip>
+        <CheckboxChip disabled>비활성</CheckboxChip>
+      </div>
+      <RadioGroup name="plan" aria-label="요금제" defaultValue="pro" className="gap-1">
+        <RadioGroupItem value="basic" label="레이블" />
+        <RadioGroupItem value="pro" label="레이블" subLabel="서브레이블" />
+        <RadioGroupItem value="off" label="비활성" disabled />
+      </RadioGroup>
     </main>
   );
 }
