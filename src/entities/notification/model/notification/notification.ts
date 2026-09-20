@@ -1,12 +1,13 @@
 import { parsePage } from "@/shared/lib/pagination-params";
+import { toSeoulParts } from "@/shared/lib/seoul-time";
 
 import {
   DEFAULT_PAGE_LIMIT,
   MAX_PAGE,
   NOTIFICATION_LIST_PARAM_KEYS,
-  SCHEDULED_AT_FORMAT_OPTIONS,
   SEND_STATUS_LABELS,
   SEND_STATUS_TONES,
+  TARGET_TYPE_LABELS,
 } from "./constants";
 import {
   type NotificationListParams,
@@ -15,31 +16,29 @@ import {
   type ScheduledAtParts,
   type SendStatus,
   type SendStatusBadge,
+  type TargetType,
 } from "./types";
-
-function readPart(parts: Intl.DateTimeFormatPart[], type: Intl.DateTimeFormatPartTypes): string {
-  return parts.find((part) => part.type === type)?.value ?? "";
-}
 
 export function getSendStatusBadge(status: SendStatus): SendStatusBadge {
   return { label: SEND_STATUS_LABELS[status], tone: SEND_STATUS_TONES[status] };
+}
+
+export function getTargetTypeLabel(targetType: TargetType): string {
+  return TARGET_TYPE_LABELS[targetType];
 }
 
 export function formatScheduledAt(iso: string | undefined): ScheduledAtParts | null {
   if (iso === undefined || iso === "") {
     return null;
   }
-  const scheduled = new Date(iso);
-  if (Number.isNaN(scheduled.getTime())) {
+  const parts = toSeoulParts(new Date(iso));
+  if (parts === null) {
     return null;
   }
-  const parts = new Intl.DateTimeFormat("ko-KR", SCHEDULED_AT_FORMAT_OPTIONS).formatToParts(
-    scheduled,
-  );
 
   return {
-    date: `${readPart(parts, "year")}.${readPart(parts, "month")}.${readPart(parts, "day")}`,
-    time: `${readPart(parts, "hour")}:${readPart(parts, "minute")}`,
+    date: `${parts.year}.${parts.month}.${parts.day}`,
+    time: `${parts.hour}:${parts.minute}`,
   };
 }
 

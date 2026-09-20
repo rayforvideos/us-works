@@ -1,10 +1,10 @@
 import { type Content } from "@/entities/content/@x/notification";
 
-import { type SEND_STATUSES } from "./constants";
+import { type SEND_STATUSES, type TARGET_TYPES } from "./constants";
 
 export type SendStatus = (typeof SEND_STATUSES)[number];
 
-type TargetType = "all" | "follower" | "member";
+export type TargetType = (typeof TARGET_TYPES)[number];
 
 export type SendStatusTone = "green" | "yellow" | "red";
 
@@ -30,6 +30,22 @@ export type Notification = {
   stats?: NotificationStats;
   created_at: string;
   updated_at: string;
+};
+
+export type NotificationInput = {
+  content_id: number;
+  title: string;
+  target_type: TargetType;
+  scheduled_at: string;
+};
+
+export type NotificationUpdateInput = {
+  title?: string;
+  target_type?: TargetType;
+};
+
+export type NotificationScheduleInput = {
+  scheduled_at: string;
 };
 
 export type NotificationListResponse = {
