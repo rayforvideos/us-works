@@ -4,7 +4,7 @@ import { ROUTES } from "@/shared/config";
 
 import { useRegisterMutation } from "../../api/useAuthMutations";
 import { getAuthErrorMessage } from "../../model/auth-error-message";
-import { type Credentials } from "../../model/validate-credentials";
+import { type Credentials } from "../../model/credentials-schema";
 import { CredentialsForm } from "../credentials-form";
 
 export function RegisterForm() {

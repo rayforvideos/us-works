@@ -71,6 +71,13 @@ describe("라우터 보호", () => {
     expect(router.state.location.pathname).toBe("/alarms");
   });
 
+  it("세션이 있으면 /contents/new에서 콘텐츠 쓰기 헤딩이 보인다", async () => {
+    const router = openRoute("/contents/new", { hasSession: true });
+
+    expect(await screen.findByRole("heading", { name: "콘텐츠 쓰기" })).toBeInTheDocument();
+    expect(router.state.location.pathname).toBe("/contents/new");
+  });
+
   it('알 수 없는 경로는 "/"로 보낸다', async () => {
     const router = openRoute("/없는-경로", { hasSession: true });
 

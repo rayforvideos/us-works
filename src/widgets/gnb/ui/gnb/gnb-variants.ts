@@ -14,6 +14,6 @@ export const backButtonClass = cva(
 
 export const titleClass = cva("min-w-0 truncate text-18-b700 text-blue-grey-300");
 
-export const actionsClass = cva("ml-auto flex items-center gap-2");
+export const actionsClass = cva("ml-auto flex items-center gap-4");
 
 export const messageClass = cva("text-12-m500 text-grey-500");

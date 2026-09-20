@@ -1,6 +1,7 @@
 import { createBrowserRouter, Navigate, type RouteObject } from "react-router";
 
 import { AlarmsPage } from "@/pages/alarms";
+import { ContentWritePage } from "@/pages/content-write";
 import { ContentsPage } from "@/pages/contents";
 import { LoginPage } from "@/pages/login";
 import { RegisterPage } from "@/pages/register";
@@ -21,6 +22,8 @@ export const routes: RouteObject[] = [
     children: [
       { path: ROUTES.contents, Component: ContentsPage },
       { path: ROUTES.alarms, Component: AlarmsPage },
+      { path: ROUTES.contentNew, Component: ContentWritePage },
+      { path: ROUTES.contentDetailPattern, Component: ContentWritePage },
       { path: "*", element: <Navigate to={ROUTES.contents} replace /> },
     ],
   },

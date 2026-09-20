@@ -1,5 +1,3 @@
-export const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
 export const MIN_PASSWORD_LENGTH = 6;
 
 export const EMAIL_REQUIRED_MESSAGE = "이메일을 입력해주세요.";
