@@ -1,15 +1,21 @@
-import { type ContentFormValues } from "../content-input-schema";
-import { clearContentDraft, formatSavedAt, readContentDraft, writeContentDraft } from ".";
+import {
+  clearContentDraft,
+  formatSavedAt,
+  formatSavedAtDateTime,
+  readContentDraft,
+  writeContentDraft,
+} from ".";
 import { CONTENT_DRAFT_KEY } from "./constants";
+import { type ContentDraftValues } from "./types";
 
-const FILLED_VALUES: ContentFormValues = {
+const FILLED_VALUES: ContentDraftValues = {
   title: "제목",
   body: "내용",
   categories: ["realty"],
   linkUrl: "https://example.com",
 };
 
-const EMPTY_VALUES: ContentFormValues = { title: "", body: "", categories: [], linkUrl: "" };
+const EMPTY_VALUES: ContentDraftValues = { title: "", body: "", categories: [], linkUrl: "" };
 
 function readStoredDraft(): Record<string, unknown> {
   const raw = localStorage.getItem(CONTENT_DRAFT_KEY);
@@ -36,25 +42,44 @@ describe("임시저장", () => {
 
     writeContentDraft(EMPTY_VALUES);
 
-    expect(readContentDraft()).toEqual(FILLED_VALUES);
+    expect(readContentDraft()).toMatchObject(FILLED_VALUES);
   });
 
   it("임시저장이 없으면 null을 돌려준다", () => {
     expect(readContentDraft()).toBeNull();
   });
 
-  it("저장된 값을 폼 값으로 돌려준다", () => {
-    writeContentDraft(FILLED_VALUES);
+  it("저장된 값을 저장 시각과 함께 돌려준다", () => {
+    const savedAt = writeContentDraft(FILLED_VALUES);
 
-    expect(readContentDraft()).toEqual(FILLED_VALUES);
+    expect(readContentDraft()).toEqual({ ...FILLED_VALUES, savedAt });
   });
 
-  it("깨진 값이나 모르는 카테고리는 버린다", () => {
+  it("손상된 임시저장은 null로 읽는다", () => {
     localStorage.setItem(CONTENT_DRAFT_KEY, "{");
     expect(readContentDraft()).toBeNull();
 
     localStorage.setItem(CONTENT_DRAFT_KEY, JSON.stringify({ title: 1, categories: ["없는값"] }));
-    expect(readContentDraft()).toEqual({ title: "", body: "", categories: [], linkUrl: "" });
+    expect(readContentDraft()).toBeNull();
+  });
+
+  it("내용이 모두 빈 임시저장은 null로 읽는다", () => {
+    localStorage.setItem(
+      CONTENT_DRAFT_KEY,
+      JSON.stringify({ ...EMPTY_VALUES, savedAt: "2026-09-20T07:41:00.000Z" }),
+    );
+
+    expect(readContentDraft()).toBeNull();
+  });
+
+  it("로컬 스토리지를 읽을 수 없으면 null을 돌려준다", () => {
+    const getItem = vi.spyOn(Storage.prototype, "getItem").mockImplementation(() => {
+      throw new Error("blocked");
+    });
+
+    expect(readContentDraft()).toBeNull();
+
+    getItem.mockRestore();
   });
 
   it("임시저장을 지운다", () => {
@@ -67,5 +92,10 @@ describe("임시저장", () => {
 
   it("저장 시각을 서울 기준 HH:mm으로 보여준다", () => {
     expect(formatSavedAt("2026-09-20T07:41:00.000Z")).toBe("16:41");
+  });
+
+  it('R-01 저장 시각은 Asia/Seoul 기준 "YYYY년 MM월 DD일 HH:mm"으로 표시한다', () => {
+    expect(formatSavedAtDateTime("2026-09-20T07:41:00.000Z")).toBe("2026년 09월 20일 16:41");
+    expect(formatSavedAtDateTime("2026-01-05T15:00:00.000Z")).toBe("2026년 01월 06일 00:00");
   });
 });

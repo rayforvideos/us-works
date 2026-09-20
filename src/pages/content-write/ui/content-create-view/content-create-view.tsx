@@ -1,13 +1,12 @@
 import { useState } from "react";
 import { useNavigate } from "react-router";
 
+import { clearContentDraft, formatSavedAt, readContentDraft } from "@/entities/content";
 import {
-  clearContentDraft,
   CONTENT_FORM_ID,
   ContentForm,
   type ContentFormValues,
-  formatSavedAt,
-  readContentDraft,
+  toContentFormValues,
   toContentInput,
   useCreateContentMutation,
   useDraftAutosave,
@@ -18,14 +17,11 @@ import { Button } from "@/shared/ui/button";
 import { Container } from "@/shared/ui/container";
 import { Gnb } from "@/widgets/gnb";
 
-/**
- * @constants
- */
-const EMPTY_VALUES: ContentFormValues = { title: "", body: "", categories: [], linkUrl: "" };
-
 export function ContentCreateView() {
   const navigate = useNavigate();
-  const [initialValues] = useState<ContentFormValues>(() => readContentDraft() ?? EMPTY_VALUES);
+  const [initialValues] = useState<ContentFormValues>(() =>
+    toContentFormValues(readContentDraft()),
+  );
   const [values, setValues] = useState<ContentFormValues>(initialValues);
   const [savedAt, setSavedAt] = useState<string | null>(null);
   const mutation = useCreateContentMutation();
