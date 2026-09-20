@@ -46,6 +46,12 @@ describe("TextField 변형", () => {
     expect(screen.getByRole("button", { name: "입력 지우기" })).toBeEnabled();
   });
 
+  it("clearable이어도 비활성이면 지우기 버튼을 그리지 않는다", () => {
+    render(<TextField aria-label="제목" clearable disabled defaultValue="값" />);
+
+    expect(screen.queryByRole("button", { name: "입력 지우기" })).not.toBeInTheDocument();
+  });
+
   it("clearable이어도 값이 없으면 지우기 버튼이 비활성이다", () => {
     render(<TextField aria-label="제목" clearable />);
     expect(screen.getByRole("button", { name: "입력 지우기" })).toBeDisabled();

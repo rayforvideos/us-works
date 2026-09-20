@@ -62,15 +62,17 @@ export function ContentEditView({ id }: ContentEditViewProps) {
           void navigate(ROUTES.contents);
         }}
         actions={
-          <Button
-            ref={publishButtonRef}
-            size="medium"
-            type="submit"
-            form={CONTENT_FORM_ID}
-            loading={mutation.isPending}
-          >
-            발행하기
-          </Button>
+          data ? (
+            <Button
+              ref={publishButtonRef}
+              size="medium"
+              type="submit"
+              form={CONTENT_FORM_ID}
+              loading={mutation.isPending}
+            >
+              발행하기
+            </Button>
+          ) : undefined
         }
       />
       <Container as="main" className="py-14">
