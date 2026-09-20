@@ -40,22 +40,23 @@ header/
 
 ## FSD 세그먼트 아래에서의 적용
 
-세그먼트(`ui`, `model`, `api`, `lib`) 바로 아래에 모듈 디렉토리를 둔다. 슬라이스의 `index.ts`는 세그먼트 안의 모듈 `index.ts`를 다시 export한다.
+세그먼트(`ui`, `model`, `api`, `lib`) 바로 아래에 모듈 디렉토리를 둔다. 슬라이스의 `index.ts`는 외부가 쓰는 모듈 `index.ts`만 다시 export한다.
 
 ```
-features/publish-content/
+pages/content-write/
 ├── ui/
-│   └── publish-modal/
-│       ├── publish-modal.tsx
-│       ├── publish-modal.test.tsx
+│   └── publish-options-dialog/
+│       ├── publish-options-dialog.tsx
+│       ├── publish-options-dialog.test.tsx
 │       └── index.ts
 ├── model/
-│   └── usePublishForm/
-│       ├── usePublishForm.ts
-│       ├── usePublishForm.test.ts
+│   └── usePublishOptionsForm/
+│       ├── usePublishOptionsForm.ts
 │       └── index.ts
 └── index.ts
 ```
+
+화면 하나에서만 쓰는 폼, 스키마, 요청 훅은 `features` 슬라이스로 빼지 않고 그 페이지의 세그먼트에 둔다. 소비자가 하나뿐인 슬라이스는 steiger의 `insignificant-slice`가 막는다. 이때 페이지의 `index.ts`는 라우트 진입 컴포넌트만 공개하고, 페이지 안의 모듈끼리는 상대 경로로 참조한다. 두 번째 화면이 같은 모듈을 쓰게 되면 그때 `features`나 `entities`로 올린다.
 
 `shared/ui`, `shared/lib`도 같은 구조이며 세그먼트 단위의 `index.ts`는 두지 않고 모듈 디렉토리마다 둔다. 반면 `shared/api`, `shared/config`는 세그먼트 `index.ts`를 공개 API로 두고 외부는 `@/shared/api`처럼 세그먼트 경로로 import한다. steiger의 `no-public-api-sidestep` 규칙이 이를 검사한다.
 
