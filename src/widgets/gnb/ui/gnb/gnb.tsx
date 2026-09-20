@@ -1,6 +1,7 @@
 import { type ReactNode } from "react";
 
 import { cn } from "@/shared/lib/cn";
+import { Container } from "@/shared/ui/container";
 import { ArrowLeftIcon } from "@/shared/ui/icon";
 
 import {
@@ -27,7 +28,7 @@ type GnbProps = {
 export function Gnb({ title, message, onBack, actions, className }: GnbProps) {
   return (
     <header className={cn(gnbClass(), className)}>
-      <div className={containerClass()}>
+      <Container className={containerClass()}>
         <div className={rowClass()}>
           {onBack ? (
             <button
@@ -47,7 +48,7 @@ export function Gnb({ title, message, onBack, actions, className }: GnbProps) {
             </div>
           ) : null}
         </div>
-      </div>
+      </Container>
     </header>
   );
 }
