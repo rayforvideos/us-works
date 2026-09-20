@@ -55,7 +55,7 @@
 - S-10 Given `/contents/136` When 페이지가 열리면 Then `GET /api/v1/contents/136` 값으로 폼이 채워지고 임시저장 버튼이 없다
 - S-11 Given 수정 폼 When 발행하기를 누르면 Then `PUT /api/v1/contents/136`을 보내고 성공하면 `/`로 이동한다
 - S-12 Given 서버가 400으로 응답하면 When 발행하기 뒤 Then "입력값을 확인해주세요."가 보이고 입력값은 유지된다
-- S-13 Given 작성 페이지 When 뒤로가기를 누르면 Then `/`로 이동한다
+- S-13 Given 작성 페이지 When 뒤로가기(화살표·제목)를 누르면 Then `/`로 이동한다
 
 ## 확인 필요
 

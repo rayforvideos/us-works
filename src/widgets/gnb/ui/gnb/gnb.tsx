@@ -12,6 +12,7 @@ import {
   messageClass,
   rowClass,
   titleClass,
+  titleTextClass,
 } from "./gnb-variants";
 
 /**
@@ -25,22 +26,39 @@ type GnbProps = {
   className?: string;
 };
 
+type GnbLeadProps = Pick<GnbProps, "title" | "onBack">;
+
+function GnbLead({ title, onBack }: GnbLeadProps) {
+  if (!onBack) {
+    return title ? (
+      <h1 className={titleClass()}>
+        <span className={titleTextClass()}>{title}</span>
+      </h1>
+    ) : null;
+  }
+  if (!title) {
+    return (
+      <button type="button" aria-label="뒤로 가기" onClick={onBack} className={backButtonClass()}>
+        <ArrowLeftIcon />
+      </button>
+    );
+  }
+  return (
+    <h1 className={titleClass()}>
+      <button type="button" onClick={onBack} className={backButtonClass()}>
+        <ArrowLeftIcon />
+        <span className={titleTextClass()}>{title}</span>
+      </button>
+    </h1>
+  );
+}
+
 export function Gnb({ title, message, onBack, actions, className }: GnbProps) {
   return (
     <header className={cn(gnbClass(), className)}>
       <Container className={containerClass()}>
         <div className={rowClass()}>
-          {onBack ? (
-            <button
-              type="button"
-              aria-label="뒤로 가기"
-              onClick={onBack}
-              className={backButtonClass()}
-            >
-              <ArrowLeftIcon />
-            </button>
-          ) : null}
-          {title ? <h1 className={titleClass()}>{title}</h1> : null}
+          <GnbLead title={title} onBack={onBack} />
           {message || actions ? (
             <div className={actionsClass()}>
               {message ? <p className={messageClass()}>{message}</p> : null}
