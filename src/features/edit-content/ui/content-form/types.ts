@@ -5,6 +5,5 @@ export type ContentFormProps = {
   defaultValues: ContentFormValues;
   onSubmit: (values: ContentFormValues) => void;
   isPending: boolean;
-  requestError?: string;
   onValuesChange?: (values: ContentFormValues) => void;
 };

@@ -20,7 +20,6 @@ import {
   groupClass,
   headingClass,
   helperClass,
-  requestErrorClass,
   sectionClass,
 } from "./content-form-variants";
 import { type ContentFormProps } from "./types";
@@ -30,7 +29,6 @@ export function ContentForm({
   defaultValues,
   onSubmit,
   isPending,
-  requestError,
   onValuesChange,
 }: ContentFormProps) {
   const form = useForm({
@@ -49,9 +47,6 @@ export function ContentForm({
 
   return (
     <form id={formId} noValidate onSubmit={submitForm} className={formClass()}>
-      <p role={requestError === undefined ? undefined : "alert"} className={requestErrorClass()}>
-        {requestError}
-      </p>
       <section className={sectionClass()}>
         <div className="flex flex-col gap-2">
           <h2 className={headingClass()}>카테고리</h2>

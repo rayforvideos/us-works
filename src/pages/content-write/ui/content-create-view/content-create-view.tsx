@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { useNavigate } from "react-router";
 
 import { clearContentDraft, formatSavedAt, readContentDraft } from "@/entities/content";
@@ -8,9 +8,13 @@ import {
   type ContentFormValues,
   toContentFormValues,
   toContentInput,
-  useCreateContentMutation,
   useDraftAutosave,
 } from "@/features/edit-content";
+import {
+  PublishOptionsDialog,
+  type PublishOptionsValues,
+  usePublishContentMutation,
+} from "@/features/publish-content";
 import { ROUTES } from "@/shared/config";
 import { getErrorMessage } from "@/shared/lib/error-message";
 import { Button } from "@/shared/ui/button";
@@ -19,25 +23,39 @@ import { Gnb } from "@/widgets/gnb";
 
 export function ContentCreateView() {
   const navigate = useNavigate();
+  const publishButtonRef = useRef<HTMLButtonElement>(null);
   const [initialValues] = useState<ContentFormValues>(() =>
     toContentFormValues(readContentDraft()),
   );
   const [values, setValues] = useState<ContentFormValues>(initialValues);
   const [savedAt, setSavedAt] = useState<string | null>(null);
-  const mutation = useCreateContentMutation();
+  const [publishValues, setPublishValues] = useState<ContentFormValues | null>(null);
+  const [savedContentId, setSavedContentId] = useState<string | null>(null);
+  const mutation = usePublishContentMutation({ onContentSaved: setSavedContentId });
   const { saveNow } = useDraftAutosave({
     enabled: true,
     getValues: () => values,
     onSaved: setSavedAt,
   });
 
-  function createContentFromValues(next: ContentFormValues) {
-    mutation.mutate(toContentInput(next, { editing: false }), {
-      onSuccess: () => {
-        clearContentDraft();
-        void navigate(ROUTES.contents, { replace: true });
+  function publishContent(options: PublishOptionsValues) {
+    if (publishValues === null || mutation.isPending) {
+      return;
+    }
+    mutation.mutate(
+      {
+        contentId: savedContentId,
+        contentInput: toContentInput(publishValues, { editing: savedContentId !== null }),
+        values: options,
+        contentTitle: publishValues.title,
       },
-    });
+      {
+        onSuccess: () => {
+          clearContentDraft();
+          void navigate(ROUTES.contents, { replace: true });
+        },
+      },
+    );
   }
 
   return (
@@ -55,7 +73,13 @@ export function ContentCreateView() {
             <Button importance="secondary" size="medium" type="button" onClick={saveNow}>
               임시저장
             </Button>
-            <Button size="medium" type="submit" form={CONTENT_FORM_ID} loading={mutation.isPending}>
+            <Button
+              ref={publishButtonRef}
+              size="medium"
+              type="submit"
+              form={CONTENT_FORM_ID}
+              loading={mutation.isPending}
+            >
               발행하기
             </Button>
           </>
@@ -66,11 +90,25 @@ export function ContentCreateView() {
           formId={CONTENT_FORM_ID}
           defaultValues={initialValues}
           onValuesChange={setValues}
-          onSubmit={createContentFromValues}
+          onSubmit={setPublishValues}
           isPending={mutation.isPending}
-          requestError={mutation.error === null ? undefined : getErrorMessage(mutation.error)}
         />
       </Container>
+      {publishValues === null ? null : (
+        <PublishOptionsDialog
+          open
+          onOpenChange={() => {
+            setPublishValues(null);
+          }}
+          content={null}
+          notification={null}
+          contentTitle={publishValues.title}
+          submitting={mutation.isPending}
+          requestError={mutation.error === null ? undefined : getErrorMessage(mutation.error)}
+          finalFocus={publishButtonRef}
+          onSubmit={publishContent}
+        />
+      )}
     </>
   );
 }

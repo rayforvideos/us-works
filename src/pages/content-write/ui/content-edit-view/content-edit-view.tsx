@@ -1,13 +1,18 @@
+import { useRef, useState } from "react";
 import { useNavigate } from "react-router";
 
-import { type Content, useContentQuery } from "@/entities/content";
+import { type Content, useContentNotificationQuery, useContentQuery } from "@/entities/content";
 import {
   CONTENT_FORM_ID,
   ContentForm,
   type ContentFormValues,
   toContentInput,
-  useUpdateContentMutation,
 } from "@/features/edit-content";
+import {
+  PublishOptionsDialog,
+  type PublishOptionsValues,
+  usePublishContentMutation,
+} from "@/features/publish-content";
 import { ROUTES } from "@/shared/config";
 import { getErrorMessage } from "@/shared/lib/error-message";
 import { Button } from "@/shared/ui/button";
@@ -29,15 +34,29 @@ function toFormValues(content: Content): ContentFormValues {
 
 export function ContentEditView({ id }: ContentEditViewProps) {
   const navigate = useNavigate();
+  const publishButtonRef = useRef<HTMLButtonElement>(null);
   const { data, isPending, error } = useContentQuery(id);
-  const mutation = useUpdateContentMutation(id);
+  const notificationQuery = useContentNotificationQuery(id);
+  const [publishValues, setPublishValues] = useState<ContentFormValues | null>(null);
+  const mutation = usePublishContentMutation();
 
-  function updateContentFromValues(next: ContentFormValues) {
-    mutation.mutate(toContentInput(next, { editing: true }), {
-      onSuccess: () => {
-        void navigate(ROUTES.contents, { replace: true });
+  function publishContent(options: PublishOptionsValues) {
+    if (publishValues === null || mutation.isPending) {
+      return;
+    }
+    mutation.mutate(
+      {
+        contentId: id,
+        contentInput: toContentInput(publishValues, { editing: true }),
+        values: options,
+        contentTitle: publishValues.title,
       },
-    });
+      {
+        onSuccess: () => {
+          void navigate(ROUTES.contents, { replace: true });
+        },
+      },
+    );
   }
 
   return (
@@ -48,7 +67,13 @@ export function ContentEditView({ id }: ContentEditViewProps) {
           void navigate(ROUTES.contents);
         }}
         actions={
-          <Button size="medium" type="submit" form={CONTENT_FORM_ID} loading={mutation.isPending}>
+          <Button
+            ref={publishButtonRef}
+            size="medium"
+            type="submit"
+            form={CONTENT_FORM_ID}
+            loading={mutation.isPending}
+          >
             발행하기
           </Button>
         }
@@ -66,12 +91,26 @@ export function ContentEditView({ id }: ContentEditViewProps) {
           <ContentForm
             formId={CONTENT_FORM_ID}
             defaultValues={toFormValues(data)}
-            onSubmit={updateContentFromValues}
+            onSubmit={setPublishValues}
             isPending={mutation.isPending}
-            requestError={mutation.error === null ? undefined : getErrorMessage(mutation.error)}
           />
         ) : null}
       </Container>
+      {data && publishValues !== null ? (
+        <PublishOptionsDialog
+          open
+          onOpenChange={() => {
+            setPublishValues(null);
+          }}
+          content={data}
+          notification={notificationQuery.data ?? null}
+          contentTitle={publishValues.title}
+          submitting={mutation.isPending}
+          requestError={mutation.error === null ? undefined : getErrorMessage(mutation.error)}
+          finalFocus={publishButtonRef}
+          onSubmit={publishContent}
+        />
+      ) : null}
     </>
   );
 }

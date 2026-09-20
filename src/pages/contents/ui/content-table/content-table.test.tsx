@@ -4,6 +4,7 @@ import { RouterProvider } from "react-router/dom";
 import { fireEvent, render, screen, waitFor, within } from "@testing-library/react";
 
 import {
+  type Content,
   CONTENT_FIXTURE,
   DRAFT_CONTENT_FIXTURE,
   PUBLISHED_CONTENT_FIXTURE,
@@ -112,6 +113,23 @@ describe("ContentTable", () => {
 
     const scheduledRow = getRow(SCHEDULED_CONTENT_FIXTURE.title);
     expect(within(scheduledRow).queryByRole("link", { name: "푸시알림 생성" })).toBeNull();
+  });
+
+  it('S-14 Given 콘텐츠 목록의 비공개 콘텐츠 행 When 보면 Then "푸시알림 생성" 버튼이 없다', () => {
+    const hiddenScheduledContent = {
+      ...DRAFT_CONTENT_FIXTURE,
+      id: 4,
+      title: "네 번째 콘텐츠",
+      publish_status: "scheduled",
+      published_at: "2026-10-05T09:00:00+09:00",
+    } satisfies Content;
+    renderContentTable({ contents: [DRAFT_CONTENT_FIXTURE, hiddenScheduledContent] });
+
+    const draftRow = getRow(DRAFT_CONTENT_FIXTURE.title);
+    expect(within(draftRow).queryByRole("link", { name: "푸시알림 생성" })).toBeNull();
+
+    const scheduledRow = getRow(hiddenScheduledContent.title);
+    expect(within(scheduledRow).getByRole("link", { name: "푸시알림 생성" })).toBeInTheDocument();
   });
 
   it("이미 보이는 목록을 다시 불러오는 중이면 표가 aria-busy가 된다", () => {

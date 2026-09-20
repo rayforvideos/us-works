@@ -27,6 +27,8 @@ export function ContentRow({ content }: ContentRowProps) {
   const detailPath = ROUTES.contentDetail(content.id);
   const publishedAt = formatPublishedAt(content.published_at);
   const badge = getPublishStatusBadge(content.publish_status);
+  const isNotifiable =
+    !content.notification_status.has_notification && content.publish_status !== "draft";
 
   return (
     <tr
@@ -47,7 +49,7 @@ export function ContentRow({ content }: ContentRowProps) {
           >
             {content.title}
           </Link>
-          {content.notification_status.has_notification ? null : (
+          {isNotifiable ? (
             <Link
               to={ROUTES.alarmNewForContent(content.id)}
               className={cn(
@@ -60,7 +62,7 @@ export function ContentRow({ content }: ContentRowProps) {
             >
               푸시알림 생성
             </Link>
-          )}
+          ) : null}
         </div>
       </td>
       <td className={dataCellVariants({ align: "center" })}>
