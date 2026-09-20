@@ -52,3 +52,19 @@ export const CONTENT_FIXTURE: readonly Content[] = [
   SCHEDULED_CONTENT_FIXTURE,
   DRAFT_CONTENT_FIXTURE,
 ];
+
+export const CONTENT_DETAIL_FIXTURE: Content = {
+  id: 136,
+  user_id: 7,
+  title: "수정할 콘텐츠",
+  categories: ["realty", "investment"],
+  body: "수정할 본문",
+  link_url: "https://example.com/original",
+  status: "public",
+  publish_status: "published",
+  published_at: "2026-09-20T10:30:00+09:00",
+  created_at: "2026-09-19T10:30:00+09:00",
+  updated_at: "2026-09-19T10:30:00+09:00",
+  stats: { view_count: 5, like_count: 1, comment_count: 0 },
+  notification_status: { has_notification: false },
+};

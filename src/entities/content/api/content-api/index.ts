@@ -1,1 +1,1 @@
-export { fetchContents } from "./content-api";
+export { createContent, fetchContent, fetchContents, updateContent } from "./content-api";

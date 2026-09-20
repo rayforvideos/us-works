@@ -11,6 +11,7 @@ export {
   parseContentListParams,
 } from "./content";
 export {
+  CONTENT_DETAIL_FIXTURE,
   CONTENT_FIXTURE,
   DRAFT_CONTENT_FIXTURE,
   PUBLISHED_CONTENT_FIXTURE,
@@ -19,6 +20,7 @@ export {
 export {
   type Content,
   type ContentCategory,
+  type ContentInput,
   type ContentListFilters,
   type ContentListParams,
   type ContentListResponse,

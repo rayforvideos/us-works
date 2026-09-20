@@ -27,6 +27,7 @@ export type Content = {
   title: string;
   categories: ContentCategory[];
   body: string;
+  link_url?: string;
   status: ContentVisibility;
   publish_status: PublishStatus;
   published_at?: string;
@@ -34,6 +35,13 @@ export type Content = {
   updated_at: string;
   stats: ContentStats;
   notification_status: ContentNotificationStatus;
+};
+
+export type ContentInput = {
+  title: string;
+  body: string;
+  categories: ContentCategory[];
+  link_url?: string;
 };
 
 export type ContentListResponse = {
