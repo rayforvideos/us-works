@@ -1,6 +1,8 @@
 import { useEffect, useRef } from "react";
 
-import { DRAFT_AUTOSAVE_MS, writeContentDraft } from "../content-draft";
+import { writeContentDraft } from "@/entities/content";
+
+import { DRAFT_AUTOSAVE_MS } from "./constants";
 import { type DraftAutosaveOptions, type SaveDraft } from "./types";
 
 export function useDraftAutosave({ enabled, getValues, onSaved }: DraftAutosaveOptions) {

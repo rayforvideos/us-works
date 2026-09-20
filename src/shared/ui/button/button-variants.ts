@@ -87,7 +87,7 @@ export function buttonVariants(props: ButtonVariantProps = {}): string {
   return buttonVariantClasses(resolveButtonVariant(props));
 }
 
-export const labelClass = cva("inline-flex items-center gap-2.5", {
+export const labelClass = cva("inline-flex items-center gap-1", {
   variants: {
     loading: {
       true: "invisible",

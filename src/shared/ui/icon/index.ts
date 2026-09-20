@@ -1,7 +1,11 @@
 export { ArrowLeftIcon } from "./arrow-left-icon";
+export { CancelIcon } from "./cancel-icon";
+export { ChatIcon } from "./chat-icon";
 export { CheckIcon } from "./check-icon";
 export { ChevronLeftIcon } from "./chevron-left-icon";
 export { ChevronRightIcon } from "./chevron-right-icon";
 export { LogoIcon } from "./logo-icon";
+export { PenLineIcon } from "./pen-line-icon";
+export { PlusIcon } from "./plus-icon";
 export { RoundArrowIcon } from "./round-arrow-icon";
 export { RoundCancelIcon } from "./round-cancel-icon";

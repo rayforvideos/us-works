@@ -143,10 +143,10 @@ describe("ContentWritePage", () => {
     expect(screen.getByLabelText("제목")).toHaveValue("제목");
   });
 
-  it("S-13 Given 작성 페이지 When 뒤로가기를 누르면 Then `/`로 이동한다", async () => {
+  it("S-13 Given 작성 페이지 When 뒤로가기(화살표·제목)를 누르면 Then `/`로 이동한다", async () => {
     const { router } = renderPage("/contents/new", createOkResponse(CONTENT_DETAIL_FIXTURE, 201));
 
-    fireEvent.click(screen.getByRole("button", { name: "뒤로 가기" }));
+    fireEvent.click(screen.getByRole("button", { name: "콘텐츠 쓰기" }));
 
     expect(await screen.findByText("목록")).toBeInTheDocument();
     expect(router.state.location.pathname).toBe("/");

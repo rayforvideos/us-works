@@ -6,6 +6,7 @@ import {
   parseContentListParams,
   useContentsQuery,
 } from "@/entities/content";
+import { NewPostButton } from "@/features/start-content";
 import { ROUTES } from "@/shared/config";
 import { getPageCount } from "@/shared/lib/pagination-params";
 import { Container } from "@/shared/ui/container";
@@ -59,7 +60,7 @@ export function ContentsPage() {
 
   return (
     <>
-      <ListHeader tabs={LIST_TABS} />
+      <ListHeader tabs={LIST_TABS} action={<NewPostButton />} />
       <Container as="main" className="flex flex-col gap-6 py-10">
         <h1 className="text-32-b700 text-blue-grey-300">콘텐츠</h1>
         <ContentFilters

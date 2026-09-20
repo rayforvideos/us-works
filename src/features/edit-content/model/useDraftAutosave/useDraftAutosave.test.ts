@@ -1,6 +1,7 @@
 import { act, renderHook } from "@testing-library/react";
 
-import { CONTENT_DRAFT_KEY } from "../content-draft";
+import { CONTENT_DRAFT_KEY } from "@/entities/content";
+
 import { type ContentFormValues } from "../content-input-schema";
 import { useDraftAutosave } from ".";
 

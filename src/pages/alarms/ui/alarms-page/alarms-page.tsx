@@ -5,6 +5,7 @@ import {
   parseNotificationListParams,
   useNotificationsQuery,
 } from "@/entities/notification";
+import { NewPostButton } from "@/features/start-content";
 import { ROUTES } from "@/shared/config";
 import { getPageCount } from "@/shared/lib/pagination-params";
 import { Container } from "@/shared/ui/container";
@@ -37,7 +38,7 @@ export function AlarmsPage() {
 
   return (
     <>
-      <ListHeader tabs={LIST_TABS} />
+      <ListHeader tabs={LIST_TABS} action={<NewPostButton />} />
       <Container as="main" className="flex flex-col gap-6 py-10">
         <h1 className="text-32-b700 text-blue-grey-300">알람</h1>
         <NotificationTable
