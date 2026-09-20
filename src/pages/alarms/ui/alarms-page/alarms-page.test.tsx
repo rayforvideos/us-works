@@ -58,6 +58,14 @@ describe("AlarmsPage", () => {
     });
   });
 
+  it('37 S-07 Given 알람 탭 When "새 글쓰기"를 누르면 Then 같은 다이얼로그가 열린다', () => {
+    renderAlarmsPage();
+
+    fireEvent.click(screen.getByRole("button", { name: "새 글쓰기" }));
+
+    expect(screen.getByRole("dialog", { name: "새글쓰기" })).toBeInTheDocument();
+  });
+
   it('S-08 Given `/alarms`에 있을 때 When 헤더를 보면 Then "알람" 탭이 선택 상태다', () => {
     renderAlarmsPage();
 
