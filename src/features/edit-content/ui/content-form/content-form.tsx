@@ -1,7 +1,8 @@
-import { type SubmitEvent, useEffect } from "react";
+import { type SubmitEvent } from "react";
 import { useForm } from "@tanstack/react-form";
 
 import { readFieldError } from "@/shared/lib/field-error";
+import { FormValuesWatcher } from "@/shared/lib/form-values-watcher";
 import { TextArea } from "@/shared/ui/text-area";
 import { TextField } from "@/shared/ui/text-field";
 
@@ -22,15 +23,7 @@ import {
   requestErrorClass,
   sectionClass,
 } from "./content-form-variants";
-import { type ContentFormProps, type ValuesWatcherProps } from "./types";
-
-function ValuesWatcher({ values, onChange }: ValuesWatcherProps) {
-  useEffect(() => {
-    onChange?.(values);
-  }, [values, onChange]);
-
-  return null;
-}
+import { type ContentFormProps } from "./types";
 
 export function ContentForm({
   formId,
@@ -130,7 +123,7 @@ export function ContentForm({
         </form.Field>
       </section>
       <form.Subscribe selector={(state) => state.values}>
-        {(values) => <ValuesWatcher values={values} onChange={onValuesChange} />}
+        {(values) => <FormValuesWatcher values={values} onChange={onValuesChange} />}
       </form.Subscribe>
     </form>
   );
