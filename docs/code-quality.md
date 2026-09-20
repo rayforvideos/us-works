@@ -58,6 +58,12 @@
 - 불리언은 `is`, `has`, `should`, `can`으로 시작한다.
 - 타입, 상수, 파일 이름 규칙은 `docs/file-structure.md`를 따른다.
 
+## 의존성
+
+- pnpm 11부터 `minimumReleaseAge` 기본값이 1440분이다. 배포 24시간이 지나지 않은 버전은 설치 대상에서 제외되므로, `pnpm update`가 npm 최신 버전을 올리지 않는 것은 정상이다.
+- `pnpm add pkg@정확한버전`으로 강제하면 pnpm이 `minimumReleaseAgeExclude`에 그 패키지를 자동으로 더하고, 이후 `pnpm` 명령이 lockfile 공급망 검사에서 실패한다. 우회하지 않고 하루 뒤 `pnpm update`로 올린다.
+- pnpm 12는 의존성의 postinstall 스크립트를 기본 차단한다. 필요한 패키지만 `pnpm-workspace.yaml`의 `allowBuilds`에 적는다.
+
 ## 커밋 전 자기 점검
 
 커밋마다 다음을 스스로 묻고, 하나라도 "아니오"면 커밋 전에 고친다.
