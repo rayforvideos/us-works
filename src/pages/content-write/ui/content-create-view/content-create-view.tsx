@@ -2,24 +2,20 @@ import { useRef, useState } from "react";
 import { useNavigate } from "react-router";
 
 import { clearContentDraft, formatSavedAt, readContentDraft } from "@/entities/content";
-import {
-  CONTENT_FORM_ID,
-  ContentForm,
-  type ContentFormValues,
-  toContentFormValues,
-  toContentInput,
-  useDraftAutosave,
-} from "@/features/edit-content";
-import {
-  PublishOptionsDialog,
-  type PublishOptionsValues,
-  usePublishContentMutation,
-} from "@/features/publish-content";
 import { ROUTES } from "@/shared/config";
 import { getErrorMessage } from "@/shared/lib/error-message";
 import { Button } from "@/shared/ui/button";
 import { Container } from "@/shared/ui/container";
 import { Gnb } from "@/widgets/gnb";
+
+import { usePublishContentMutation } from "../../api/usePublishContentMutation";
+import { type ContentFormValues } from "../../model/content-input-schema";
+import { toContentFormValues } from "../../model/draft-form-values";
+import { type PublishOptionsValues } from "../../model/publish-options-schema";
+import { toContentInput } from "../../model/to-content-input";
+import { useDraftAutosave } from "../../model/useDraftAutosave";
+import { CONTENT_FORM_ID, ContentForm } from "../content-form";
+import { PublishOptionsDialog } from "../publish-options-dialog";
 
 export function ContentCreateView() {
   const navigate = useNavigate();

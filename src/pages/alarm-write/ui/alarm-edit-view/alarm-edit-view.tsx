@@ -2,23 +2,22 @@ import { useState } from "react";
 import { useNavigate } from "react-router";
 
 import { useNotificationQuery } from "@/entities/notification";
-import {
-  diffNotificationUpdate,
-  getNotificationErrorMessage,
-  isSameNotificationValues,
-  NOTIFICATION_FORM_ID,
-  NotificationForm,
-  type NotificationFormValues,
-  toNotificationFormValues,
-  useUpdateNotificationMutation,
-} from "@/features/edit-notification";
 import { ROUTES } from "@/shared/config";
 import { getErrorMessage } from "@/shared/lib/error-message";
 import { Button } from "@/shared/ui/button";
 import { LinkNotice } from "@/shared/ui/link-notice";
 import { Spinner } from "@/shared/ui/spinner";
 
+import { useUpdateNotificationMutation } from "../../api/useNotificationMutations";
+import { getNotificationErrorMessage } from "../../model/notification-error-message";
+import { type NotificationFormValues } from "../../model/notification-input-schema";
+import {
+  diffNotificationUpdate,
+  isSameNotificationValues,
+  toNotificationFormValues,
+} from "../../model/to-notification-input";
 import { AlarmWriteLayout } from "../alarm-write-layout";
+import { NOTIFICATION_FORM_ID, NotificationForm } from "../notification-form";
 import { type AlarmEditViewProps } from "./types";
 
 export function AlarmEditView({ id }: AlarmEditViewProps) {

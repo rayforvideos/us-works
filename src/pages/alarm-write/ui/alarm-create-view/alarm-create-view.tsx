@@ -2,24 +2,22 @@ import { useState } from "react";
 import { useNavigate } from "react-router";
 
 import { useContentQuery } from "@/entities/content";
-import {
-  canNotifyContent,
-  getNotificationErrorMessage,
-  isSameNotificationValues,
-  NOTIFICATION_FORM_ID,
-  NotificationForm,
-  type NotificationFormValues,
-  PRIVATE_CONTENT_MESSAGE,
-  toNotificationInput,
-  useCreateNotificationMutation,
-} from "@/features/edit-notification";
 import { ROUTES } from "@/shared/config";
 import { getErrorMessage } from "@/shared/lib/error-message";
 import { Button } from "@/shared/ui/button";
 import { LinkNotice } from "@/shared/ui/link-notice";
 import { Spinner } from "@/shared/ui/spinner";
 
+import { useCreateNotificationMutation } from "../../api/useNotificationMutations";
+import { canNotifyContent } from "../../model/can-notify-content";
+import {
+  getNotificationErrorMessage,
+  PRIVATE_CONTENT_MESSAGE,
+} from "../../model/notification-error-message";
+import { type NotificationFormValues } from "../../model/notification-input-schema";
+import { isSameNotificationValues, toNotificationInput } from "../../model/to-notification-input";
 import { AlarmWriteLayout } from "../alarm-write-layout";
+import { NOTIFICATION_FORM_ID, NotificationForm } from "../notification-form";
 import { type AlarmCreateViewProps } from "./types";
 
 /**
