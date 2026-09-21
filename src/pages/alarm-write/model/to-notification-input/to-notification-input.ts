@@ -1,8 +1,11 @@
-import { type Notification, type NotificationInput } from "@/entities/notification";
+import {
+  type Notification,
+  type NotificationChanges,
+  type NotificationInput,
+} from "@/entities/notification";
 import { fromSeoulIso, toSeoulIso } from "@/shared/lib/seoul-time";
 
 import { type NotificationFormValues } from "../notification-input-schema";
-import { type NotificationUpdate } from "./types";
 
 export function toNotificationInput(
   values: NotificationFormValues,
@@ -35,16 +38,10 @@ export function isSameNotificationValues(
   );
 }
 
-export function diffNotificationUpdate(
-  initial: NotificationFormValues,
-  current: NotificationFormValues,
-): NotificationUpdate {
-  const isDetailChanged =
-    initial.title !== current.title || initial.targetType !== current.targetType;
-  const isScheduleChanged = initial.scheduledAt !== current.scheduledAt;
-
+export function toNotificationChanges(values: NotificationFormValues): NotificationChanges {
   return {
-    detail: isDetailChanged ? { title: current.title, target_type: current.targetType } : undefined,
-    schedule: isScheduleChanged ? { scheduled_at: toSeoulIso(current.scheduledAt) } : undefined,
+    title: values.title,
+    targetType: values.targetType,
+    scheduledAt: toSeoulIso(values.scheduledAt),
   };
 }

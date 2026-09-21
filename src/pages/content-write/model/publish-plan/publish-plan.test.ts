@@ -3,7 +3,11 @@ import {
   PUBLISHED_CONTENT_FIXTURE,
   SCHEDULED_CONTENT_FIXTURE,
 } from "@/entities/content";
-import { PENDING_NOTIFICATION_FIXTURE, SENT_NOTIFICATION_FIXTURE } from "@/entities/notification";
+import {
+  FAILED_NOTIFICATION_FIXTURE,
+  PENDING_NOTIFICATION_FIXTURE,
+  SENT_NOTIFICATION_FIXTURE,
+} from "@/entities/notification";
 
 import { type PublishOptionsValues } from "../publish-options-schema";
 import { buildPublishPlan } from ".";
@@ -124,7 +128,7 @@ describe("buildPublishPlan", () => {
     ]);
   });
 
-  it("R-10 알림이 발송 완료(`sent`)면 어떤 요청도 보내지 않고, 공개로 바꿀 때는 기존 알림의 예약 시각을 그대로 둔다(알림 예약을 지우는 API가 없다)", () => {
+  it("R-10 알림이 발송 대기 중이 아니면 어떤 요청도 보내지 않고, 공개로 바꿀 때는 기존 알림의 예약 시각을 그대로 둔다(알림 예약을 지우는 API가 없다)", () => {
     expect(
       buildPlan(
         { visibility: "private" },
@@ -149,6 +153,15 @@ describe("buildPublishPlan", () => {
         { content: SCHEDULED_CONTENT_FIXTURE, notification: PENDING_NOTIFICATION_FIXTURE },
       ),
     ).toEqual([{ kind: "status", status: "public" }]);
+  });
+
+  it("발송에 실패한 알림도 고치지 않는다", () => {
+    expect(
+      buildPlan(
+        { notify: false },
+        { content: PUBLISHED_CONTENT_FIXTURE, notification: FAILED_NOTIFICATION_FIXTURE },
+      ),
+    ).toEqual([]);
   });
 
   it("비공개로 발행하면 발송을 골랐어도 기존 알림을 지운다", () => {

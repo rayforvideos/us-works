@@ -2,8 +2,8 @@ import { PENDING_NOTIFICATION_FIXTURE } from "@/entities/notification";
 
 import { type NotificationFormValues } from "../notification-input-schema";
 import {
-  diffNotificationUpdate,
   isSameNotificationValues,
+  toNotificationChanges,
   toNotificationFormValues,
   toNotificationInput,
 } from ".";
@@ -42,19 +42,12 @@ describe("isSameNotificationValues", () => {
   });
 });
 
-describe("diffNotificationUpdate", () => {
-  it("R-07 수정 요청은 제목·대상자가 바뀌었을 때만 `PUT /notifications/{id}`를, 시간이 바뀌었을 때만 `PUT /notifications/{id}/schedule`을 보낸다", () => {
-    expect(diffNotificationUpdate(VALUES, { ...VALUES, title: "바뀐 제목" })).toEqual({
-      detail: { title: "바뀐 제목", target_type: "all" },
-      schedule: undefined,
-    });
-    expect(diffNotificationUpdate(VALUES, { ...VALUES, scheduledAt: "2026-12-20T14:30" })).toEqual({
-      detail: undefined,
-      schedule: { scheduled_at: "2026-12-20T14:30:00+09:00" },
-    });
-    expect(diffNotificationUpdate(VALUES, { ...VALUES })).toEqual({
-      detail: undefined,
-      schedule: undefined,
+describe("toNotificationChanges", () => {
+  it("폼 값을 알림 엔티티가 비교할 수 있는 변경 값으로 바꾼다", () => {
+    expect(toNotificationChanges(VALUES)).toEqual({
+      title: "알림 제목",
+      targetType: "all",
+      scheduledAt: "2026-12-20T10:00:00+09:00",
     });
   });
 });

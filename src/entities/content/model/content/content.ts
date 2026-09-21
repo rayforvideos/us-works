@@ -12,6 +12,7 @@ import {
   PUBLISHED_AT_FORMAT_OPTIONS,
 } from "./constants";
 import {
+  type Content,
   type ContentCategory,
   type ContentListParams,
   type PublishedAtParts,
@@ -43,6 +44,14 @@ function parsePublishStatus(value: string | null): PublishStatus | undefined {
     return undefined;
   }
   return value;
+}
+
+export function canNotifyContent(content: Content): boolean {
+  return content.publish_status !== "draft";
+}
+
+export function hasNotification(content: Content): boolean {
+  return content.notification_status?.has_notification === true;
 }
 
 export function getCategoryLabel(value: string): string {

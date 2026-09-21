@@ -2,7 +2,12 @@ import { useState } from "react";
 import { useNavigate } from "react-router";
 import { useQuery } from "@tanstack/react-query";
 
-import { notificationQueries } from "@/entities/notification";
+import {
+  canEditNotification,
+  diffNotification,
+  hasNotificationChanges,
+  notificationQueries,
+} from "@/entities/notification";
 import { useHttpClient } from "@/shared/api";
 import { ROUTES } from "@/shared/config";
 import { getErrorMessage } from "@/shared/lib/error-message";
@@ -14,8 +19,8 @@ import { useUpdateNotificationMutation } from "../../api/useNotificationMutation
 import { getNotificationErrorMessage } from "../../model/notification-error-message";
 import { type NotificationFormValues } from "../../model/notification-input-schema";
 import {
-  diffNotificationUpdate,
   isSameNotificationValues,
+  toNotificationChanges,
   toNotificationFormValues,
 } from "../../model/to-notification-input";
 import { AlarmWriteLayout } from "../alarm-write-layout";
@@ -30,17 +35,18 @@ export function AlarmEditView({ id }: AlarmEditViewProps) {
   const mutation = useUpdateNotificationMutation(id);
   const [values, setValues] = useState<NotificationFormValues | null>(null);
   const initialValues = data === undefined ? null : toNotificationFormValues(data);
-  const isEditable = data?.send_status === "pending";
+  const isEditable = data !== undefined && canEditNotification(data);
 
   function updateNotificationFromValues(next: NotificationFormValues) {
-    if (initialValues === null) {
+    if (data === undefined) {
       return;
     }
-    if (isSameNotificationValues(initialValues, next)) {
+    const update = diffNotification(data, toNotificationChanges(next));
+    if (!hasNotificationChanges(update)) {
       void navigate(ROUTES.alarms, { replace: true });
       return;
     }
-    mutation.mutate(diffNotificationUpdate(initialValues, next), {
+    mutation.mutate(update, {
       onSuccess: () => {
         void navigate(ROUTES.alarms, { replace: true });
       },

@@ -1,6 +1,12 @@
 import { Link, useNavigate } from "react-router";
 
-import { type Content, formatPublishedAt, getPublishStatusBadge } from "@/entities/content";
+import {
+  canNotifyContent,
+  type Content,
+  formatPublishedAt,
+  getPublishStatusBadge,
+  hasNotification,
+} from "@/entities/content";
 import { ROUTES } from "@/shared/config";
 import { cn } from "@/shared/lib/cn";
 import { buttonVariants } from "@/shared/ui/button";
@@ -27,8 +33,7 @@ export function ContentRow({ content }: ContentRowProps) {
   const detailPath = ROUTES.contentDetail(content.id);
   const publishedAt = formatPublishedAt(content.published_at);
   const badge = getPublishStatusBadge(content.publish_status);
-  const isNotifiable =
-    content.notification_status?.has_notification !== true && content.publish_status !== "draft";
+  const isNotifiable = canNotifyContent(content) && !hasNotification(content);
 
   return (
     <tr

@@ -9,6 +9,7 @@ import {
   type NotificationListResponse,
   type NotificationSchedule,
   type NotificationScheduleInput,
+  type NotificationUpdate,
   type NotificationUpdateInput,
 } from "../../model/notification";
 
@@ -73,4 +74,17 @@ export async function updateNotificationSchedule(
 
 export async function deleteNotification(client: AxiosInstance, id: number): Promise<void> {
   await client.delete(toNotificationPath(id));
+}
+
+export async function applyNotificationUpdate(
+  client: AxiosInstance,
+  id: number,
+  update: NotificationUpdate,
+): Promise<void> {
+  if (update.detail) {
+    await updateNotification(client, id, update.detail);
+  }
+  if (update.schedule) {
+    await updateNotificationSchedule(client, id, update.schedule);
+  }
 }

@@ -1,5 +1,5 @@
 import { parsePage } from "@/shared/lib/pagination-params";
-import { toSeoulParts } from "@/shared/lib/seoul-time";
+import { fromSeoulIso, toSeoulParts } from "@/shared/lib/seoul-time";
 
 import {
   DEFAULT_PAGE_LIMIT,
@@ -10,14 +10,40 @@ import {
   TARGET_TYPE_LABELS,
 } from "./constants";
 import {
+  type Notification,
+  type NotificationChanges,
   type NotificationListParams,
   type NotificationStatKey,
   type NotificationStats,
+  type NotificationUpdate,
   type ScheduledAtParts,
   type SendStatus,
   type SendStatusBadge,
   type TargetType,
 } from "./types";
+
+export function canEditNotification(notification: Notification): boolean {
+  return notification.send_status === "pending";
+}
+
+export function diffNotification(
+  current: Notification,
+  next: NotificationChanges,
+): NotificationUpdate {
+  const isDetailChanged = current.title !== next.title || current.target_type !== next.targetType;
+  const scheduledAt = next.scheduledAt;
+  const isScheduleChanged =
+    scheduledAt !== undefined && fromSeoulIso(current.scheduled_at) !== fromSeoulIso(scheduledAt);
+
+  return {
+    detail: isDetailChanged ? { title: next.title, target_type: next.targetType } : undefined,
+    schedule: isScheduleChanged ? { scheduled_at: scheduledAt } : undefined,
+  };
+}
+
+export function hasNotificationChanges(update: NotificationUpdate): boolean {
+  return update.detail !== undefined || update.schedule !== undefined;
+}
 
 export function getSendStatusBadge(status: SendStatus): SendStatusBadge {
   return { label: SEND_STATUS_LABELS[status], tone: SEND_STATUS_TONES[status] };

@@ -1,4 +1,5 @@
 export {
+  applyNotificationUpdate,
   createNotification,
   deleteNotification,
   updateNotification,
@@ -6,16 +7,21 @@ export {
 } from "./api/notification-api";
 export { notificationQueries } from "./api/notification-queries";
 export {
+  canEditNotification,
+  diffNotification,
   FAILED_NOTIFICATION_FIXTURE,
   formatScheduledAt,
   getSendStatusBadge,
   getStatCount,
   getTargetTypeLabel,
+  hasNotificationChanges,
   type Notification,
   NOTIFICATION_FIXTURE,
   NOTIFICATION_LIST_PARAM_KEYS,
+  type NotificationChanges,
   type NotificationInput,
   type NotificationScheduleInput,
+  type NotificationUpdate,
   type NotificationUpdateInput,
   parseNotificationListParams,
   PENDING_NOTIFICATION_FIXTURE,

@@ -1,9 +1,15 @@
 import {
+  canEditNotification,
+  diffNotification,
+  FAILED_NOTIFICATION_FIXTURE,
   formatScheduledAt,
   getSendStatusBadge,
   getStatCount,
   getTargetTypeLabel,
+  hasNotificationChanges,
   parseNotificationListParams,
+  PENDING_NOTIFICATION_FIXTURE,
+  SENT_NOTIFICATION_FIXTURE,
 } from ".";
 
 describe("알림 모델", () => {
@@ -49,5 +55,66 @@ describe("알림 모델", () => {
     expect(parseNotificationListParams(new URLSearchParams("page=abc")).page).toBe(1);
     expect(parseNotificationListParams(new URLSearchParams("page=10000")).page).toBe(9999);
     expect(parseNotificationListParams(new URLSearchParams("page=3")).page).toBe(3);
+  });
+});
+
+describe("canEditNotification", () => {
+  it("발송 대기 중인 알림만 고칠 수 있다", () => {
+    expect(canEditNotification(PENDING_NOTIFICATION_FIXTURE)).toBe(true);
+    expect(canEditNotification(SENT_NOTIFICATION_FIXTURE)).toBe(false);
+    expect(canEditNotification(FAILED_NOTIFICATION_FIXTURE)).toBe(false);
+  });
+});
+
+describe("diffNotification", () => {
+  it("R-07 제목이나 대상자가 바뀌었을 때만 내용 요청을, 시각이 바뀌었을 때만 예약 요청을 만든다", () => {
+    const current = PENDING_NOTIFICATION_FIXTURE;
+    const same = {
+      title: current.title,
+      targetType: current.target_type,
+      scheduledAt: current.scheduled_at,
+    };
+
+    expect(diffNotification(current, { ...same, title: "바뀐 제목" })).toEqual({
+      detail: { title: "바뀐 제목", target_type: current.target_type },
+      schedule: undefined,
+    });
+    expect(
+      diffNotification(current, { ...same, scheduledAt: "2026-12-20T14:30:00+09:00" }),
+    ).toEqual({
+      detail: undefined,
+      schedule: { scheduled_at: "2026-12-20T14:30:00+09:00" },
+    });
+    expect(diffNotification(current, same)).toEqual({ detail: undefined, schedule: undefined });
+  });
+
+  it("예약 시각을 넘기지 않으면 예약 요청을 만들지 않는다", () => {
+    const current = PENDING_NOTIFICATION_FIXTURE;
+
+    expect(
+      diffNotification(current, { title: current.title, targetType: current.target_type }),
+    ).toEqual({ detail: undefined, schedule: undefined });
+  });
+
+  it("초 단위만 다른 예약 시각은 바뀌지 않은 것으로 본다", () => {
+    const current = { ...PENDING_NOTIFICATION_FIXTURE, scheduled_at: "2026-10-01T09:00:30+09:00" };
+
+    expect(
+      diffNotification(current, {
+        title: current.title,
+        targetType: current.target_type,
+        scheduledAt: "2026-10-01T09:00:00+09:00",
+      }).schedule,
+    ).toBeUndefined();
+  });
+});
+
+describe("hasNotificationChanges", () => {
+  it("내용이나 예약 요청이 하나라도 있으면 바뀐 것으로 본다", () => {
+    expect(hasNotificationChanges({})).toBe(false);
+    expect(hasNotificationChanges({ detail: { title: "t", target_type: "all" } })).toBe(true);
+    expect(
+      hasNotificationChanges({ schedule: { scheduled_at: "2026-10-01T09:00:00+09:00" } }),
+    ).toBe(true);
   });
 });

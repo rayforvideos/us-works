@@ -6,19 +6,24 @@ export {
   SENT_NOTIFICATION_FIXTURE,
 } from "./fixtures";
 export {
+  canEditNotification,
+  diffNotification,
   formatScheduledAt,
   getSendStatusBadge,
   getStatCount,
   getTargetTypeLabel,
+  hasNotificationChanges,
   parseNotificationListParams,
 } from "./notification";
 export {
   type Notification,
+  type NotificationChanges,
   type NotificationInput,
   type NotificationListParams,
   type NotificationListResponse,
   type NotificationSchedule,
   type NotificationScheduleInput,
+  type NotificationUpdate,
   type NotificationUpdateInput,
   type SendStatus,
   type TargetType,

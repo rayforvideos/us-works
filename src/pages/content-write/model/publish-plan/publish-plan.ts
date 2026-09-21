@@ -1,9 +1,14 @@
 import { type Content } from "@/entities/content";
-import { type Notification } from "@/entities/notification";
+import {
+  canEditNotification,
+  diffNotification,
+  hasNotificationChanges,
+  type Notification,
+} from "@/entities/notification";
 import { fromSeoulIso, toSeoulIso } from "@/shared/lib/seoul-time";
 
 import { type PublishOptionsValues } from "../publish-options-schema";
-import { applyUseContentTitle, toPublishVisibility } from "../publish-rules";
+import { applyUseContentTitle, isNotifying, toPublishVisibility } from "../publish-rules";
 import { type BuildPublishPlanInput, type PublishStep } from "./types";
 
 /**
@@ -50,7 +55,7 @@ function buildNotificationSteps({
   values,
   contentTitle,
 }: NotificationStepInput): PublishStep[] {
-  if (notification?.send_status === "sent") {
+  if (notification !== null && !canEditNotification(notification)) {
     return [];
   }
   const title = applyUseContentTitle({
@@ -61,7 +66,7 @@ function buildNotificationSteps({
   const scheduledAt =
     values.visibility === "scheduled" ? toSeoulIso(values.publishedAt) : undefined;
 
-  if (!values.notify || values.visibility === "private") {
+  if (!isNotifying(values)) {
     return notification === null ? [] : [{ kind: "notification-delete", id: notification.id }];
   }
   if (notification === null) {
@@ -72,20 +77,15 @@ function buildNotificationSteps({
       },
     ];
   }
-  const isDetailChanged =
-    notification.title !== title || notification.target_type !== values.targetType;
-  const isScheduleChanged = scheduledAt !== undefined && notification.scheduled_at !== scheduledAt;
-  if (!isDetailChanged && !isScheduleChanged) {
+  const update = diffNotification(notification, {
+    title,
+    targetType: values.targetType,
+    scheduledAt,
+  });
+  if (!hasNotificationChanges(update)) {
     return [];
   }
-  return [
-    {
-      kind: "notification-update",
-      id: notification.id,
-      detail: isDetailChanged ? { title, target_type: values.targetType } : undefined,
-      schedule: isScheduleChanged ? { scheduled_at: scheduledAt } : undefined,
-    },
-  ];
+  return [{ kind: "notification-update", id: notification.id, ...update }];
 }
 
 export function buildPublishPlan({
