@@ -7,6 +7,7 @@ export default mergeConfig(
   defineConfig({
     test: {
       environment: "jsdom",
+      pool: "vmThreads",
       globals: true,
       setupFiles: ["./src/shared/config/test-setup.ts"],
       env: { VITE_API_BASE_URL: "http://api.test" },
