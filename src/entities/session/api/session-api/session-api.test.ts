@@ -1,5 +1,5 @@
 import { createHttpClient } from "@/shared/api";
-import { createFakeAdapter, createOkResponse, readLastCall } from "@/shared/config";
+import { createFakeAdapter, createOkResponse, readLastCall } from "@/shared/testing";
 
 import { refreshSession } from ".";
 

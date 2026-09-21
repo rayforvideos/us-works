@@ -33,8 +33,8 @@
 ## 파일 배치
 
 - 테스트 파일은 대상 파일과 같은 디렉토리에 `<이름>.test.ts` 또는 `<이름>.test.tsx`로 둔다. 상세는 `docs/file-structure.md`.
-- 테스트 셋업은 `src/shared/config/test-setup.ts`에 둔다.
-- 여러 테스트가 공유하는 렌더 헬퍼는 `src/shared/config/` 아래에, 엔티티 픽스처는 해당 `entities/<엔티티>/model`에 둔다. 필요해질 때 만든다.
+- 테스트 셋업과 공용 테스트 도구는 `src/shared/testing/`에 둔다. 앱 코드가 쓰는 `shared/config`와 진입점을 나눠, 픽스처와 렌더 헬퍼가 앱 번들에 섞이지 않는다.
+- 여러 테스트가 공유하는 렌더 헬퍼(`renderWithProviders`)와 가짜 어댑터는 `src/shared/testing/`에, 엔티티 픽스처는 해당 `entities/<엔티티>/model`에 둔다.
 - 테스트용 인스턴스는 `initializeSystem()` 또는 개별 팩토리로 만든다. QueryClient는 `retry: false`로 만든다.
 
 ## 실행

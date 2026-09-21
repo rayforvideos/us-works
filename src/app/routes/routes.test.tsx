@@ -5,7 +5,7 @@ import { render, screen } from "@testing-library/react";
 import { PUBLISHED_CONTENT_FIXTURE } from "@/entities/content";
 import { PENDING_NOTIFICATION_FIXTURE } from "@/entities/notification";
 import { persistedSessionAtom } from "@/entities/session";
-import { createFakeAdapter, createOkResponse, PERSISTED_SESSION_FIXTURE } from "@/shared/config";
+import { createFakeAdapter, createOkResponse, PERSISTED_SESSION_FIXTURE } from "@/shared/testing";
 
 import { AppProviders } from "../app-providers";
 import { initializeSystem } from "../initialize-system";

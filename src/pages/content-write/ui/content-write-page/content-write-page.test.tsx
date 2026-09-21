@@ -1,7 +1,4 @@
-import { createMemoryRouter } from "react-router";
-import { RouterProvider } from "react-router/dom";
-import { QueryClientProvider } from "@tanstack/react-query";
-import { act, fireEvent, render, screen, waitFor, within } from "@testing-library/react";
+import { act, fireEvent, screen, waitFor, within } from "@testing-library/react";
 import { type InternalAxiosRequestConfig } from "axios";
 
 import {
@@ -11,13 +8,12 @@ import {
   SCHEDULED_CONTENT_FIXTURE,
 } from "@/entities/content";
 import { PENDING_NOTIFICATION_FIXTURE } from "@/entities/notification";
-import { createHttpClient, createQueryClient, HttpClientProvider } from "@/shared/api";
 import {
   createFailResponse,
-  createFakeAdapter,
   createOkResponse,
   type FakeResponse,
-} from "@/shared/config";
+  renderWithProviders,
+} from "@/shared/testing";
 
 import { ContentWritePage } from ".";
 
@@ -56,32 +52,22 @@ const CREATE_ROUTES: Record<string, FakeRoute> = {
 };
 
 function renderPage(pathname: string, routes: Record<string, FakeRoute> = {}) {
-  const { adapter, calls } = createFakeAdapter((config: InternalAxiosRequestConfig) => {
-    const key = `${String(config.method)} ${String(config.url)}`;
-    const route = routes[key];
-    if (typeof route === "function") {
-      return route();
-    }
-    return route ?? createOkResponse(CONTENT_DETAIL_FIXTURE);
-  });
-  const router = createMemoryRouter(
-    [
+  return renderWithProviders({
+    routes: [
       { path: "/contents/new", element: <ContentWritePage /> },
       { path: "/contents/:id", element: <ContentWritePage /> },
       { path: "/", element: <p>목록</p> },
     ],
-    { initialEntries: [pathname] },
-  );
-
-  render(
-    <QueryClientProvider client={createQueryClient({ queries: { retry: false } })}>
-      <HttpClientProvider client={createHttpClient({ baseUrl: "http://api.test", adapter })}>
-        <RouterProvider router={router} />
-      </HttpClientProvider>
-    </QueryClientProvider>,
-  );
-
-  return { router, calls };
+    respond: (config: InternalAxiosRequestConfig) => {
+      const key = `${String(config.method)} ${String(config.url)}`;
+      const route = routes[key];
+      if (typeof route === "function") {
+        return route();
+      }
+      return route ?? createOkResponse(CONTENT_DETAIL_FIXTURE);
+    },
+    initialEntries: [pathname],
+  });
 }
 
 function readCalls(calls: InternalAxiosRequestConfig[]): string[] {

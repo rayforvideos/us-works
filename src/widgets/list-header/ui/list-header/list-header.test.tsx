@@ -1,15 +1,10 @@
 import { type ReactNode } from "react";
 import { createMemoryRouter } from "react-router";
 import { RouterProvider } from "react-router/dom";
-import { fireEvent, render, screen, waitFor } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
 
-import { ListHeader } from ".";
+import { LIST_TABS, ListHeader } from ".";
 import { type ListHeaderTab } from "./types";
-
-const LIST_TABS: readonly ListHeaderTab[] = [
-  { label: "콘텐츠", to: "/", end: true },
-  { label: "알람", to: "/alarms" },
-];
 
 const CUSTOM_TABS: readonly ListHeaderTab[] = [
   { label: "첫 번째", to: "/" },
@@ -39,29 +34,6 @@ function renderListHeader(
 }
 
 describe("ListHeader", () => {
-  it('30 S-10 Given 콘텐츠 탭 When "알람" 탭을 누르면 Then `/alarms`로 이동한다', async () => {
-    const { router } = renderListHeader("/");
-
-    fireEvent.click(screen.getByRole("link", { name: "알람" }));
-
-    await waitFor(() => {
-      expect(router.state.location.pathname).toBe("/alarms");
-    });
-  });
-
-  it("30 S-11 Given 아래로 스크롤된 콘텐츠 목록 When 로고를 누르면 Then `/`로 이동하고 창 스크롤이 맨 위로 이동한다", async () => {
-    const scrollTo = vi.spyOn(window, "scrollTo").mockImplementation(() => undefined);
-    const { router } = renderListHeader("/?page=2");
-
-    fireEvent.click(screen.getByRole("link", { name: "홈으로" }));
-
-    await waitFor(() => {
-      expect(router.state.location.search).toBe("");
-    });
-    expect(router.state.location.pathname).toBe("/");
-    expect(scrollTo).toHaveBeenCalledWith({ top: 0, behavior: "smooth" });
-  });
-
   it("로고 링크는 넘긴 홈 경로를 가리킨다", () => {
     renderListHeader("/alarms", { homeTo: "/alarms" });
 

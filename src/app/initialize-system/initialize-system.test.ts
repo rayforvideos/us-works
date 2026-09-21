@@ -1,9 +1,14 @@
 import { QueryClient } from "@tanstack/react-query";
-import { AxiosHeaders, type InternalAxiosRequestConfig } from "axios";
 import { atom } from "jotai";
 
 import { clearSession, persistedSessionAtom, SESSION_STORAGE_KEY } from "@/entities/session";
-import { createFakeAdapter, createOkResponse, PERSISTED_SESSION_FIXTURE } from "@/shared/config";
+import {
+  createFakeAdapter,
+  createOkResponse,
+  PERSISTED_SESSION_FIXTURE,
+  readAuthorization,
+  readCallAt,
+} from "@/shared/testing";
 
 import { initializeSystem } from "./initialize-system";
 
@@ -16,14 +21,6 @@ function createSessionAdapter() {
         })
       : createOkResponse({ items: [] }),
   );
-}
-
-function getAuthorization(config: InternalAxiosRequestConfig | undefined): string | null {
-  if (!config) {
-    throw new Error("요청이 없습니다");
-  }
-  const value = AxiosHeaders.from(config.headers).get("Authorization");
-  return typeof value === "string" ? value : null;
 }
 
 describe("initializeSystem", () => {
@@ -108,7 +105,7 @@ describe("저장된 세션 복구", () => {
     await system.httpClient.get("/api/v1/contents");
 
     expect(calls.map((call) => call.url)).toEqual(["/api/v1/auth/refresh", "/api/v1/contents"]);
-    expect(getAuthorization(calls[1])).toBe("Bearer new-token");
+    expect(readAuthorization(readCallAt(calls, 1))).toBe("Bearer new-token");
   });
 
   it("저장된 세션이 없으면 갱신 없이 토큰 없는 요청을 보낸다", async () => {
@@ -118,6 +115,6 @@ describe("저장된 세션 복구", () => {
     await system.httpClient.get("/api/v1/contents");
 
     expect(calls.map((call) => call.url)).toEqual(["/api/v1/contents"]);
-    expect(getAuthorization(calls[0])).toBeNull();
+    expect(readAuthorization(readCallAt(calls, 0))).toBeNull();
   });
 });

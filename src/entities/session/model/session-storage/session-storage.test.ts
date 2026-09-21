@@ -1,4 +1,4 @@
-import { PERSISTED_SESSION_FIXTURE } from "@/shared/config";
+import { PERSISTED_SESSION_FIXTURE } from "@/shared/testing";
 
 import { SESSION_STORAGE_KEY } from "./constants";
 import { readPersistedSession, writePersistedSession } from "./session-storage";
