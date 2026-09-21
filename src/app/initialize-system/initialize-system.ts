@@ -52,6 +52,7 @@ export function initializeSystem(options: InitializeSystemOptions = {}): AppSyst
   const { adapter } = options;
   const baseUrl = options.apiBaseUrl ?? readEnv().apiBaseUrl;
   const store = createStore();
+  const queryClient = createQueryClient(options.queryClient);
   const refreshClient = createHttpClient({ baseUrl, adapter });
   const httpClient = createHttpClient({
     baseUrl,
@@ -59,5 +60,9 @@ export function initializeSystem(options: InitializeSystemOptions = {}): AppSyst
     auth: createAuthHandlers(store, refreshClient),
   });
 
-  return { store, queryClient: createQueryClient(options.queryClient), httpClient };
+  store.sub(persistedSessionAtom, () => {
+    queryClient.clear();
+  });
+
+  return { store, queryClient, httpClient };
 }
