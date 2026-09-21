@@ -27,15 +27,7 @@ import {
 } from "./notify-section-variants";
 import { type NotifySectionProps } from "./types";
 
-export function NotifySection({
-  form,
-  values,
-  contentTitle,
-  submitting,
-  isSent,
-}: NotifySectionProps) {
-  const isPrivate = values.visibility === "private";
-  const isSending = isNotifying(values);
+export function NotifySection({ form, contentTitle, submitting, isSent }: NotifySectionProps) {
   const isDisabled = submitting || isSent;
 
   return (
@@ -48,79 +40,95 @@ export function NotifySection({
         <hr className={dividerClass()} />
       </div>
       {isSent ? <p className={sentNoticeClass()}>{SENT_NOTIFICATION_TEXT}</p> : null}
-      <div className={rowsClass()}>
-        <form.Field name="notify">
-          {(field) => (
-            <OptionRadioRow
-              label="발송 여부"
-              name="publish-notify"
-              options={NOTIFY_VALUES.map((item) => ({ value: item, label: NOTIFY_LABELS[item] }))}
-              value={isSending ? "send" : "none"}
-              onChange={(next) => {
-                field.handleChange(next === "send");
-              }}
-              disabled={isDisabled || isPrivate}
-            />
-          )}
-        </form.Field>
-        {isSending ? (
-          <form.Field name="targetType">
-            {(field) => (
-              <OptionRadioRow
-                label="대상자"
-                name="publish-target-type"
-                options={TARGET_TYPES.map((target) => ({
-                  value: target,
-                  label: getTargetTypeLabel(target),
-                }))}
-                value={field.state.value}
-                onChange={field.handleChange}
-                disabled={isDisabled}
-              />
-            )}
-          </form.Field>
-        ) : null}
-        {isSending ? (
-          <PublishRow label="알람 내용">
-            <form.Field name="notificationTitle">
-              {(field) => (
-                <div className={titleBoxClass()}>
-                  <form.Field name="useContentTitle">
-                    {(checkboxField) => (
-                      <CheckboxChip
-                        checked={checkboxField.state.value}
-                        disabled={isDisabled}
-                        onChange={(event) => {
-                          checkboxField.handleChange(event.target.checked);
-                          field.handleChange(
-                            applyUseContentTitle({
-                              useContentTitle: event.target.checked,
-                              contentTitle,
-                            }),
-                          );
+      <form.Subscribe selector={(state) => state.values.visibility}>
+        {(visibility) => (
+          <form.Subscribe selector={(state) => state.values.notify}>
+            {(notify) => {
+              const isSending = isNotifying({ visibility, notify });
+              const isPrivate = visibility === "private";
+
+              return (
+                <div className={rowsClass()}>
+                  <form.Field name="notify">
+                    {(field) => (
+                      <OptionRadioRow
+                        label="발송 여부"
+                        name="publish-notify"
+                        options={NOTIFY_VALUES.map((item) => ({
+                          value: item,
+                          label: NOTIFY_LABELS[item],
+                        }))}
+                        value={isSending ? "send" : "none"}
+                        onChange={(next) => {
+                          field.handleChange(next === "send");
                         }}
-                      >
-                        콘텐츠 제목 사용
-                      </CheckboxChip>
+                        disabled={isDisabled || isPrivate}
+                      />
                     )}
                   </form.Field>
-                  <TextField
-                    aria-label="알람 내용"
-                    placeholder={NOTIFICATION_TITLE_PLACEHOLDER}
-                    maxLength={MAX_NOTIFICATION_TITLE_LENGTH}
-                    value={field.state.value}
-                    onChange={(event) => {
-                      field.handleChange(event.target.value);
-                    }}
-                    error={readFieldError(field.state.meta.errors)}
-                    disabled={isDisabled || values.useContentTitle}
-                  />
+                  {isSending ? (
+                    <form.Field name="targetType">
+                      {(field) => (
+                        <OptionRadioRow
+                          label="대상자"
+                          name="publish-target-type"
+                          options={TARGET_TYPES.map((target) => ({
+                            value: target,
+                            label: getTargetTypeLabel(target),
+                          }))}
+                          value={field.state.value}
+                          onChange={field.handleChange}
+                          disabled={isDisabled}
+                        />
+                      )}
+                    </form.Field>
+                  ) : null}
+                  {isSending ? (
+                    <PublishRow label="알람 내용">
+                      <form.Field name="useContentTitle">
+                        {(checkboxField) => (
+                          <form.Field name="notificationTitle">
+                            {(field) => (
+                              <div className={titleBoxClass()}>
+                                <CheckboxChip
+                                  checked={checkboxField.state.value}
+                                  disabled={isDisabled}
+                                  onChange={(event) => {
+                                    checkboxField.handleChange(event.target.checked);
+                                    field.handleChange(
+                                      applyUseContentTitle({
+                                        useContentTitle: event.target.checked,
+                                        contentTitle,
+                                      }),
+                                    );
+                                  }}
+                                >
+                                  콘텐츠 제목 사용
+                                </CheckboxChip>
+                                <TextField
+                                  aria-label="알람 내용"
+                                  placeholder={NOTIFICATION_TITLE_PLACEHOLDER}
+                                  maxLength={MAX_NOTIFICATION_TITLE_LENGTH}
+                                  value={field.state.value}
+                                  onChange={(event) => {
+                                    field.handleChange(event.target.value);
+                                  }}
+                                  error={readFieldError(field.state.meta.errors)}
+                                  disabled={isDisabled || checkboxField.state.value}
+                                />
+                              </div>
+                            )}
+                          </form.Field>
+                        )}
+                      </form.Field>
+                    </PublishRow>
+                  ) : null}
                 </div>
-              )}
-            </form.Field>
-          </PublishRow>
-        ) : null}
-      </div>
+              );
+            }}
+          </form.Subscribe>
+        )}
+      </form.Subscribe>
     </section>
   );
 }

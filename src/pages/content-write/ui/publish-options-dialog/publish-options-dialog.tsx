@@ -85,38 +85,37 @@ export function PublishOptionsDialog({
       }
     >
       <form id={PUBLISH_OPTIONS_FORM_ID} noValidate onSubmit={submitForm} className={formClass()}>
-        <form.Subscribe selector={(state) => state.values}>
-          {(values) => (
-            <div className={sectionsClass()}>
-              <form.Field name="visibility">
-                {(field) => (
-                  <OptionRadioRow
-                    label="공개 여부"
-                    name="publish-visibility"
-                    options={PUBLISH_VISIBILITIES.map((item) => ({
-                      value: item,
-                      label: VISIBILITY_LABELS[item],
-                    }))}
-                    value={field.state.value}
-                    onChange={field.handleChange}
-                    disabled={submitting}
-                    disabledValues={isScheduleAllowed ? undefined : SCHEDULE_DISABLED_VALUES}
-                  />
-                )}
-              </form.Field>
-              {values.visibility === "scheduled" ? (
-                <PublishedAtRow form={form} submitting={submitting} />
-              ) : null}
-              <NotifySection
-                form={form}
-                values={values}
-                contentTitle={contentTitle}
-                submitting={submitting}
-                isSent={isSent}
+        <div className={sectionsClass()}>
+          <form.Field name="visibility">
+            {(field) => (
+              <OptionRadioRow
+                label="공개 여부"
+                name="publish-visibility"
+                options={PUBLISH_VISIBILITIES.map((item) => ({
+                  value: item,
+                  label: VISIBILITY_LABELS[item],
+                }))}
+                value={field.state.value}
+                onChange={field.handleChange}
+                disabled={submitting}
+                disabledValues={isScheduleAllowed ? undefined : SCHEDULE_DISABLED_VALUES}
               />
-            </div>
-          )}
-        </form.Subscribe>
+            )}
+          </form.Field>
+          <form.Subscribe selector={(state) => state.values.visibility}>
+            {(visibility) =>
+              visibility === "scheduled" ? (
+                <PublishedAtRow form={form} submitting={submitting} />
+              ) : null
+            }
+          </form.Subscribe>
+          <NotifySection
+            form={form}
+            contentTitle={contentTitle}
+            submitting={submitting}
+            isSent={isSent}
+          />
+        </div>
       </form>
     </Dialog>
   );

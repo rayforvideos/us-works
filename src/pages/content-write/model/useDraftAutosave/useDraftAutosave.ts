@@ -5,7 +5,7 @@ import { writeContentDraft } from "@/entities/content";
 import { DRAFT_AUTOSAVE_MS } from "./constants";
 import { type DraftAutosaveOptions, type SaveDraft } from "./types";
 
-export function useDraftAutosave({ enabled, getValues, onSaved }: DraftAutosaveOptions) {
+export function useDraftAutosave({ getValues, onSaved }: DraftAutosaveOptions) {
   const saveRef = useRef<SaveDraft>(() => undefined);
   const savedValuesRef = useRef<string | null>(null);
 
@@ -26,9 +26,6 @@ export function useDraftAutosave({ enabled, getValues, onSaved }: DraftAutosaveO
   });
 
   useEffect(() => {
-    if (!enabled) {
-      return;
-    }
     const timer = setInterval(() => {
       saveRef.current({ onlyWhenChanged: true });
     }, DRAFT_AUTOSAVE_MS);
@@ -36,7 +33,7 @@ export function useDraftAutosave({ enabled, getValues, onSaved }: DraftAutosaveO
     return () => {
       clearInterval(timer);
     };
-  }, [enabled]);
+  }, []);
 
   function saveNow() {
     saveRef.current({ onlyWhenChanged: false });

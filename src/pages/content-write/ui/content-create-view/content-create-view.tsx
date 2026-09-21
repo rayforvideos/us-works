@@ -23,14 +23,13 @@ export function ContentCreateView() {
   const [initialValues] = useState<ContentFormValues>(() =>
     toContentFormValues(readContentDraft()),
   );
-  const [values, setValues] = useState<ContentFormValues>(initialValues);
+  const valuesRef = useRef<ContentFormValues>(initialValues);
   const [savedAt, setSavedAt] = useState<string | null>(null);
   const [publishValues, setPublishValues] = useState<ContentFormValues | null>(null);
   const [savedContentId, setSavedContentId] = useState<number | null>(null);
   const mutation = usePublishContentMutation({ onContentSaved: setSavedContentId });
   const { saveNow } = useDraftAutosave({
-    enabled: true,
-    getValues: () => values,
+    getValues: () => valuesRef.current,
     onSaved: setSavedAt,
   });
 
@@ -85,7 +84,9 @@ export function ContentCreateView() {
         <ContentForm
           formId={CONTENT_FORM_ID}
           defaultValues={initialValues}
-          onValuesChange={setValues}
+          onValuesChange={(next) => {
+            valuesRef.current = next;
+          }}
           onSubmit={setPublishValues}
           isPending={mutation.isPending}
         />
