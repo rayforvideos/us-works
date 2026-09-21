@@ -7,7 +7,7 @@ export function LinkNotice({ message, linkLabel, to }: LinkNoticeProps) {
   return (
     <div className={noticeClass()}>
       <p className={messageClass()}>{message}</p>
-      <Link to={to} className={linkClass()}>
+      <Link to={to} viewTransition className={linkClass()}>
         {linkLabel}
       </Link>
     </div>

@@ -39,7 +39,7 @@ export function ContentRow({ content }: ContentRowProps) {
     <tr
       className={rowClass()}
       onClick={() => {
-        void navigate(detailPath);
+        void navigate(detailPath, { viewTransition: true });
       }}
     >
       <td className={dataCellVariants()}>{content.id}</td>
@@ -47,6 +47,7 @@ export function ContentRow({ content }: ContentRowProps) {
         <div className={titleRowClass()}>
           <Link
             to={detailPath}
+            viewTransition
             className={titleLinkClass()}
             onClick={(event) => {
               event.stopPropagation();
@@ -57,6 +58,7 @@ export function ContentRow({ content }: ContentRowProps) {
           {isNotifiable ? (
             <Link
               to={ROUTES.alarmNewForContent(content.id)}
+              viewTransition
               className={cn(
                 buttonVariants({ variant: "outline", importance: "assistive", size: "small" }),
                 pushLinkClass(),

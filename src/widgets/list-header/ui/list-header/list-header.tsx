@@ -21,6 +21,7 @@ export function ListHeader({ homeTo, tabs, action }: ListHeaderProps) {
       <Container className={containerClass()}>
         <Link
           to={homeTo}
+          viewTransition
           aria-label="홈으로"
           className={logoLinkClass()}
           onClick={() => {
@@ -36,6 +37,7 @@ export function ListHeader({ homeTo, tabs, action }: ListHeaderProps) {
                 <NavLink
                   to={tab.to}
                   end={tab.end}
+                  viewTransition
                   className={cn(buttonVariants({ variant: "text" }), tabActiveClass())}
                 >
                   {tab.label}

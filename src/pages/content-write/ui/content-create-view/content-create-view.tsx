@@ -47,7 +47,7 @@ export function ContentCreateView() {
       {
         onSuccess: () => {
           clearContentDraft();
-          void navigate(ROUTES.contents, { replace: true });
+          void navigate(ROUTES.contents, { replace: true, viewTransition: true });
         },
       },
     );
@@ -61,7 +61,7 @@ export function ContentCreateView() {
           savedAt === null ? undefined : `해당 글이 임시 저장되었습니다 ${formatSavedAt(savedAt)}`
         }
         onBack={() => {
-          void navigate(ROUTES.contents);
+          void navigate(ROUTES.contents, { viewTransition: true });
         }}
         actions={
           <>

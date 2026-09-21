@@ -46,7 +46,7 @@ export function ContentEditView({ id }: ContentEditViewProps) {
       },
       {
         onSuccess: () => {
-          void navigate(ROUTES.contents, { replace: true });
+          void navigate(ROUTES.contents, { replace: true, viewTransition: true });
         },
       },
     );
@@ -57,7 +57,7 @@ export function ContentEditView({ id }: ContentEditViewProps) {
       <Gnb
         title="콘텐츠 쓰기"
         onBack={() => {
-          void navigate(ROUTES.contents);
+          void navigate(ROUTES.contents, { viewTransition: true });
         }}
         actions={
           content ? (

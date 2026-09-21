@@ -41,6 +41,8 @@
 - 값을 돌려주는 컨트롤은 콜백 이름을 `onValueChange`로 맞춘다(`Select`, `RadioGroup`, `DateTimeField`). `onChange`는 네이티브 이벤트를 그대로 넘기는 입력(`TextField`, `TextArea`)에만 쓴다.
 - 선 아이콘은 `shared/ui/icon/stroke-icon`의 `StrokeIcon`을 감싸고 `viewBox`, `strokeWidth`, 경로만 갖는다. 채움이 있는 아이콘(`RoundArrowIcon`, `RoundCancelIcon`, `LogoIcon`)은 자기 `svg`를 그대로 둔다.
 - Base UI 팝업(Select, Dialog)의 열림·닫힘 전환은 `transition-[opacity,scale]`처럼 속성을 한정한다. Tailwind `transition` 단축은 `display`, `pointer-events` 같은 이산 속성을 포함해 Base UI가 닫힘 전환의 완료를 기다리다 팝업을 언마운트하지 못한다.
+- 사용자가 일으키는 화면 이동에는 react-router의 `viewTransition`을 붙인다. 목록 헤더의 탭과 로고, 목록 행, 안내의 목록 링크, 작성과 발행 뒤 이동이 대상이다. 인증 가드의 리다이렉트처럼 사용자가 누르지 않은 이동에는 붙이지 않는다. React의 `<ViewTransition>` 컴포넌트는 쓰지 않는다. 이동 시점을 라우터가 쥐고 있어 둘을 함께 쓰면 전환이 겹친다.
+- 동작 줄이기를 켠 사용자에게는 전환 애니메이션을 끈다. 규칙은 `app/styles/base.css`에 있다.
 - 화면 위에 고정하는 블록(목록 헤더, GNB)은 `sticky top-0`과 `z-10`, 배경색을 함께 준다. Base UI 팝업(Select, Dialog)은 body로 포털되며 자체 z-index를 최상단에 두므로 페이지의 `z-*`와 겹치지 않는다.
 - Base UI의 `onOpenChange`는 `(open, eventDetails)` 두 인자를 넘기므로 `shared/ui/dialog`는 소비자 콜백에 `open` 하나만 전달하는 래퍼를 둔다.
 

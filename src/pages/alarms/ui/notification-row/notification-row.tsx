@@ -36,7 +36,7 @@ export function NotificationRow({ notification }: NotificationRowProps) {
     <tr
       className={rowClass()}
       onClick={() => {
-        void navigate(detailPath);
+        void navigate(detailPath, { viewTransition: true });
       }}
     >
       <td className={dataCellVariants()}>{notification.id}</td>
