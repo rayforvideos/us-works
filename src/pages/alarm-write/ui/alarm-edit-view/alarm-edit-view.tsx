@@ -43,12 +43,12 @@ export function AlarmEditView({ id }: AlarmEditViewProps) {
     }
     const update = diffNotification(data, toNotificationChanges(next));
     if (!hasNotificationChanges(update)) {
-      void navigate(ROUTES.alarms, { replace: true });
+      void navigate(ROUTES.alarms, { replace: true, viewTransition: true });
       return;
     }
     mutation.mutate(update, {
       onSuccess: () => {
-        void navigate(ROUTES.alarms, { replace: true });
+        void navigate(ROUTES.alarms, { replace: true, viewTransition: true });
       },
     });
   }

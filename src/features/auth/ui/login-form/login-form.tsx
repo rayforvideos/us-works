@@ -27,7 +27,10 @@ export function LoginForm() {
   function handleSubmit(values: Credentials) {
     mutation.mutate(values, {
       onSuccess: () => {
-        void navigate(readRedirectPath(location.state) ?? ROUTES.contents, { replace: true });
+        void navigate(readRedirectPath(location.state) ?? ROUTES.contents, {
+          replace: true,
+          viewTransition: true,
+        });
       },
     });
   }

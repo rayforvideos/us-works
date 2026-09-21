@@ -14,7 +14,7 @@ export function RegisterForm() {
   function handleSubmit(values: Credentials) {
     mutation.mutate(values, {
       onSuccess: () => {
-        void navigate(ROUTES.contents, { replace: true });
+        void navigate(ROUTES.contents, { replace: true, viewTransition: true });
       },
     });
   }

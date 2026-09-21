@@ -41,7 +41,7 @@ export function AlarmCreateView({ contentId }: AlarmCreateViewProps) {
   function createNotificationFromValues(next: NotificationFormValues) {
     mutation.mutate(toNotificationInput(next, contentId), {
       onSuccess: () => {
-        void navigate(ROUTES.alarms, { replace: true });
+        void navigate(ROUTES.alarms, { replace: true, viewTransition: true });
       },
     });
   }

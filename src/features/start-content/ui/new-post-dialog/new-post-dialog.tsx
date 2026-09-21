@@ -70,7 +70,7 @@ export function NewPostDialog({ open, onOpenChange, finalFocus }: NewPostDialogP
       clearContentDraft();
     }
     onOpenChange(false);
-    void navigate(ROUTES.contentNew);
+    void navigate(ROUTES.contentNew, { viewTransition: true });
   }
 
   return (

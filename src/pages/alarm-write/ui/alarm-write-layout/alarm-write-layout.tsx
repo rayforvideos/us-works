@@ -13,7 +13,7 @@ export function AlarmWriteLayout({ isDirty, actions, children }: AlarmWriteLayou
   const [isLeaveOpen, setIsLeaveOpen] = useState(false);
 
   function leave() {
-    void navigate(ROUTES.alarms);
+    void navigate(ROUTES.alarms, { viewTransition: true });
   }
 
   return (
