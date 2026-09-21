@@ -2,7 +2,7 @@ import { QueryClient } from "@tanstack/react-query";
 import { AxiosHeaders, type InternalAxiosRequestConfig } from "axios";
 import { atom } from "jotai";
 
-import { SESSION_STORAGE_KEY } from "@/entities/session";
+import { clearSession, persistedSessionAtom, SESSION_STORAGE_KEY } from "@/entities/session";
 import { createFakeAdapter, createOkResponse, PERSISTED_SESSION_FIXTURE } from "@/shared/config";
 
 import { initializeSystem } from "./initialize-system";
@@ -65,6 +65,25 @@ describe("initializeSystem", () => {
     expect(initializeSystem({ apiBaseUrl: "http://other.test" }).httpClient.defaults.baseURL).toBe(
       "http://other.test",
     );
+  });
+
+  it("다른 세션이 들어오면 쿼리 캐시를 비운다", () => {
+    const system = initializeSystem();
+    system.queryClient.setQueryData(["contents", "list"], { items: [] });
+
+    system.store.set(persistedSessionAtom, PERSISTED_SESSION_FIXTURE);
+
+    expect(system.queryClient.getQueryData(["contents", "list"])).toBeUndefined();
+  });
+
+  it("세션이 끊기면 쿼리 캐시를 비운다", () => {
+    const system = initializeSystem();
+    system.store.set(persistedSessionAtom, PERSISTED_SESSION_FIXTURE);
+    system.queryClient.setQueryData(["contents", "list"], { items: [] });
+
+    clearSession(system.store);
+
+    expect(system.queryClient.getQueryData(["contents", "list"])).toBeUndefined();
   });
 
   it("전달한 QueryClient 옵션이 반영된다", () => {
