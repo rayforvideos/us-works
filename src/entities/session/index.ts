@@ -3,7 +3,7 @@ export {
   accessTokenAtom,
   clearSession,
   persistedSessionAtom,
-  SESSION_STORAGE_KEY,
   setAccessTokenFromRefreshResponse,
 } from "./model/session";
+export { SESSION_STORAGE_KEY } from "./model/session-storage";
 export { useIsAuthenticated, useSetSession } from "./model/useSession";
