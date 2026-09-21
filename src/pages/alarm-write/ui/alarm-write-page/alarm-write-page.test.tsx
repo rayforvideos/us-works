@@ -1,4 +1,4 @@
-import { fireEvent, screen } from "@testing-library/react";
+import { act, fireEvent, screen } from "@testing-library/react";
 
 import { DRAFT_CONTENT_FIXTURE, PUBLISHED_CONTENT_FIXTURE } from "@/entities/content";
 import { PENDING_NOTIFICATION_FIXTURE, SENT_NOTIFICATION_FIXTURE } from "@/entities/notification";
@@ -20,7 +20,7 @@ const EDITED_NOTIFICATION = {
 
 const SENT_NOTIFICATION = { ...SENT_NOTIFICATION_FIXTURE, id: 12 };
 
-function renderPage(pathname: string, respond: FakeResponder) {
+function renderPage(pathname: string, respond: FakeResponder, entries?: string[]) {
   return renderWithProviders({
     routes: [
       { path: "/alarms/new", element: <AlarmWritePage /> },
@@ -29,7 +29,7 @@ function renderPage(pathname: string, respond: FakeResponder) {
       { path: "/", element: <p>콘텐츠 목록</p> },
     ],
     respond,
-    initialEntries: [pathname],
+    initialEntries: entries ?? [pathname],
   });
 }
 
@@ -253,6 +253,28 @@ describe("AlarmWritePage 작성 종료", () => {
     expect(
       await screen.findByRole("dialog", { name: "작성을 종료하시겠습니까?" }),
     ).toBeInTheDocument();
+  });
+
+  it("S-14 Given 입력이 바뀐 폼 When 브라우저 뒤로가기를 하면 Then 같은 확인 모달이 보이고, 네를 누르면 `/alarms`로 이동한다", async () => {
+    const { router } = renderPage("/alarms/12", respondToEdit(EDITED_NOTIFICATION), [
+      "/alarms",
+      "/alarms/12",
+    ]);
+
+    await screen.findByLabelText("제목");
+    fireEvent.change(screen.getByLabelText("제목"), { target: { value: "바뀐 제목" } });
+    await act(async () => {
+      await router.navigate(-1);
+    });
+
+    expect(
+      await screen.findByRole("dialog", { name: "작성을 종료하시겠습니까?" }),
+    ).toBeInTheDocument();
+    expect(router.state.location.pathname).toBe("/alarms/12");
+
+    fireEvent.click(screen.getByRole("button", { name: "네" }));
+
+    expect(await screen.findByText("알람 목록")).toBeInTheDocument();
   });
 
   it("S-11 Given 바뀐 게 없는 폼 When 뒤로가기를 누르면 Then 모달 없이 `/alarms`로 이동한다", async () => {

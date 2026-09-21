@@ -62,6 +62,7 @@
 - S-11 Given 바뀐 게 없는 폼 When 뒤로가기를 누르면 Then 모달 없이 `/alarms`로 이동한다
 - S-12 Given `/alarms/new`(contentId 없음) When 페이지가 열리면 Then `/`로 이동한다
 - S-13 Given 비공개 콘텐츠의 `/alarms/new?contentId=147` When 페이지가 열리면 Then 폼 대신 비공개 안내와 "목록으로" 링크가 보인다
+- S-14 Given 입력이 바뀐 폼 When 브라우저 뒤로가기를 하면 Then 같은 확인 모달이 보이고, 네를 누르면 `/alarms`로 이동한다
 
 ## 확인 필요
 

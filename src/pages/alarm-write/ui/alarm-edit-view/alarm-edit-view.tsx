@@ -16,6 +16,7 @@ import { LinkNotice } from "@/shared/ui/link-notice";
 import { Spinner } from "@/shared/ui/spinner";
 
 import { useUpdateNotificationMutation } from "../../api/useNotificationMutations";
+import { LEAVE_ALLOWED_STATE } from "../../model/leave-confirm";
 import { getNotificationErrorMessage } from "../../model/notification-error-message";
 import { type NotificationFormValues } from "../../model/notification-input-schema";
 import {
@@ -43,12 +44,20 @@ export function AlarmEditView({ id }: AlarmEditViewProps) {
     }
     const update = diffNotification(data, toNotificationChanges(next));
     if (!hasNotificationChanges(update)) {
-      void navigate(ROUTES.alarms, { replace: true, viewTransition: true });
+      void navigate(ROUTES.alarms, {
+        replace: true,
+        viewTransition: true,
+        state: LEAVE_ALLOWED_STATE,
+      });
       return;
     }
     mutation.mutate(update, {
       onSuccess: () => {
-        void navigate(ROUTES.alarms, { replace: true, viewTransition: true });
+        void navigate(ROUTES.alarms, {
+          replace: true,
+          viewTransition: true,
+          state: LEAVE_ALLOWED_STATE,
+        });
       },
     });
   }
