@@ -34,6 +34,8 @@ export function ContentEditView({ id }: ContentEditViewProps) {
   const notificationQuery = useContentNotificationQuery(id);
   const [publishValues, setPublishValues] = useState<ContentFormValues | null>(null);
   const mutation = usePublishContentMutation();
+  const loadError = error ?? notificationQuery.error;
+  const content = loadError === null ? data : undefined;
   const isWaitingNotification = publishValues !== null && notificationQuery.isPending;
 
   function publishContent(options: PublishOptionsValues) {
@@ -63,7 +65,7 @@ export function ContentEditView({ id }: ContentEditViewProps) {
           void navigate(ROUTES.contents);
         }}
         actions={
-          data ? (
+          content ? (
             <Button
               ref={publishButtonRef}
               size="medium"
@@ -82,25 +84,29 @@ export function ContentEditView({ id }: ContentEditViewProps) {
             <Spinner aria-label="콘텐츠 불러오는 중" />
           </div>
         ) : null}
-        {error === null ? null : (
-          <LinkNotice message={getErrorMessage(error)} linkLabel="목록으로" to={ROUTES.contents} />
+        {loadError === null ? null : (
+          <LinkNotice
+            message={getErrorMessage(loadError)}
+            linkLabel="목록으로"
+            to={ROUTES.contents}
+          />
         )}
-        {data ? (
+        {content ? (
           <ContentForm
             formId={CONTENT_FORM_ID}
-            defaultValues={toFormValues(data)}
+            defaultValues={toFormValues(content)}
             onSubmit={setPublishValues}
             isPending={mutation.isPending}
           />
         ) : null}
       </Container>
-      {data && publishValues !== null && !notificationQuery.isPending ? (
+      {content && publishValues !== null && !notificationQuery.isPending ? (
         <PublishOptionsDialog
           open
           onOpenChange={() => {
             setPublishValues(null);
           }}
-          content={data}
+          content={content}
           notification={notificationQuery.data ?? null}
           contentTitle={publishValues.title}
           submitting={mutation.isPending}

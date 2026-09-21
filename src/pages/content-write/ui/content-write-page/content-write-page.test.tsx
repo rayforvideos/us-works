@@ -516,4 +516,16 @@ describe("ContentWritePage 콘텐츠 저장", () => {
     expect(screen.getByRole("link", { name: "목록으로" })).toBeInTheDocument();
     expect(screen.queryByRole("button", { name: "발행하기" })).not.toBeInTheDocument();
   });
+
+  it("수정 화면은 알림을 불러오지 못해도 실패로 보고 폼과 발행하기 버튼을 내린다", async () => {
+    renderPage("/contents/136", {
+      "get /api/v1/contents/136": createOkResponse(SCHEDULED_CONTENT),
+      "get /api/v1/contents/136/notification": createFailResponse(500, "server error"),
+    });
+
+    expect(await screen.findByText("잠시 후 다시 시도해주세요.")).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "목록으로" })).toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: "발행하기" })).not.toBeInTheDocument();
+    expect(screen.queryByLabelText("제목")).not.toBeInTheDocument();
+  });
 });
