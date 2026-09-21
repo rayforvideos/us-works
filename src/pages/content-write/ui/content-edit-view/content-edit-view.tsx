@@ -1,7 +1,9 @@
 import { useRef, useState } from "react";
 import { useNavigate } from "react-router";
+import { useQuery } from "@tanstack/react-query";
 
-import { type Content, useContentNotificationQuery, useContentQuery } from "@/entities/content";
+import { type Content, contentQueries } from "@/entities/content";
+import { useHttpClient } from "@/shared/api";
 import { ROUTES } from "@/shared/config";
 import { getErrorMessage } from "@/shared/lib/error-message";
 import { Button } from "@/shared/ui/button";
@@ -30,8 +32,9 @@ function toFormValues(content: Content): ContentFormValues {
 export function ContentEditView({ id }: ContentEditViewProps) {
   const navigate = useNavigate();
   const publishButtonRef = useRef<HTMLButtonElement>(null);
-  const { data, isPending, error } = useContentQuery(id);
-  const notificationQuery = useContentNotificationQuery(id);
+  const client = useHttpClient();
+  const { data, isPending, error } = useQuery(contentQueries.detail(client, id));
+  const notificationQuery = useQuery(contentQueries.notification(client, id));
   const [publishValues, setPublishValues] = useState<ContentFormValues | null>(null);
   const mutation = usePublishContentMutation();
   const loadError = error ?? notificationQuery.error;

@@ -1,7 +1,9 @@
 import { useState } from "react";
 import { useNavigate } from "react-router";
+import { useQuery } from "@tanstack/react-query";
 
-import { useContentQuery } from "@/entities/content";
+import { contentQueries } from "@/entities/content";
+import { useHttpClient } from "@/shared/api";
 import { ROUTES } from "@/shared/config";
 import { getErrorMessage } from "@/shared/lib/error-message";
 import { Button } from "@/shared/ui/button";
@@ -31,7 +33,8 @@ const INITIAL_VALUES: NotificationFormValues = {
 
 export function AlarmCreateView({ contentId }: AlarmCreateViewProps) {
   const navigate = useNavigate();
-  const { data, isPending, error } = useContentQuery(String(contentId));
+  const client = useHttpClient();
+  const { data, isPending, error } = useQuery(contentQueries.detail(client, String(contentId)));
   const mutation = useCreateNotificationMutation();
   const [values, setValues] = useState<NotificationFormValues>(INITIAL_VALUES);
   const canNotify = data !== undefined && canNotifyContent(data);

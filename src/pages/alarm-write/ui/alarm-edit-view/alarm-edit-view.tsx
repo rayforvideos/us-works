@@ -1,7 +1,9 @@
 import { useState } from "react";
 import { useNavigate } from "react-router";
+import { useQuery } from "@tanstack/react-query";
 
-import { useNotificationQuery } from "@/entities/notification";
+import { notificationQueries } from "@/entities/notification";
+import { useHttpClient } from "@/shared/api";
 import { ROUTES } from "@/shared/config";
 import { getErrorMessage } from "@/shared/lib/error-message";
 import { Button } from "@/shared/ui/button";
@@ -23,7 +25,8 @@ import { type AlarmEditViewProps } from "./types";
 
 export function AlarmEditView({ id }: AlarmEditViewProps) {
   const navigate = useNavigate();
-  const { data, isPending, error } = useNotificationQuery(id);
+  const client = useHttpClient();
+  const { data, isPending, error } = useQuery(notificationQueries.detail(client, id));
   const mutation = useUpdateNotificationMutation(id);
   const [values, setValues] = useState<NotificationFormValues | null>(null);
   const initialValues = data === undefined ? null : toNotificationFormValues(data);
