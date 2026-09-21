@@ -2,9 +2,7 @@ import { createContext, useContext } from "react";
 
 import { type RadioGroupContextValue } from "./types";
 
-const RadioGroupContext = createContext<RadioGroupContextValue | null>(null);
-
-export const RadioGroupProvider = RadioGroupContext.Provider;
+export const RadioGroupContext = createContext<RadioGroupContextValue | null>(null);
 
 export function useRadioGroupContext(): RadioGroupContextValue {
   const context = useContext(RadioGroupContext);

@@ -7,7 +7,6 @@ import {
   TARGET_TYPES,
 } from "@/entities/notification";
 import { readFieldError } from "@/shared/lib/field-error";
-import { FormValuesWatcher } from "@/shared/lib/form-values-watcher";
 import { toMinDateTime } from "@/shared/lib/seoul-time";
 import { DateTimeField } from "@/shared/ui/date-time-field";
 import { FieldError } from "@/shared/ui/field-error";
@@ -46,6 +45,11 @@ export function NotificationForm({
   const form = useForm({
     defaultValues,
     validators: { onSubmit: notificationInputSchema },
+    listeners: {
+      onChange: ({ formApi }) => {
+        onValuesChange?.(formApi.state.values);
+      },
+    },
     onSubmit: ({ value }) => {
       onSubmit(value);
     },
@@ -134,9 +138,6 @@ export function NotificationForm({
           );
         }}
       </form.Field>
-      <form.Subscribe selector={(state) => state.values}>
-        {(values) => <FormValuesWatcher values={values} onChange={onValuesChange} />}
-      </form.Subscribe>
     </form>
   );
 }
