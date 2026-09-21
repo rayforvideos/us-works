@@ -1,6 +1,6 @@
 import { cn } from "@/shared/lib/cn";
 
-import { RadioGroupProvider, useRadioGroupContext } from "./radio-group-context";
+import { RadioGroupContext, useRadioGroupContext } from "./radio-group-context";
 import {
   circleClass,
   controlClass,
@@ -25,11 +25,11 @@ export function RadioGroup({
   ...rest
 }: RadioGroupProps) {
   return (
-    <RadioGroupProvider value={{ name, value, defaultValue, disabled, onValueChange }}>
+    <RadioGroupContext value={{ name, value, defaultValue, disabled, onValueChange }}>
       <div role="radiogroup" className={cn(groupClass(), className)} {...rest}>
         {children}
       </div>
-    </RadioGroupProvider>
+    </RadioGroupContext>
   );
 }
 

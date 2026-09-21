@@ -1,9 +1,7 @@
 import { createContext, useContext } from "react";
 import { type AxiosInstance } from "axios";
 
-const HttpClientContext = createContext<AxiosInstance | null>(null);
-
-export const HttpClientContextProvider = HttpClientContext.Provider;
+export const HttpClientContext = createContext<AxiosInstance | null>(null);
 
 export function useHttpClient(): AxiosInstance {
   const client = useContext(HttpClientContext);

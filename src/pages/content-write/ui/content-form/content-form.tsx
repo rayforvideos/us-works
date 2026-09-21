@@ -2,7 +2,6 @@ import { type SubmitEvent } from "react";
 import { useForm } from "@tanstack/react-form";
 
 import { readFieldError } from "@/shared/lib/field-error";
-import { FormValuesWatcher } from "@/shared/lib/form-values-watcher";
 import { TextArea } from "@/shared/ui/text-area";
 import { TextField } from "@/shared/ui/text-field";
 
@@ -34,6 +33,11 @@ export function ContentForm({
   const form = useForm({
     defaultValues,
     validators: { onSubmit: contentInputSchema },
+    listeners: {
+      onChange: ({ formApi }) => {
+        onValuesChange?.(formApi.state.values);
+      },
+    },
     onSubmit: ({ value }) => {
       onSubmit(value);
     },
@@ -117,9 +121,6 @@ export function ContentForm({
           )}
         </form.Field>
       </section>
-      <form.Subscribe selector={(state) => state.values}>
-        {(values) => <FormValuesWatcher values={values} onChange={onValuesChange} />}
-      </form.Subscribe>
     </form>
   );
 }
