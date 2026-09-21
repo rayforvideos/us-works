@@ -1,4 +1,3 @@
-export { SESSION_STORAGE_KEY } from "./constants";
 export {
   accessTokenAtom,
   clearSession,

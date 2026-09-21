@@ -1,68 +1,23 @@
 import { atom } from "jotai";
 
 import { type AuthResponse, type RefreshResponse } from "../../api/session-api";
-import { SESSION_STORAGE_KEY } from "./constants";
-import { type AccessToken, type PersistedSession, type SessionStore } from "./types";
-
-function isPersistedSession(value: unknown): value is PersistedSession {
-  return (
-    typeof value === "object" &&
-    value !== null &&
-    "refreshToken" in value &&
-    typeof value.refreshToken === "string" &&
-    "refreshExpiresAt" in value &&
-    typeof value.refreshExpiresAt === "string" &&
-    "user" in value &&
-    typeof value.user === "object" &&
-    value.user !== null
-  );
-}
-
-function isExpired(expiresAt: string): boolean {
-  const expiresAtMs = Date.parse(expiresAt);
-  return Number.isNaN(expiresAtMs) || expiresAtMs <= Date.now();
-}
-
-function parseStoredSession(raw: string): PersistedSession | null {
-  try {
-    const parsed: unknown = JSON.parse(raw);
-    return isPersistedSession(parsed) ? parsed : null;
-  } catch {
-    return null;
-  }
-}
-
-function readStoredSession(): PersistedSession | null {
-  const raw = localStorage.getItem(SESSION_STORAGE_KEY);
-  if (raw === null) {
-    return null;
-  }
-  const stored = parseStoredSession(raw);
-  if (stored === null || isExpired(stored.refreshExpiresAt)) {
-    localStorage.removeItem(SESSION_STORAGE_KEY);
-    return null;
-  }
-  return stored;
-}
-
-function writeStoredSession(session: PersistedSession | null): void {
-  if (session === null) {
-    localStorage.removeItem(SESSION_STORAGE_KEY);
-    return;
-  }
-  localStorage.setItem(SESSION_STORAGE_KEY, JSON.stringify(session));
-}
+import {
+  type PersistedSession,
+  readPersistedSession,
+  writePersistedSession,
+} from "../session-storage";
+import { type AccessToken, type SessionStore } from "./types";
 
 const cachedSessionAtom = atom<PersistedSession | null | undefined>(undefined);
 
 export const persistedSessionAtom = atom(
   (get) => {
     const cached = get(cachedSessionAtom);
-    return cached === undefined ? readStoredSession() : cached;
+    return cached === undefined ? readPersistedSession() : cached;
   },
   (_get, set, session: PersistedSession | null) => {
     set(cachedSessionAtom, session);
-    writeStoredSession(session);
+    writePersistedSession(session);
   },
 );
 

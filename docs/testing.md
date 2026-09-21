@@ -28,6 +28,7 @@
 - 비동기 렌더링은 `findBy*`로 기다린다. `waitFor` 안에 단언을 여러 개 넣지 않는다.
 - `.resolves`, `.rejects` 단언은 반드시 `await`한다. Vitest 5는 await하지 않은 비동기 단언을 실패로 처리한다.
 - `clearMocks`가 기본 true라 목 호출 기록은 테스트마다 초기화된다. 별도 `beforeEach` 정리를 쓰지 않는다.
+- `vi.spyOn`으로 `localStorage` 같은 전역을 바꾼 파일은 `afterEach`에서 `vi.restoreAllMocks()`를 부른다. 단언이 실패하면 테스트 본문의 복구 줄은 실행되지 않아 뒤 테스트까지 함께 무너진다.
 
 ## 파일 배치
 

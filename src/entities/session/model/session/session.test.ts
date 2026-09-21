@@ -2,7 +2,7 @@ import { createStore } from "jotai";
 
 import { AUTH_RESPONSE_FIXTURE, PERSISTED_SESSION_FIXTURE } from "@/shared/config";
 
-import { SESSION_STORAGE_KEY } from "./constants";
+import { SESSION_STORAGE_KEY } from "../session-storage";
 import {
   accessTokenAtom,
   clearSession,
@@ -15,6 +15,10 @@ import {
 describe("세션 저장", () => {
   beforeEach(() => {
     localStorage.clear();
+  });
+
+  afterEach(() => {
+    vi.restoreAllMocks();
   });
 
   it("로그인 응답의 refresh token과 사용자만 localStorage에 남긴다", () => {
@@ -77,27 +81,17 @@ describe("세션 저장", () => {
     expect(store.get(isAuthenticatedAtom)).toBe(false);
   });
 
-  it("저장된 refresh 토큰이 만료됐으면 세션이 없는 것으로 보고 저장값을 지운다", () => {
-    localStorage.setItem(
-      SESSION_STORAGE_KEY,
-      JSON.stringify({
-        ...PERSISTED_SESSION_FIXTURE,
-        refreshExpiresAt: "2020-01-01T00:00:00.000Z",
-      }),
-    );
+  it("저장소를 쓸 수 없어도 세션을 읽고 쓸 수 있다", () => {
+    vi.spyOn(Storage.prototype, "getItem").mockImplementation(() => {
+      throw new Error("storage blocked");
+    });
+    vi.spyOn(Storage.prototype, "setItem").mockImplementation(() => {
+      throw new Error("storage blocked");
+    });
     const store = createStore();
 
     expect(store.get(persistedSessionAtom)).toBeNull();
-    expect(localStorage.getItem(SESSION_STORAGE_KEY)).toBeNull();
-  });
-
-  it("형식이 맞지 않는 저장값은 무시한다", () => {
-    localStorage.setItem(SESSION_STORAGE_KEY, JSON.stringify({ refreshToken: 7 }));
-    const store = createStore();
-
-    expect(store.get(persistedSessionAtom)).toBeNull();
-
-    localStorage.setItem(SESSION_STORAGE_KEY, "not json");
-    expect(createStore().get(persistedSessionAtom)).toBeNull();
+    setSessionFromAuthResponse(store, AUTH_RESPONSE_FIXTURE);
+    expect(store.get(isAuthenticatedAtom)).toBe(true);
   });
 });
