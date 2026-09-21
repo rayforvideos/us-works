@@ -98,12 +98,7 @@ export function PublishOptionsDialog({
                       label: VISIBILITY_LABELS[item],
                     }))}
                     value={field.state.value}
-                    onChange={(next) => {
-                      const picked = PUBLISH_VISIBILITIES.find((item) => item === next);
-                      if (picked) {
-                        field.handleChange(picked);
-                      }
-                    }}
+                    onChange={field.handleChange}
                     disabled={submitting}
                     disabledValues={isScheduleAllowed ? undefined : SCHEDULE_DISABLED_VALUES}
                   />

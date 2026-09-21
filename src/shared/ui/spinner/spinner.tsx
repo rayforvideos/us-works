@@ -37,7 +37,7 @@ export function Spinner({
             width="1.33"
             height="4"
             rx="0.67"
-            transform={`rotate(${String(index * 45)} 8 8)`}
+            transform={`rotate(${index * 45} 8 8)`}
             opacity={1 - index * 0.1}
           />
         ))}

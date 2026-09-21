@@ -24,7 +24,7 @@ import { useHttpClient } from "@/shared/api";
 import { buildPublishPlan, type PublishStep } from "../../model/publish-plan";
 import { type PublishContentVariables, type PublishMutationOptions } from "./types";
 
-async function runStep(client: AxiosInstance, contentId: string, step: PublishStep): Promise<void> {
+async function runStep(client: AxiosInstance, contentId: number, step: PublishStep): Promise<void> {
   switch (step.kind) {
     case "status":
       await changeContentStatus(client, contentId, step.status);
@@ -39,17 +39,17 @@ async function runStep(client: AxiosInstance, contentId: string, step: PublishSt
       await deleteContentSchedule(client, contentId);
       return;
     case "notification-create":
-      await createNotification(client, { content_id: Number(contentId), ...step.input });
+      await createNotification(client, { content_id: contentId, ...step.input });
       return;
     case "notification-delete":
-      await deleteNotification(client, String(step.id));
+      await deleteNotification(client, step.id);
       return;
     case "notification-update":
       if (step.detail) {
-        await updateNotification(client, String(step.id), step.detail);
+        await updateNotification(client, step.id, step.detail);
       }
       if (step.schedule) {
-        await updateNotificationSchedule(client, String(step.id), step.schedule);
+        await updateNotificationSchedule(client, step.id, step.schedule);
       }
       return;
   }
@@ -70,7 +70,7 @@ export function usePublishContentMutation({ onContentSaved }: PublishMutationOpt
         contentId === null
           ? await createContent(client, contentInput)
           : await updateContent(client, contentId, contentInput);
-      const savedId = String(saved.id);
+      const savedId = saved.id;
       onContentSaved?.(savedId);
       const [content, notification] = await Promise.all([
         fetchContent(client, savedId),

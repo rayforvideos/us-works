@@ -1,3 +1,3 @@
 export type ContentEditViewProps = {
-  id: string;
+  id: number;
 };

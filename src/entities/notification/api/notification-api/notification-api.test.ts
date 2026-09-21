@@ -55,7 +55,7 @@ describe("fetchNotification", () => {
     );
     const client = createHttpClient({ baseUrl: "http://api.test", adapter });
 
-    const result = await fetchNotification(client, "12");
+    const result = await fetchNotification(client, 12);
 
     expect(readLastCall(calls).method).toBe("get");
     expect(readLastCall(calls).url).toBe("/api/v1/notifications/12");
@@ -85,7 +85,7 @@ describe("updateNotification", () => {
     );
     const client = createHttpClient({ baseUrl: "http://api.test", adapter });
 
-    await updateNotification(client, "12", { title: "바뀐 제목", target_type: "follower" });
+    await updateNotification(client, 12, { title: "바뀐 제목", target_type: "follower" });
 
     expect(readLastCall(calls).method).toBe("put");
     expect(readLastCall(calls).url).toBe("/api/v1/notifications/12");
@@ -103,7 +103,7 @@ describe("updateNotificationSchedule", () => {
     );
     const client = createHttpClient({ baseUrl: "http://api.test", adapter });
 
-    await updateNotificationSchedule(client, "12", { scheduled_at: "2026-12-20T10:00:00+09:00" });
+    await updateNotificationSchedule(client, 12, { scheduled_at: "2026-12-20T10:00:00+09:00" });
 
     expect(readLastCall(calls).method).toBe("put");
     expect(readLastCall(calls).url).toBe("/api/v1/notifications/12/schedule");
@@ -118,7 +118,7 @@ describe("deleteNotification", () => {
     const { adapter, calls } = createFakeAdapter(() => createOkResponse(null));
     const client = createHttpClient({ baseUrl: "http://api.test", adapter });
 
-    await deleteNotification(client, "12");
+    await deleteNotification(client, 12);
 
     expect(readLastCall(calls).method).toBe("delete");
     expect(readLastCall(calls).url).toBe("/api/v1/notifications/12");

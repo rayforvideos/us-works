@@ -1,6 +1,6 @@
 import { cva } from "class-variance-authority";
 
-import { type ButtonVariantProps } from "./types";
+import { type ButtonProps, type ButtonVariantProps } from "./types";
 
 /**
  * @types
@@ -85,6 +85,18 @@ export function resolveButtonVariant({
 
 export function buttonVariants(props: ButtonVariantProps = {}): string {
   return buttonVariantClasses(resolveButtonVariant(props));
+}
+
+export function toButtonVariantProps(props: ButtonProps): ButtonVariantProps {
+  switch (props.variant) {
+    case "outline":
+      return { variant: "outline", importance: props.importance, size: props.size };
+    case "text":
+      return { variant: "text", importance: props.importance };
+    case "solid":
+    case undefined:
+      return { variant: "solid", importance: props.importance, size: props.size };
+  }
 }
 
 export const labelClass = cva("inline-flex items-center gap-1", {

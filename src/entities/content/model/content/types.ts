@@ -1,3 +1,5 @@
+import { type SendStatus } from "@/entities/notification/@x/content";
+
 import { type CONTENT_CATEGORIES, type PUBLISH_STATUSES } from "./constants";
 
 export type ContentCategory = (typeof CONTENT_CATEGORIES)[number];
@@ -8,8 +10,6 @@ export type PublishStatusTone = "green" | "yellow" | "grey";
 
 export type ContentVisibility = "public" | "private";
 
-type NotificationSendStatus = "pending" | "sent" | "failed";
-
 type ContentStats = {
   view_count: number;
   like_count: number;
@@ -18,7 +18,7 @@ type ContentStats = {
 
 type ContentNotificationStatus = {
   has_notification: boolean;
-  send_status?: NotificationSendStatus;
+  send_status?: SendStatus;
 };
 
 export type Content = {

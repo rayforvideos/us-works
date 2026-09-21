@@ -14,7 +14,7 @@ export const notificationQueries = {
       queryFn: ({ signal }) => fetchNotifications(client, params, { signal }),
       placeholderData: keepPreviousData,
     }),
-  detail: (client: AxiosInstance, id: string) =>
+  detail: (client: AxiosInstance, id: number) =>
     queryOptions({
       queryKey: [...notificationQueries.details(), id],
       queryFn: ({ signal }) => fetchNotification(client, id, { signal }),

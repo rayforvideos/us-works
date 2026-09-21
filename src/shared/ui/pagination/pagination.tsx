@@ -35,7 +35,7 @@ export function Pagination({ page, pageCount, onPageChange, className }: Paginat
         <button
           key={number}
           type="button"
-          aria-label={`${String(number)}페이지`}
+          aria-label={`${number}페이지`}
           aria-current={number === currentPage ? "page" : undefined}
           className={itemClass()}
           onClick={() => {

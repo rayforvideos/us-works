@@ -4,7 +4,7 @@ import { PublishRow } from "../publish-row";
 import { radioGroupClass } from "./option-radio-row-variants";
 import { type OptionRadioRowProps } from "./types";
 
-export function OptionRadioRow({
+export function OptionRadioRow<TValue extends string>({
   label,
   name,
   options,
@@ -12,7 +12,7 @@ export function OptionRadioRow({
   onChange,
   disabled,
   disabledValues = [],
-}: OptionRadioRowProps) {
+}: OptionRadioRowProps<TValue>) {
   return (
     <PublishRow label={label} align="center">
       <RadioGroup
@@ -20,7 +20,12 @@ export function OptionRadioRow({
         aria-label={label}
         className={radioGroupClass()}
         value={value}
-        onValueChange={onChange}
+        onValueChange={(next) => {
+          const picked = options.find((option) => option.value === next);
+          if (picked) {
+            onChange(picked.value);
+          }
+        }}
         disabled={disabled}
       >
         {options.map((option) => (

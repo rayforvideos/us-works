@@ -47,7 +47,7 @@ export function TextArea({
         />
         {showCounter ? (
           <span className={counterClass()} data-testid="counter">
-            {maxLength === undefined ? length : `${String(length)}/${String(maxLength)}`}
+            {maxLength === undefined ? length : `${length}/${maxLength}`}
           </span>
         ) : null}
       </div>

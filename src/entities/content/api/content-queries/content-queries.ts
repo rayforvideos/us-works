@@ -15,12 +15,12 @@ export const contentQueries = {
       queryFn: ({ signal }) => fetchContents(client, params, { signal }),
       placeholderData: keepPreviousData,
     }),
-  detail: (client: AxiosInstance, id: string) =>
+  detail: (client: AxiosInstance, id: number) =>
     queryOptions({
       queryKey: [...contentQueries.details(), id],
       queryFn: ({ signal }) => fetchContent(client, id, { signal }),
     }),
-  notification: (client: AxiosInstance, id: string) =>
+  notification: (client: AxiosInstance, id: number) =>
     queryOptions({
       queryKey: [...contentQueries.notifications(), id],
       queryFn: ({ signal }) => fetchContentNotification(client, id, { signal }),

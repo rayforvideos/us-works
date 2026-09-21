@@ -10,5 +10,5 @@ export function formatDateTimeLabel(value: string): string {
   }
   const [, year, month, day, hour, minute] = matched;
 
-  return `${String(year)}년 ${String(month)}월 ${String(day)}일 ${String(hour)}시 ${String(minute)}분`;
+  return `${year}년 ${month}월 ${day}일 ${hour}시 ${minute}분`;
 }

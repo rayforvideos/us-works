@@ -98,7 +98,7 @@ export function TextField({
         {trailing === "counter" ? (
           <span className={trailingSlotClass()}>
             <span className={counterClass()} data-testid="counter">
-              {maxLength === undefined ? length : `${String(length)}/${String(maxLength)}`}
+              {maxLength === undefined ? length : `${length}/${maxLength}`}
             </span>
           </span>
         ) : null}

@@ -34,7 +34,7 @@ const INITIAL_VALUES: NotificationFormValues = {
 export function AlarmCreateView({ contentId }: AlarmCreateViewProps) {
   const navigate = useNavigate();
   const client = useHttpClient();
-  const { data, isPending, error } = useQuery(contentQueries.detail(client, String(contentId)));
+  const { data, isPending, error } = useQuery(contentQueries.detail(client, contentId));
   const mutation = useCreateNotificationMutation();
   const [values, setValues] = useState<NotificationFormValues>(INITIAL_VALUES);
   const canNotify = data !== undefined && canNotifyContent(data);

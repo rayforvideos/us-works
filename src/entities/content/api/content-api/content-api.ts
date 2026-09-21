@@ -13,11 +13,11 @@ import {
   type ContentVisibility,
 } from "../../model/content";
 
-function toContentPath(id: string): string {
+function toContentPath(id: number): string {
   return `/api/v1/contents/${id}`;
 }
 
-function toSchedulePath(id: string): string {
+function toSchedulePath(id: number): string {
   return `${toContentPath(id)}/schedule`;
 }
 
@@ -40,7 +40,7 @@ export async function fetchContents(
 
 export async function fetchContent(
   client: AxiosInstance,
-  id: string,
+  id: number,
   options: RequestOptions = {},
 ): Promise<Content> {
   const response = await client.get<Content>(toContentPath(id), { signal: options.signal });
@@ -54,7 +54,7 @@ export async function createContent(client: AxiosInstance, input: ContentInput):
 
 export async function updateContent(
   client: AxiosInstance,
-  id: string,
+  id: number,
   input: ContentInput,
 ): Promise<Content> {
   const response = await client.put<Content>(toContentPath(id), input);
@@ -63,7 +63,7 @@ export async function updateContent(
 
 export async function changeContentStatus(
   client: AxiosInstance,
-  id: string,
+  id: number,
   status: ContentVisibility,
 ): Promise<Content> {
   const response = await client.patch<Content>(`${toContentPath(id)}/status`, { status });
@@ -72,7 +72,7 @@ export async function changeContentStatus(
 
 export async function scheduleContent(
   client: AxiosInstance,
-  id: string,
+  id: number,
   input: ContentScheduleInput,
 ): Promise<Content> {
   const response = await client.post<Content>(toSchedulePath(id), input);
@@ -81,7 +81,7 @@ export async function scheduleContent(
 
 export async function updateContentSchedule(
   client: AxiosInstance,
-  id: string,
+  id: number,
   input: ContentScheduleInput,
 ): Promise<ContentSchedule> {
   const response = await client.put<ContentSchedule>(toSchedulePath(id), input);
@@ -90,7 +90,7 @@ export async function updateContentSchedule(
 
 export async function deleteContentSchedule(
   client: AxiosInstance,
-  id: string,
+  id: number,
 ): Promise<ContentSchedule> {
   const response = await client.delete<ContentSchedule>(toSchedulePath(id));
   return response.data;
@@ -98,7 +98,7 @@ export async function deleteContentSchedule(
 
 export async function fetchContentNotification(
   client: AxiosInstance,
-  id: string,
+  id: number,
   options: RequestOptions = {},
 ): Promise<Notification | null> {
   const response = await client.get<Notification | null>(`${toContentPath(id)}/notification`, {

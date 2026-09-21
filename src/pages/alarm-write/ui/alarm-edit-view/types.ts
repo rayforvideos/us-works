@@ -1,3 +1,3 @@
 export type AlarmEditViewProps = {
-  id: string;
+  id: number;
 };

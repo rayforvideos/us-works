@@ -10,8 +10,9 @@ import {
   loadingClass,
   resolveButtonVariant,
   spinnerSlotClass,
+  toButtonVariantProps,
 } from "./button-variants";
-import { type ButtonProps, type ButtonVariantProps } from "./types";
+import { type ButtonProps } from "./types";
 
 function IconSlot({ children }: { children: ReactNode }) {
   return (
@@ -24,21 +25,22 @@ function IconSlot({ children }: { children: ReactNode }) {
   );
 }
 
-export function Button({
-  variant,
-  importance,
-  size,
-  leftIcon,
-  rightIcon,
-  loading = false,
-  fullWidth = false,
-  className,
-  type = "button",
-  onClick,
-  children,
-  ...rest
-}: ButtonProps) {
-  const variantProps = { variant, importance, size } as ButtonVariantProps;
+export function Button(props: ButtonProps) {
+  const {
+    variant,
+    importance,
+    size,
+    leftIcon,
+    rightIcon,
+    loading = false,
+    fullWidth = false,
+    className,
+    type = "button",
+    onClick,
+    children,
+    ...rest
+  } = props;
+  const variantProps = toButtonVariantProps(props);
   const resolved = resolveButtonVariant(variantProps);
 
   function handleClick(event: MouseEvent<HTMLButtonElement>) {
