@@ -1,11 +1,11 @@
 import { cva } from "class-variance-authority";
 
 export const backdropClass = cva(
-  "fixed inset-0 bg-black/60 transition-opacity duration-150 data-ending-style:opacity-0 data-starting-style:opacity-0",
+  "fixed inset-0 bg-black/60 transition-opacity duration-150 data-closed:pointer-events-none data-ending-style:opacity-0 data-starting-style:opacity-0",
 );
 
 export const popupClass = cva(
-  "fixed top-1/2 left-1/2 max-w-[calc(100vw-2rem)] -translate-x-1/2 -translate-y-1/2 rounded-20 bg-white shadow-200 transition-[opacity,scale] duration-150 outline-none data-ending-style:scale-95 data-ending-style:opacity-0 data-starting-style:scale-95 data-starting-style:opacity-0",
+  "fixed top-1/2 left-1/2 max-w-[calc(100vw-2rem)] -translate-x-1/2 -translate-y-1/2 rounded-20 bg-white shadow-200 transition-[opacity,scale] duration-150 outline-none data-closed:pointer-events-none data-ending-style:scale-95 data-ending-style:opacity-0 data-starting-style:scale-95 data-starting-style:opacity-0",
   {
     variants: {
       width: {
