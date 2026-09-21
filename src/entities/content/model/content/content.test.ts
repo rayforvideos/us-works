@@ -8,6 +8,7 @@ import {
   parseContentListParams,
   PUBLISHED_CONTENT_FIXTURE,
   SCHEDULED_CONTENT_FIXTURE,
+  withContentListFilters,
 } from ".";
 
 describe("콘텐츠 모델", () => {
@@ -78,5 +79,29 @@ describe("알림 관련 규칙", () => {
     expect(hasNotification({ ...PUBLISHED_CONTENT_FIXTURE, notification_status: undefined })).toBe(
       false,
     );
+  });
+});
+
+describe("withContentListFilters", () => {
+  it("필터를 반영하면서 페이지는 버린다", () => {
+    const current = new URLSearchParams("page=3&category=realty");
+
+    const next = withContentListFilters(current, {
+      category: "investment",
+      publishStatus: "draft",
+    });
+
+    expect(next.get("category")).toBe("investment");
+    expect(next.get("publish_status")).toBe("draft");
+    expect(next.get("page")).toBeNull();
+  });
+
+  it("값이 없는 필터는 지운다", () => {
+    const current = new URLSearchParams("category=realty&publish_status=draft");
+
+    const next = withContentListFilters(current, {});
+
+    expect(next.get("category")).toBeNull();
+    expect(next.get("publish_status")).toBeNull();
   });
 });

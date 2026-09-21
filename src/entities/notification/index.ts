@@ -15,6 +15,7 @@ export {
   getStatCount,
   getTargetTypeLabel,
   hasNotificationChanges,
+  MAX_NOTIFICATION_TITLE_LENGTH,
   type Notification,
   NOTIFICATION_FIXTURE,
   NOTIFICATION_LIST_PARAM_KEYS,

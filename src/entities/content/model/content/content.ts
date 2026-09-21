@@ -1,4 +1,5 @@
 import { parsePage } from "@/shared/lib/pagination-params";
+import { toSeoulParts } from "@/shared/lib/seoul-time";
 
 import {
   CATEGORY_LABELS,
@@ -9,11 +10,11 @@ import {
   PUBLISH_STATUS_LABELS,
   PUBLISH_STATUS_TONES,
   PUBLISH_STATUSES,
-  PUBLISHED_AT_FORMAT_OPTIONS,
 } from "./constants";
 import {
   type Content,
   type ContentCategory,
+  type ContentListFilters,
   type ContentListParams,
   type PublishedAtParts,
   type PublishStatus,
@@ -28,8 +29,12 @@ function isPublishStatus(value: string): value is PublishStatus {
   return PUBLISH_STATUSES.some((status) => status === value);
 }
 
-function readPart(parts: Intl.DateTimeFormatPart[], type: Intl.DateTimeFormatPartTypes): string {
-  return parts.find((part) => part.type === type)?.value ?? "";
+function writeParam(params: URLSearchParams, key: string, value: string | undefined): void {
+  if (value === undefined) {
+    params.delete(key);
+    return;
+  }
+  params.set(key, value);
 }
 
 function parseCategory(value: string | null): ContentCategory | undefined {
@@ -69,18 +74,27 @@ export function formatPublishedAt(iso: string | undefined): PublishedAtParts | n
   if (iso === undefined || iso === "") {
     return null;
   }
-  const published = new Date(iso);
-  if (Number.isNaN(published.getTime())) {
+  const parts = toSeoulParts(new Date(iso));
+  if (parts === null) {
     return null;
   }
-  const parts = new Intl.DateTimeFormat("ko-KR", PUBLISHED_AT_FORMAT_OPTIONS).formatToParts(
-    published,
-  );
 
   return {
-    date: `${readPart(parts, "year")}.${readPart(parts, "month")}.${readPart(parts, "day")}`,
-    time: `${readPart(parts, "hour")}:${readPart(parts, "minute")}`,
+    date: `${parts.year.slice(-2)}.${parts.month}.${parts.day}`,
+    time: `${parts.hour}:${parts.minute}`,
   };
+}
+
+export function withContentListFilters(
+  searchParams: URLSearchParams,
+  filters: ContentListFilters,
+): URLSearchParams {
+  const next = new URLSearchParams(searchParams);
+  writeParam(next, CONTENT_LIST_PARAM_KEYS.category, filters.category);
+  writeParam(next, CONTENT_LIST_PARAM_KEYS.publishStatus, filters.publishStatus);
+  next.delete(CONTENT_LIST_PARAM_KEYS.page);
+
+  return next;
 }
 
 export function parseContentListParams(searchParams: URLSearchParams): ContentListParams {

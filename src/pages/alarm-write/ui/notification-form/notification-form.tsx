@@ -1,7 +1,11 @@
 import { type SubmitEvent } from "react";
 import { useForm } from "@tanstack/react-form";
 
-import { getTargetTypeLabel, TARGET_TYPES } from "@/entities/notification";
+import {
+  getTargetTypeLabel,
+  MAX_NOTIFICATION_TITLE_LENGTH,
+  TARGET_TYPES,
+} from "@/entities/notification";
 import { readFieldError } from "@/shared/lib/field-error";
 import { FormValuesWatcher } from "@/shared/lib/form-values-watcher";
 import { toMinDateTime } from "@/shared/lib/seoul-time";
@@ -10,7 +14,7 @@ import { FieldError } from "@/shared/ui/field-error";
 import { RadioGroup, RadioGroupItem } from "@/shared/ui/radio-group";
 import { TextField } from "@/shared/ui/text-field";
 
-import { MAX_TITLE_LENGTH, notificationInputSchema } from "../../model/notification-input-schema";
+import { notificationInputSchema } from "../../model/notification-input-schema";
 import { SCHEDULED_AT_PLACEHOLDER, TITLE_PLACEHOLDER } from "./constants";
 import {
   formClass,
@@ -95,7 +99,7 @@ export function NotificationForm({
                 aria-label="제목"
                 aria-describedby={error === undefined ? undefined : titleErrorId}
                 showCounter
-                maxLength={MAX_TITLE_LENGTH}
+                maxLength={MAX_NOTIFICATION_TITLE_LENGTH}
                 placeholder={TITLE_PLACEHOLDER}
                 reserveError={false}
                 value={field.state.value}

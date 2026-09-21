@@ -1,1 +1,1 @@
-export { getPageCount, parsePage } from "./pagination-params";
+export { getPageCount, parsePage, withPage } from "./pagination-params";

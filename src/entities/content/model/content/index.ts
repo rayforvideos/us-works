@@ -11,6 +11,7 @@ export {
   getPublishStatusBadge,
   hasNotification,
   parseContentListParams,
+  withContentListFilters,
 } from "./content";
 export {
   CONTENT_DETAIL_FIXTURE,

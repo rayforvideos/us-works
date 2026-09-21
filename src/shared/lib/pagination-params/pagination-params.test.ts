@@ -1,4 +1,4 @@
-import { getPageCount, parsePage } from ".";
+import { getPageCount, parsePage, withPage } from ".";
 
 describe("페이지 파라미터", () => {
   it("30 R-04 페이지 수는 `total`을 `limit`으로 나눠 올림한 값이며 최소 1이다", () => {
@@ -23,5 +23,17 @@ describe("페이지 파라미터", () => {
   it("페이지 값이 최대값을 넘으면 최대값으로 읽는다", () => {
     expect(parsePage("3", 9999)).toBe(3);
     expect(parsePage("10000", 9999)).toBe(9999);
+  });
+});
+
+describe("withPage", () => {
+  it("다른 파라미터는 두고 페이지만 바꾼 새 값을 돌려준다", () => {
+    const current = new URLSearchParams("category=realty&page=2");
+
+    const next = withPage(current, "page", 5);
+
+    expect(next.get("page")).toBe("5");
+    expect(next.get("category")).toBe("realty");
+    expect(current.get("page")).toBe("2");
   });
 });

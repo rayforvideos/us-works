@@ -2,6 +2,8 @@ import { type SendStatus, type SendStatusTone, type TargetType } from "./types";
 
 export const SEND_STATUSES = ["pending", "sent", "failed"] as const;
 
+export const MAX_NOTIFICATION_TITLE_LENGTH = 50;
+
 export const SEND_STATUS_LABELS: Record<SendStatus, string> = {
   sent: "발송",
   pending: "예약",
