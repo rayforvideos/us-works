@@ -2,7 +2,7 @@ import { useRef, useState } from "react";
 import { useNavigate } from "react-router";
 import { useQuery } from "@tanstack/react-query";
 
-import { type Content, contentQueries } from "@/entities/content";
+import { contentQueries } from "@/entities/content";
 import { useHttpClient } from "@/shared/api";
 import { ROUTES } from "@/shared/config";
 import { getErrorMessage } from "@/shared/lib/error-message";
@@ -14,20 +14,12 @@ import { Gnb } from "@/widgets/gnb";
 
 import { usePublishContentMutation } from "../../api/usePublishContentMutation";
 import { type ContentFormValues } from "../../model/content-input-schema";
+import { toContentFormValuesFromContent } from "../../model/draft-form-values";
 import { type PublishOptionsValues } from "../../model/publish-options-schema";
 import { toContentInput } from "../../model/to-content-input";
 import { CONTENT_FORM_ID, ContentForm } from "../content-form";
 import { PublishOptionsDialog } from "../publish-options-dialog";
 import { type ContentEditViewProps } from "./types";
-
-function toFormValues(content: Content): ContentFormValues {
-  return {
-    title: content.title,
-    body: content.body,
-    categories: content.categories,
-    linkUrl: content.link_url ?? "",
-  };
-}
 
 export function ContentEditView({ id }: ContentEditViewProps) {
   const navigate = useNavigate();
@@ -97,7 +89,7 @@ export function ContentEditView({ id }: ContentEditViewProps) {
         {content ? (
           <ContentForm
             formId={CONTENT_FORM_ID}
-            defaultValues={toFormValues(content)}
+            defaultValues={toContentFormValuesFromContent(content)}
             onSubmit={setPublishValues}
             isPending={mutation.isPending}
           />

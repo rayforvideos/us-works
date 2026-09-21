@@ -28,7 +28,7 @@ describe("useDraftAutosave", () => {
 
   it("30초마다 값이 바뀌었으면 임시저장하고 저장 시각을 알린다", () => {
     const onSaved = vi.fn();
-    renderHook(() => useDraftAutosave({ enabled: true, getValues: () => FILLED_VALUES, onSaved }));
+    renderHook(() => useDraftAutosave({ getValues: () => FILLED_VALUES, onSaved }));
 
     act(() => {
       vi.advanceTimersByTime(30_000);
@@ -44,22 +44,10 @@ describe("useDraftAutosave", () => {
     expect(onSaved).toHaveBeenCalledTimes(1);
   });
 
-  it("사용하지 않으면 시간이 지나도 저장하지 않는다", () => {
-    const onSaved = vi.fn();
-    renderHook(() => useDraftAutosave({ enabled: false, getValues: () => FILLED_VALUES, onSaved }));
-
-    act(() => {
-      vi.advanceTimersByTime(60_000);
-    });
-
-    expect(hasStoredDraft()).toBe(false);
-    expect(onSaved).not.toHaveBeenCalled();
-  });
-
   it("즉시 저장은 값이 그대로여도 다시 저장한다", () => {
     const onSaved = vi.fn();
     const { result } = renderHook(() =>
-      useDraftAutosave({ enabled: true, getValues: () => FILLED_VALUES, onSaved }),
+      useDraftAutosave({ getValues: () => FILLED_VALUES, onSaved }),
     );
 
     act(() => {

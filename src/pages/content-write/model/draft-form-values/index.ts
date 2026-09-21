@@ -1,1 +1,1 @@
-export { toContentFormValues } from "./draft-form-values";
+export { toContentFormValues, toContentFormValuesFromContent } from "./draft-form-values";
