@@ -7,7 +7,7 @@ import { readFieldError } from "@/shared/lib/field-error";
 import { CheckboxChip } from "@/shared/ui/checkbox-chip";
 import { TextField } from "@/shared/ui/text-field";
 
-import { applyUseContentTitle, isNotifying } from "../../model/publish-rules";
+import { applyUseContentTitle, isNotifying } from "../../../model/publish-rules";
 import { OptionRadioRow } from "../option-radio-row";
 import { PublishRow } from "../publish-row";
 import {

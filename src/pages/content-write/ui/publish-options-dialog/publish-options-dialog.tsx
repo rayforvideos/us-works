@@ -6,10 +6,9 @@ import { Dialog } from "@/shared/ui/dialog";
 import { PUBLISH_VISIBILITIES } from "../../model/publish-options-schema";
 import { canSchedule } from "../../model/publish-rules";
 import { usePublishOptionsForm } from "../../model/usePublishOptionsForm";
-import { NotifySection } from "../notify-section";
-import { OptionRadioRow } from "../option-radio-row";
-import { PublishedAtRow } from "../published-at-row";
 import { PUBLISH_OPTIONS_FORM_ID, SCHEDULE_DISABLED_VALUES, VISIBILITY_LABELS } from "./constants";
+import { NotifySection } from "./notify-section";
+import { OptionRadioRow } from "./option-radio-row";
 import {
   bodyClass,
   footerActionsClass,
@@ -19,6 +18,7 @@ import {
   requestErrorClass,
   sectionsClass,
 } from "./publish-options-dialog-variants";
+import { PublishedAtRow } from "./published-at-row";
 import { type PublishOptionsDialogProps } from "./types";
 
 export function PublishOptionsDialog({

@@ -6,7 +6,7 @@ import { RouterProvider } from "react-router/dom";
 
 import { AppProviders } from "./app-providers";
 import { initializeSystem } from "./initialize-system";
-import { createAppRouter } from "./router";
+import { createAppRouter } from "./routes";
 
 const rootElement = document.getElementById("root");
 if (!rootElement) {
