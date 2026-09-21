@@ -1,14 +1,10 @@
 import { type ChangeEvent, useId, useState } from "react";
 
 import { cn } from "@/shared/lib/cn";
+import { hasFieldError } from "@/shared/lib/field-error";
+import { FieldError } from "@/shared/ui/field-error";
 
-import {
-  boxVariants,
-  counterClass,
-  errorTextClass,
-  fieldClass,
-  textareaClass,
-} from "./text-area-variants";
+import { boxVariants, counterClass, fieldClass, textareaClass } from "./text-area-variants";
 import { type TextAreaProps } from "./types";
 
 export function TextArea({
@@ -24,7 +20,7 @@ export function TextArea({
   const errorId = useId();
   const [innerLength, setInnerLength] = useState(String(defaultValue ?? "").length);
   const length = value === undefined ? innerLength : String(value).length;
-  const isInvalid = error !== undefined && error !== null && error !== false;
+  const isInvalid = hasFieldError(error);
 
   function handleChange(event: ChangeEvent<HTMLTextAreaElement>) {
     setInnerLength(event.target.value.length);
@@ -51,9 +47,7 @@ export function TextArea({
           </span>
         ) : null}
       </div>
-      <p id={errorId} data-testid="error-text" className={errorTextClass()}>
-        {isInvalid ? error : null}
-      </p>
+      <FieldError id={errorId} error={error} />
     </div>
   );
 }

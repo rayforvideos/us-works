@@ -1,1 +1,1 @@
-export { readFieldError } from "./field-error";
+export { hasFieldError, readFieldError } from "./field-error";

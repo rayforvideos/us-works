@@ -5,19 +5,19 @@ import { DateTimeField } from ".";
 const PLACEHOLDER = "알림 발송 시간을 선택해주세요.";
 
 function renderField(props: Partial<Parameters<typeof DateTimeField>[0]> = {}) {
-  const onChange = vi.fn();
+  const onValueChange = vi.fn();
 
   render(
     <DateTimeField
       aria-label="발송 시간"
       placeholder={PLACEHOLDER}
       value=""
-      onChange={onChange}
+      onValueChange={onValueChange}
       {...props}
     />,
   );
 
-  return { onChange };
+  return { onValueChange };
 }
 
 describe("DateTimeField", () => {
@@ -34,13 +34,13 @@ describe("DateTimeField", () => {
   });
 
   it("선택기에서 고른 값을 분 단위 그대로 돌려준다", () => {
-    const { onChange } = renderField();
+    const { onValueChange } = renderField();
 
     fireEvent.change(screen.getByLabelText("발송 시간"), {
       target: { value: "2027-04-05T14:35" },
     });
 
-    expect(onChange).toHaveBeenCalledWith("2027-04-05T14:35");
+    expect(onValueChange).toHaveBeenCalledWith("2027-04-05T14:35");
   });
 
   it("필드를 누르면 브라우저 기본 선택기를 연다", () => {

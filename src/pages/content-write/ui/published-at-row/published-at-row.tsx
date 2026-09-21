@@ -1,10 +1,10 @@
 import { readFieldError } from "@/shared/lib/field-error";
 import { toMinDateTime } from "@/shared/lib/seoul-time";
 import { DateTimeField } from "@/shared/ui/date-time-field";
+import { FieldError } from "@/shared/ui/field-error";
 
 import { PublishRow } from "../publish-row";
 import { PUBLISHED_AT_ERROR_ID, PUBLISHED_AT_PLACEHOLDER } from "./constants";
-import { fieldErrorClass } from "./published-at-row-variants";
 import { type PublishedAtRowProps } from "./types";
 
 export function PublishedAtRow({ form, submitting }: PublishedAtRowProps) {
@@ -22,15 +22,11 @@ export function PublishedAtRow({ form, submitting }: PublishedAtRowProps) {
                 placeholder={PUBLISHED_AT_PLACEHOLDER}
                 min={toMinDateTime(new Date())}
                 value={field.state.value}
-                onChange={(next) => {
-                  field.handleChange(next);
-                }}
+                onValueChange={field.handleChange}
                 invalid={error !== undefined}
                 disabled={submitting}
               />
-              <p id={PUBLISHED_AT_ERROR_ID} className={fieldErrorClass()}>
-                {error}
-              </p>
+              <FieldError id={PUBLISHED_AT_ERROR_ID} error={error} />
             </>
           );
         }}

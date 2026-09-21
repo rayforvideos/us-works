@@ -1,13 +1,14 @@
 import { type ChangeEvent, type Ref, useId, useRef, useState } from "react";
 
 import { cn } from "@/shared/lib/cn";
+import { hasFieldError } from "@/shared/lib/field-error";
+import { FieldError } from "@/shared/ui/field-error";
 import { RoundCancelIcon } from "@/shared/ui/icon";
 
 import {
   clearButtonClass,
   controlClass,
   counterClass,
-  errorTextClass,
   fieldClass,
   inputVariants,
   trailingSlotClass,
@@ -44,7 +45,7 @@ export function TextField({
   const [innerLength, setInnerLength] = useState(String(defaultValue ?? "").length);
   const length = value === undefined ? innerLength : String(value).length;
   const isFilled = length > 0;
-  const hasError = error !== undefined && error !== null && error !== false;
+  const hasError = hasFieldError(error);
   const isInvalid = hasError || invalid;
   const trailing = clearable && disabled !== true ? "clear" : showCounter ? "counter" : "none";
 
@@ -103,11 +104,7 @@ export function TextField({
           </span>
         ) : null}
       </div>
-      {hasError || reserveError ? (
-        <p id={errorId} data-testid="error-text" className={errorTextClass()}>
-          {hasError ? error : null}
-        </p>
-      ) : null}
+      <FieldError id={errorId} error={error} reserve={reserveError} />
     </div>
   );
 }

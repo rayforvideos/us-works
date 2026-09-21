@@ -6,13 +6,13 @@ import { readFieldError } from "@/shared/lib/field-error";
 import { FormValuesWatcher } from "@/shared/lib/form-values-watcher";
 import { toMinDateTime } from "@/shared/lib/seoul-time";
 import { DateTimeField } from "@/shared/ui/date-time-field";
+import { FieldError } from "@/shared/ui/field-error";
 import { RadioGroup, RadioGroupItem } from "@/shared/ui/radio-group";
 import { TextField } from "@/shared/ui/text-field";
 
 import { MAX_TITLE_LENGTH, notificationInputSchema } from "../../model/notification-input-schema";
 import { SCHEDULED_AT_PLACEHOLDER, TITLE_PLACEHOLDER } from "./constants";
 import {
-  fieldErrorClass,
   formClass,
   labelClass,
   labelRowClass,
@@ -26,9 +26,7 @@ function SectionLabel({ label, error, errorId }: SectionLabelProps) {
   return (
     <div className={labelRowClass()}>
       <h2 className={labelClass()}>{label}</h2>
-      <p id={errorId} className={fieldErrorClass()}>
-        {error}
-      </p>
+      <FieldError id={errorId} error={error} reserve={false} />
     </div>
   );
 }
@@ -124,9 +122,7 @@ export function NotificationForm({
                 placeholder={SCHEDULED_AT_PLACEHOLDER}
                 min={toMinDateTime(new Date())}
                 value={field.state.value}
-                onChange={(next) => {
-                  field.handleChange(next);
-                }}
+                onValueChange={field.handleChange}
                 invalid={error !== undefined}
                 disabled={disabled}
               />
