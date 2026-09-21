@@ -5,11 +5,20 @@ import { type PublishVisibility } from "../publish-options-schema";
 /**
  * @types
  */
+type NotifyRuleInput = {
+  visibility: PublishVisibility;
+  notify: boolean;
+};
+
 type UseContentTitleInput = {
   useContentTitle: boolean;
   contentTitle: string;
   fallback?: string;
 };
+
+export function isNotifying(values: NotifyRuleInput): boolean {
+  return values.notify && values.visibility !== "private";
+}
 
 export function canSchedule(content: Content | null): boolean {
   return (

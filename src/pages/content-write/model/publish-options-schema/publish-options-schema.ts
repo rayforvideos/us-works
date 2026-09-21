@@ -3,6 +3,7 @@ import { z } from "zod";
 import { TARGET_TYPES } from "@/entities/notification";
 import { isFutureDateTime } from "@/shared/lib/seoul-time";
 
+import { isNotifying } from "../publish-rules";
 import {
   MAX_NOTIFICATION_TITLE_LENGTH,
   NOTIFICATION_TITLE_MAX_MESSAGE,
@@ -34,11 +35,7 @@ export const publishOptionsSchema = z
     ) {
       ctx.addIssue({ code: "custom", path: ["publishedAt"], message: PAST_TIME_MESSAGE });
     }
-    if (
-      values.notify &&
-      values.visibility !== "private" &&
-      values.notificationTitle.trim() === ""
-    ) {
+    if (isNotifying(values) && values.notificationTitle.trim() === "") {
       ctx.addIssue({
         code: "custom",
         path: ["notificationTitle"],

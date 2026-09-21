@@ -1,8 +1,13 @@
 import {
+  canNotifyContent,
+  DRAFT_CONTENT_FIXTURE,
   formatPublishedAt,
   getCategoryLabel,
   getPublishStatusBadge,
+  hasNotification,
   parseContentListParams,
+  PUBLISHED_CONTENT_FIXTURE,
+  SCHEDULED_CONTENT_FIXTURE,
 } from ".";
 
 describe("콘텐츠 모델", () => {
@@ -57,5 +62,21 @@ describe("콘텐츠 모델", () => {
     expect(
       parseContentListParams(new URLSearchParams("publish_status=published")).publishStatus,
     ).toBe("published");
+  });
+});
+
+describe("알림 관련 규칙", () => {
+  it("39 R-08 콘텐츠의 `publish_status`가 `draft`면 알림을 만들 수 없다", () => {
+    expect(canNotifyContent(DRAFT_CONTENT_FIXTURE)).toBe(false);
+    expect(canNotifyContent(PUBLISHED_CONTENT_FIXTURE)).toBe(true);
+    expect(canNotifyContent(SCHEDULED_CONTENT_FIXTURE)).toBe(true);
+  });
+
+  it("알림 상태가 있고 `has_notification`이 참일 때만 알림이 있는 콘텐츠로 본다", () => {
+    expect(hasNotification(SCHEDULED_CONTENT_FIXTURE)).toBe(true);
+    expect(hasNotification(PUBLISHED_CONTENT_FIXTURE)).toBe(false);
+    expect(hasNotification({ ...PUBLISHED_CONTENT_FIXTURE, notification_status: undefined })).toBe(
+      false,
+    );
   });
 });

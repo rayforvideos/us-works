@@ -72,3 +72,14 @@ export type ScheduledAtParts = {
   date: string;
   time: string;
 };
+
+export type NotificationUpdate = {
+  detail?: NotificationUpdateInput;
+  schedule?: NotificationScheduleInput;
+};
+
+export type NotificationChanges = {
+  title: string;
+  targetType: TargetType;
+  scheduledAt?: string;
+};

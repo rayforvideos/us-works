@@ -1,7 +1,6 @@
 export {
-  diffNotificationUpdate,
   isSameNotificationValues,
+  toNotificationChanges,
   toNotificationFormValues,
   toNotificationInput,
 } from "./to-notification-input";
-export { type NotificationUpdate } from "./types";

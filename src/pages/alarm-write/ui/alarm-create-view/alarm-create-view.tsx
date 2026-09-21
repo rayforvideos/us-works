@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router";
 import { useQuery } from "@tanstack/react-query";
 
-import { contentQueries } from "@/entities/content";
+import { canNotifyContent, contentQueries } from "@/entities/content";
 import { useHttpClient } from "@/shared/api";
 import { ROUTES } from "@/shared/config";
 import { getErrorMessage } from "@/shared/lib/error-message";
@@ -11,7 +11,6 @@ import { LinkNotice } from "@/shared/ui/link-notice";
 import { Spinner } from "@/shared/ui/spinner";
 
 import { useCreateNotificationMutation } from "../../api/useNotificationMutations";
-import { canNotifyContent } from "../../model/can-notify-content";
 import {
   getNotificationErrorMessage,
   PRIVATE_CONTENT_MESSAGE,

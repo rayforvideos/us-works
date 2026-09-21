@@ -4,7 +4,7 @@ import { CheckboxChip } from "@/shared/ui/checkbox-chip";
 import { TextField } from "@/shared/ui/text-field";
 
 import { MAX_NOTIFICATION_TITLE_LENGTH } from "../../model/publish-options-schema";
-import { applyUseContentTitle } from "../../model/publish-rules";
+import { applyUseContentTitle, isNotifying } from "../../model/publish-rules";
 import { OptionRadioRow } from "../option-radio-row";
 import { PublishRow } from "../publish-row";
 import {
@@ -35,7 +35,7 @@ export function NotifySection({
   isSent,
 }: NotifySectionProps) {
   const isPrivate = values.visibility === "private";
-  const isNotifying = values.notify && !isPrivate;
+  const isSending = isNotifying(values);
   const isDisabled = submitting || isSent;
 
   return (
@@ -55,7 +55,7 @@ export function NotifySection({
               label="발송 여부"
               name="publish-notify"
               options={NOTIFY_VALUES.map((item) => ({ value: item, label: NOTIFY_LABELS[item] }))}
-              value={isNotifying ? "send" : "none"}
+              value={isSending ? "send" : "none"}
               onChange={(next) => {
                 field.handleChange(next === "send");
               }}
@@ -63,7 +63,7 @@ export function NotifySection({
             />
           )}
         </form.Field>
-        {isNotifying ? (
+        {isSending ? (
           <form.Field name="targetType">
             {(field) => (
               <OptionRadioRow
@@ -80,7 +80,7 @@ export function NotifySection({
             )}
           </form.Field>
         ) : null}
-        {isNotifying ? (
+        {isSending ? (
           <PublishRow label="알람 내용">
             <form.Field name="notificationTitle">
               {(field) => (

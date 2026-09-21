@@ -1,1 +1,6 @@
-export { applyUseContentTitle, canSchedule, toPublishVisibility } from "./publish-rules";
+export {
+  applyUseContentTitle,
+  canSchedule,
+  isNotifying,
+  toPublishVisibility,
+} from "./publish-rules";

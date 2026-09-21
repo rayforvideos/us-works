@@ -10,6 +10,7 @@ export {
 } from "./api/content-api";
 export { contentQueries } from "./api/content-queries";
 export {
+  canNotifyContent,
   type Content,
   CONTENT_CATEGORIES,
   CONTENT_DETAIL_FIXTURE,
@@ -23,6 +24,7 @@ export {
   formatPublishedAt,
   getCategoryLabel,
   getPublishStatusBadge,
+  hasNotification,
   parseContentListParams,
   PUBLISH_STATUS_LABELS,
   PUBLISH_STATUSES,
