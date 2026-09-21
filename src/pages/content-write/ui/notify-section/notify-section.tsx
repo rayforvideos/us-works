@@ -1,9 +1,12 @@
-import { getTargetTypeLabel, TARGET_TYPES } from "@/entities/notification";
+import {
+  getTargetTypeLabel,
+  MAX_NOTIFICATION_TITLE_LENGTH,
+  TARGET_TYPES,
+} from "@/entities/notification";
 import { readFieldError } from "@/shared/lib/field-error";
 import { CheckboxChip } from "@/shared/ui/checkbox-chip";
 import { TextField } from "@/shared/ui/text-field";
 
-import { MAX_NOTIFICATION_TITLE_LENGTH } from "../../model/publish-options-schema";
 import { applyUseContentTitle, isNotifying } from "../../model/publish-rules";
 import { OptionRadioRow } from "../option-radio-row";
 import { PublishRow } from "../publish-row";

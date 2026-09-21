@@ -1,11 +1,10 @@
 import { z } from "zod";
 
-import { TARGET_TYPES } from "@/entities/notification";
+import { MAX_NOTIFICATION_TITLE_LENGTH, TARGET_TYPES } from "@/entities/notification";
 import { isFutureDateTime } from "@/shared/lib/seoul-time";
 
 import { isNotifying } from "../publish-rules";
 import {
-  MAX_NOTIFICATION_TITLE_LENGTH,
   NOTIFICATION_TITLE_MAX_MESSAGE,
   NOTIFICATION_TITLE_REQUIRED_MESSAGE,
   PAST_TIME_MESSAGE,

@@ -1,1 +1,1 @@
-export { ListHeader, type ListHeaderTab } from "./ui/list-header";
+export { LIST_TABS, ListHeader } from "./ui/list-header";

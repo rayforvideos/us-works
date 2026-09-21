@@ -51,13 +51,3 @@ export const CONTENT_LIST_PARAM_KEYS = {
 export const DEFAULT_PAGE_LIMIT = 10;
 
 export const MAX_PAGE = 9999;
-
-export const PUBLISHED_AT_FORMAT_OPTIONS: Intl.DateTimeFormatOptions = {
-  timeZone: "Asia/Seoul",
-  year: "2-digit",
-  month: "2-digit",
-  day: "2-digit",
-  hour: "2-digit",
-  minute: "2-digit",
-  hour12: false,
-};

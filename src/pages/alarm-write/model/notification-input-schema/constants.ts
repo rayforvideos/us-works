@@ -1,5 +1,3 @@
-export const MAX_TITLE_LENGTH = 50;
-
 export const REQUIRED_MESSAGE = "필수 정보입니다.";
 
 export const TITLE_MAX_MESSAGE = "제목은 50자 이하로 입력해주세요.";

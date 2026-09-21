@@ -31,6 +31,7 @@ export {
   PUBLISHED_CONTENT_FIXTURE,
   type PublishStatus,
   SCHEDULED_CONTENT_FIXTURE,
+  withContentListFilters,
 } from "./model/content";
 export {
   clearContentDraft,

@@ -9,21 +9,16 @@ import {
 import { NewPostButton } from "@/features/start-content";
 import { useHttpClient } from "@/shared/api";
 import { ROUTES } from "@/shared/config";
-import { getPageCount } from "@/shared/lib/pagination-params";
+import { getPageCount, withPage } from "@/shared/lib/pagination-params";
 import { Container } from "@/shared/ui/container";
 import { Pagination } from "@/shared/ui/pagination";
-import { ListHeader, type ListHeaderTab } from "@/widgets/list-header";
+import { LIST_TABS, ListHeader } from "@/widgets/list-header";
 
 import { NotificationTable } from "../notification-table";
 
 /**
  * @constants
  */
-const LIST_TABS: readonly ListHeaderTab[] = [
-  { label: "콘텐츠", to: ROUTES.contents, end: true },
-  { label: "알람", to: ROUTES.alarms },
-];
-
 const EMPTY_MESSAGE = "알림이 없습니다.";
 
 export function AlarmsPage() {
@@ -35,9 +30,7 @@ export function AlarmsPage() {
   );
 
   const goToPage = (page: number) => {
-    const nextParams = new URLSearchParams(searchParams);
-    nextParams.set(NOTIFICATION_LIST_PARAM_KEYS.page, String(page));
-    setSearchParams(nextParams);
+    setSearchParams(withPage(searchParams, NOTIFICATION_LIST_PARAM_KEYS.page, page));
   };
 
   return (

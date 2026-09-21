@@ -1,7 +1,5 @@
 export const PUBLISH_VISIBILITIES = ["public", "private", "scheduled"] as const;
 
-export const MAX_NOTIFICATION_TITLE_LENGTH = 50;
-
 export const REQUIRED_MESSAGE = "필수 정보입니다.";
 
 export const PAST_TIME_MESSAGE = "시간을 다시 선택해주세요.";

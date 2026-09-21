@@ -15,8 +15,7 @@ type PaginationProps = {
 };
 
 export function Pagination({ page, pageCount, onPageChange, className }: PaginationProps) {
-  const lastPage = Math.max(pageCount, 1);
-  const currentPage = Math.min(Math.max(page, 1), lastPage);
+  const { current: currentPage, lastPage, pages } = getPageWindow(page, pageCount);
 
   return (
     <nav aria-label="페이지" className={cn(navClass(), className)}>
@@ -31,7 +30,7 @@ export function Pagination({ page, pageCount, onPageChange, className }: Paginat
       >
         <ChevronLeftIcon />
       </button>
-      {getPageWindow(currentPage, lastPage).map((number) => (
+      {pages.map((number) => (
         <button
           key={number}
           type="button"

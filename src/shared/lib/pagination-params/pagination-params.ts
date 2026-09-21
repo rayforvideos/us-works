@@ -12,3 +12,9 @@ export function parsePage(raw: string | null, max: number): number {
   }
   return Math.min(page, max);
 }
+
+export function withPage(params: URLSearchParams, key: string, page: number): URLSearchParams {
+  const next = new URLSearchParams(params);
+  next.set(key, String(page));
+  return next;
+}
