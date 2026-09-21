@@ -32,7 +32,8 @@ HTTP 클라이언트의 동작과 API 호출 코드의 배치를 정한다. API�
 
 ## 기본 동작
 
-- 기본 URL은 환경 변수 `VITE_API_BASE_URL`에서 읽어 팩토리에 넘긴다. 저장소에는 `.env.example`만 두고, 받은 뒤 `cp .env.example .env.development`로 만들어 쓴다. `.env`로 시작하는 파일은 예시 하나를 빼고 커밋하지 않는다.
+- 기본 URL은 환경 변수 `VITE_API_BASE_URL`에서 읽어 팩토리에 넘긴다. 과제 서버는 `https://fe-assignment-api.us-insight.com`이다.
+- 저장소에는 키만 적힌 `.env.example`을 두고, 받은 뒤 `cp .env.example .env.development`로 복사해 값을 채운다. `.env`로 시작하는 파일은 예시 하나를 빼고 커밋하지 않는다.
 - 경로는 `/api/v1/...`처럼 기본 URL 뒤에 붙는 절대 경로로 쓴다.
 - 쿼리 파라미터는 axios `params`로 넘긴다. 값이 `undefined`인 키는 axios가 생략한다.
 - 요청 본문은 axios 기본 동작대로 JSON으로 직렬화한다.
