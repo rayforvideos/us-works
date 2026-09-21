@@ -90,6 +90,18 @@ describe("createTokenRefresher", () => {
     expect(handlers.onUnauthorized).toHaveBeenCalledTimes(1);
   });
 
+  it("새 갱신을 시작하면 앞선 실패와 무관하게 다시 알린다", async () => {
+    const handlers = createHandlers(Promise.resolve(false));
+    const refresher = createTokenRefresher(handlers);
+
+    await refresher.refresh();
+    expect(handlers.onUnauthorized).toHaveBeenCalledTimes(1);
+
+    await refresher.refresh();
+
+    expect(handlers.onUnauthorized).toHaveBeenCalledTimes(2);
+  });
+
   it("실패 뒤에도 재시도 요청 실패를 notifyUnauthorized로 알리면 한 번만 전달되고, 성공 후에는 다시 알릴 수 있다", async () => {
     const handlers = createHandlers(Promise.resolve(true));
     const refresher = createTokenRefresher(handlers);

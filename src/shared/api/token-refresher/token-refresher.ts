@@ -15,9 +15,7 @@ export function createTokenRefresher(handlers: TokenRefreshHandlers): TokenRefre
   async function runRefresh(): Promise<boolean> {
     try {
       const isRefreshed = await handlers.refreshAccessToken();
-      if (isRefreshed) {
-        hasNotifiedUnauthorized = false;
-      } else {
+      if (!isRefreshed) {
         notifyUnauthorized();
       }
       return isRefreshed;
@@ -30,7 +28,10 @@ export function createTokenRefresher(handlers: TokenRefreshHandlers): TokenRefre
   }
 
   function refresh(): Promise<boolean> {
-    inFlight ??= runRefresh();
+    if (!inFlight) {
+      hasNotifiedUnauthorized = false;
+      inFlight = runRefresh();
+    }
     return inFlight;
   }
 
