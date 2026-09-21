@@ -11,6 +11,7 @@ import { LinkNotice } from "@/shared/ui/link-notice";
 import { Spinner } from "@/shared/ui/spinner";
 
 import { useCreateNotificationMutation } from "../../api/useNotificationMutations";
+import { LEAVE_ALLOWED_STATE } from "../../model/leave-confirm";
 import {
   getNotificationErrorMessage,
   PRIVATE_CONTENT_MESSAGE,
@@ -41,7 +42,11 @@ export function AlarmCreateView({ contentId }: AlarmCreateViewProps) {
   function createNotificationFromValues(next: NotificationFormValues) {
     mutation.mutate(toNotificationInput(next, contentId), {
       onSuccess: () => {
-        void navigate(ROUTES.alarms, { replace: true, viewTransition: true });
+        void navigate(ROUTES.alarms, {
+          replace: true,
+          viewTransition: true,
+          state: LEAVE_ALLOWED_STATE,
+        });
       },
     });
   }

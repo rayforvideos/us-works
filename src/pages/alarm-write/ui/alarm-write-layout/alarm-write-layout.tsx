@@ -1,31 +1,28 @@
-import { useState } from "react";
-import { useNavigate } from "react-router";
+import { useBlocker, useNavigate } from "react-router";
 
 import { ROUTES } from "@/shared/config";
 import { ConfirmDialog } from "@/shared/ui/confirm-dialog";
 import { Container } from "@/shared/ui/container";
 import { Gnb } from "@/widgets/gnb";
 
+import { isLeaveAllowed } from "../../model/leave-confirm";
 import { type AlarmWriteLayoutProps } from "./types";
 
 export function AlarmWriteLayout({ isDirty, actions, children }: AlarmWriteLayoutProps) {
   const navigate = useNavigate();
-  const [isLeaveOpen, setIsLeaveOpen] = useState(false);
-
-  function leave() {
-    void navigate(ROUTES.alarms, { viewTransition: true });
-  }
+  const blocker = useBlocker(
+    ({ currentLocation, nextLocation }) =>
+      isDirty &&
+      currentLocation.pathname !== nextLocation.pathname &&
+      !isLeaveAllowed(nextLocation.state),
+  );
 
   return (
     <>
       <Gnb
         title="알람발송"
         onBack={() => {
-          if (isDirty) {
-            setIsLeaveOpen(true);
-            return;
-          }
-          leave();
+          void navigate(ROUTES.alarms, { viewTransition: true });
         }}
         actions={actions}
       />
@@ -33,13 +30,19 @@ export function AlarmWriteLayout({ isDirty, actions, children }: AlarmWriteLayou
         {children}
       </Container>
       <ConfirmDialog
-        open={isLeaveOpen}
-        onOpenChange={setIsLeaveOpen}
+        open={blocker.state === "blocked"}
+        onOpenChange={(open) => {
+          if (!open) {
+            blocker.reset?.();
+          }
+        }}
         title="작성을 종료하시겠습니까?"
         description="작성 중인 글은 저장되지 않아요."
         cancelLabel="아니오"
         confirmLabel="네"
-        onConfirm={leave}
+        onConfirm={() => {
+          blocker.proceed?.();
+        }}
       />
     </>
   );
