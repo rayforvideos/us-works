@@ -1,4 +1,4 @@
-import { type ReactNode } from "react";
+import { type MouseEvent, type ReactNode } from "react";
 
 import { cn } from "@/shared/lib/cn";
 import { Spinner } from "@/shared/ui/spinner";
@@ -41,6 +41,14 @@ export function Button({
   const variantProps = { variant, importance, size } as ButtonVariantProps;
   const resolved = resolveButtonVariant(variantProps);
 
+  function handleClick(event: MouseEvent<HTMLButtonElement>) {
+    if (loading) {
+      event.preventDefault();
+      return;
+    }
+    onClick?.(event);
+  }
+
   return (
     <button
       type={type}
@@ -50,13 +58,14 @@ export function Button({
       data-loading={loading ? "true" : undefined}
       data-full-width={fullWidth ? "true" : undefined}
       aria-busy={loading || undefined}
+      aria-disabled={loading || undefined}
       className={cn(
         buttonVariants(variantProps),
         fullWidth && fullWidthClass(),
         loading && loadingClass(),
         className,
       )}
-      onClick={loading ? undefined : onClick}
+      onClick={handleClick}
       {...rest}
     >
       <span data-slot="content" className={labelClass({ loading })}>

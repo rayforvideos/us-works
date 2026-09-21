@@ -35,6 +35,7 @@
 - 변형은 `data-variant`, `data-size` 같은 `data-*` 속성으로 드러낸다. 역할을 가진 요소(`input`, `button`)에 붙인다.
 - 아이콘은 `shared/ui/icon`의 인라인 SVG를 쓰고 색은 `currentColor`를 따른다. 필요한 아이콘은 그 아이콘을 처음 쓰는 화면 작업에서 Figma 치수로 그려 늘린다.
 - 모달 껍데기는 `shared/ui/dialog`와 그 위에 얹은 `shared/ui/confirm-dialog` 둘이다. 한 화면에서만 쓰는 모달의 내용과 동작은 그 페이지의 `ui` 세그먼트에 둔다(ADR-0017).
+- 진행 중인 버튼은 `disabled`로 막지 않는다. Figma가 로딩 상태의 배경과 글자를 그대로 두므로 `disabled` 모양이 되면 안 된다. 대신 클릭 처리기에서 기본 동작까지 막고 `aria-busy`와 `aria-disabled`로 상태를 알린다. `pointer-events-none`만으로는 키보드 활성화와 폼 제출이 막히지 않는다.
 - 비활성 입력에는 지우기 버튼을 그리지 않는다. 누를 수 없는 버튼이 남아 있으면 상태를 잘못 읽게 한다.
 - 오류 문구 자리는 항상 예약한다. 입력 컴포넌트는 오류가 없어도 문구 한 줄 높이를 유지해 오류가 나타날 때 아래 요소가 밀리지 않는다. 오류 문구를 라벨 옆처럼 다른 곳에 두는 폼은 `TextField`의 `reserveError={false}`로 아래 슬롯을 끄고, 문구를 스스로 갖지 않는 입력(`DateTimeField`)은 `invalid`로 테두리만 바꾼다.
 - Base UI 팝업(Select, Dialog)의 열림·닫힘 전환은 `transition-[opacity,scale]`처럼 속성을 한정한다. Tailwind `transition` 단축은 `display`, `pointer-events` 같은 이산 속성을 포함해 Base UI가 닫힘 전환의 완료를 기다리다 팝업을 언마운트하지 못한다.

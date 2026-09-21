@@ -1,3 +1,4 @@
+import { type SubmitEvent } from "react";
 import { fireEvent, render, screen } from "@testing-library/react";
 
 import { Button, type ButtonVariantProps, buttonVariants } from ".";
@@ -102,6 +103,42 @@ describe("Button 동작", () => {
     fireEvent.click(screen.getByRole("button"));
 
     expect(onClick).not.toHaveBeenCalled();
+  });
+
+  it("loading이면 제출 버튼을 눌러도 폼이 제출되지 않는다", () => {
+    const onSubmit = vi.fn();
+    render(
+      <form onSubmit={onSubmit}>
+        <Button type="submit" loading>
+          임시저장
+        </Button>
+      </form>,
+    );
+
+    fireEvent.click(screen.getByRole("button"));
+
+    expect(onSubmit).not.toHaveBeenCalled();
+  });
+
+  it("loading이 아니면 제출 버튼이 폼을 제출한다", () => {
+    const onSubmit = vi.fn((event: SubmitEvent<HTMLFormElement>) => {
+      event.preventDefault();
+    });
+    render(
+      <form onSubmit={onSubmit}>
+        <Button type="submit">임시저장</Button>
+      </form>,
+    );
+
+    fireEvent.click(screen.getByRole("button"));
+
+    expect(onSubmit).toHaveBeenCalledTimes(1);
+  });
+
+  it("loading이면 보조 기술에 비활성 상태로 알린다", () => {
+    render(<Button loading>임시저장</Button>);
+
+    expect(screen.getByRole("button")).toHaveAttribute("aria-disabled", "true");
   });
 
   it("fullWidth면 data-full-width 속성을 가진다", () => {
