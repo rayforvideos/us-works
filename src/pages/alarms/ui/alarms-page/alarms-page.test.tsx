@@ -1,37 +1,28 @@
-import { createMemoryRouter, type InitialEntry } from "react-router";
-import { RouterProvider } from "react-router/dom";
-import { QueryClientProvider } from "@tanstack/react-query";
-import { fireEvent, render, screen, waitFor } from "@testing-library/react";
+import { type InitialEntry } from "react-router";
+import { fireEvent, screen, waitFor } from "@testing-library/react";
 
 import { NOTIFICATION_FIXTURE } from "@/entities/notification";
-import { createHttpClient, createQueryClient, HttpClientProvider } from "@/shared/api";
-import { createFakeAdapter, createOkResponse, readCallParams } from "@/shared/config";
+import { createOkResponse, readCallParams, renderWithProviders } from "@/shared/testing";
 
 import { AlarmsPage } from ".";
 
+/**
+ * @constants
+ */
 const TOTAL = 25;
 
+const ROUTES_UNDER_TEST = [
+  { path: "/alarms", element: <AlarmsPage /> },
+  { path: "/", element: <p>콘텐츠 화면</p> },
+];
+
 function renderAlarmsPage(initialEntries: InitialEntry[] = ["/alarms"]) {
-  const { adapter, calls } = createFakeAdapter(() =>
-    createOkResponse({ notifications: NOTIFICATION_FIXTURE, total: TOTAL, page: 1, limit: 10 }),
-  );
-  const router = createMemoryRouter(
-    [
-      { path: "/alarms", element: <AlarmsPage /> },
-      { path: "/", element: <p>콘텐츠 화면</p> },
-    ],
-    { initialEntries },
-  );
-
-  render(
-    <QueryClientProvider client={createQueryClient({ queries: { retry: false } })}>
-      <HttpClientProvider client={createHttpClient({ baseUrl: "http://api.test", adapter })}>
-        <RouterProvider router={router} />
-      </HttpClientProvider>
-    </QueryClientProvider>,
-  );
-
-  return { router, calls };
+  return renderWithProviders({
+    routes: ROUTES_UNDER_TEST,
+    respond: () =>
+      createOkResponse({ notifications: NOTIFICATION_FIXTURE, total: TOTAL, page: 1, limit: 10 }),
+    initialEntries,
+  });
 }
 
 describe("AlarmsPage", () => {

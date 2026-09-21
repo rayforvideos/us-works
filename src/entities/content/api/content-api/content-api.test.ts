@@ -5,7 +5,7 @@ import {
   createOkResponse,
   readCallParams,
   readLastCall,
-} from "@/shared/config";
+} from "@/shared/testing";
 
 import { CONTENT_DETAIL_FIXTURE, CONTENT_FIXTURE, type ContentInput } from "../../model/content";
 import {

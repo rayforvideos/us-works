@@ -1,7 +1,7 @@
 import { fireEvent, render, screen } from "@testing-library/react";
 import { createStore, Provider as JotaiProvider } from "jotai";
 
-import { AUTH_RESPONSE_FIXTURE } from "@/shared/config";
+import { AUTH_RESPONSE_FIXTURE } from "@/shared/testing";
 
 import { useIsAuthenticated, useSetSession } from ".";
 

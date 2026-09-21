@@ -13,7 +13,7 @@ import {
   createOkResponse,
   type FakeResponse,
   PERSISTED_SESSION_FIXTURE,
-} from "@/shared/config";
+} from "@/shared/testing";
 
 import { LoginForm } from ".";
 

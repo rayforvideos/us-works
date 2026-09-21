@@ -1,17 +1,14 @@
-import { createMemoryRouter } from "react-router";
-import { RouterProvider } from "react-router/dom";
-import { QueryClientProvider } from "@tanstack/react-query";
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, screen } from "@testing-library/react";
 
 import { DRAFT_CONTENT_FIXTURE, PUBLISHED_CONTENT_FIXTURE } from "@/entities/content";
 import { PENDING_NOTIFICATION_FIXTURE, SENT_NOTIFICATION_FIXTURE } from "@/entities/notification";
-import { createHttpClient, createQueryClient, HttpClientProvider } from "@/shared/api";
 import {
   createFailResponse,
-  createFakeAdapter,
   createOkResponse,
+  type FakeResponder,
   type FakeResponse,
-} from "@/shared/config";
+  renderWithProviders,
+} from "@/shared/testing";
 
 import { AlarmWritePage } from ".";
 
@@ -23,28 +20,17 @@ const EDITED_NOTIFICATION = {
 
 const SENT_NOTIFICATION = { ...SENT_NOTIFICATION_FIXTURE, id: 12 };
 
-function renderPage(pathname: string, respond: Parameters<typeof createFakeAdapter>[0]) {
-  const { adapter, calls } = createFakeAdapter(respond);
-  const queryClient = createQueryClient({ queries: { retry: false } });
-  const router = createMemoryRouter(
-    [
+function renderPage(pathname: string, respond: FakeResponder) {
+  return renderWithProviders({
+    routes: [
       { path: "/alarms/new", element: <AlarmWritePage /> },
       { path: "/alarms/:id", element: <AlarmWritePage /> },
       { path: "/alarms", element: <p>알람 목록</p> },
       { path: "/", element: <p>콘텐츠 목록</p> },
     ],
-    { initialEntries: [pathname] },
-  );
-
-  render(
-    <QueryClientProvider client={queryClient}>
-      <HttpClientProvider client={createHttpClient({ baseUrl: "http://api.test", adapter })}>
-        <RouterProvider router={router} />
-      </HttpClientProvider>
-    </QueryClientProvider>,
-  );
-
-  return { router, calls, queryClient };
+    respond,
+    initialEntries: [pathname],
+  });
 }
 
 function respondToCreate(notificationResponse: FakeResponse) {
@@ -252,6 +238,21 @@ describe("AlarmWritePage 작성 종료", () => {
     await screen.findByLabelText("제목");
     expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
     expect(screen.getByLabelText("제목")).toHaveValue("바뀐 제목");
+  });
+
+  it("작성 화면에서 입력이 바뀐 뒤 뒤로가기를 누르면 같은 확인 모달이 보인다", async () => {
+    renderPage(
+      "/alarms/new?contentId=147",
+      respondToCreate(createOkResponse(EDITED_NOTIFICATION, 201)),
+    );
+
+    await screen.findByLabelText("제목");
+    fireEvent.change(screen.getByLabelText("제목"), { target: { value: "알림 제목" } });
+    goBack();
+
+    expect(
+      await screen.findByRole("dialog", { name: "작성을 종료하시겠습니까?" }),
+    ).toBeInTheDocument();
   });
 
   it("S-11 Given 바뀐 게 없는 폼 When 뒤로가기를 누르면 Then 모달 없이 `/alarms`로 이동한다", async () => {

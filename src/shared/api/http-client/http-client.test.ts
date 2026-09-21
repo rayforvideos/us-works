@@ -1,64 +1,14 @@
 import {
-  type AxiosAdapter,
-  AxiosError,
-  AxiosHeaders,
-  type InternalAxiosRequestConfig,
-} from "axios";
+  createFailResponse,
+  createFakeAdapter,
+  createOkResponse,
+  readAuthorization,
+  readCallAt,
+} from "@/shared/testing";
 
 import { type ApiError, isApiError } from "../api-error";
 import { type HttpClientAuth } from "../auth-interceptor";
 import { createHttpClient } from "./http-client";
-
-type FakeResponse = { status: number; data: unknown };
-type FakeHandler = (
-  config: InternalAxiosRequestConfig,
-  callIndex: number,
-) => FakeResponse | Promise<FakeResponse> | "network-error";
-
-function createFakeAdapter(handler: FakeHandler) {
-  const calls: InternalAxiosRequestConfig[] = [];
-  const adapter: AxiosAdapter = async (config) => {
-    calls.push(config);
-    const result = await handler(config, calls.length - 1);
-    if (result === "network-error") {
-      throw new AxiosError("Network Error", "ERR_NETWORK", config);
-    }
-    const response = {
-      status: result.status,
-      statusText: "",
-      headers: {},
-      config,
-      data: result.data,
-    };
-    if (result.status >= 400) {
-      throw new AxiosError("Request failed", "ERR_BAD_RESPONSE", config, undefined, response);
-    }
-    return response;
-  };
-  return { adapter, calls };
-}
-
-function createOkResponse(data: unknown): FakeResponse {
-  return { status: 200, data: { success: true, data, error: "" } };
-}
-
-function createFailResponse(status: number, error = "실패"): FakeResponse {
-  return { status, data: { success: false, data: null, error } };
-}
-
-function getCallAt(calls: InternalAxiosRequestConfig[], index: number): InternalAxiosRequestConfig {
-  const call = calls[index];
-  if (!call) {
-    throw new Error(`${String(index)}번째 요청이 없습니다`);
-  }
-  return call;
-}
-
-function getAuthorization(config: InternalAxiosRequestConfig): string | undefined {
-  const headers = AxiosHeaders.from(config.headers);
-  const value = headers.get("Authorization");
-  return typeof value === "string" ? value : undefined;
-}
 
 function toIsoAfter(nowMs: number, seconds: number): string {
   return new Date(nowMs + seconds * 1000).toISOString();
@@ -165,7 +115,7 @@ describe("createHttpClient: 기본 동작", () => {
 
     expect(error.kind).toBe("unauthorized");
     expect(calls).toHaveLength(1);
-    expect(getAuthorization(getCallAt(calls, 0))).toBeUndefined();
+    expect(readAuthorization(readCallAt(calls, 0))).toBeNull();
   });
 });
 
@@ -182,6 +132,6 @@ describe("createHttpClient: 인터셉터 조립", () => {
     expect(response.data).toEqual({ id: 7 });
     expect(refreshMock).toHaveBeenCalledTimes(1);
     expect(calls).toHaveLength(2);
-    expect(getAuthorization(getCallAt(calls, 1))).toBe("Bearer new-token");
+    expect(readAuthorization(readCallAt(calls, 1))).toBe("Bearer new-token");
   });
 });

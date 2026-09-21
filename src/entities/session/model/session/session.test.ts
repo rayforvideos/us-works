@@ -1,6 +1,6 @@
 import { createStore } from "jotai";
 
-import { AUTH_RESPONSE_FIXTURE, PERSISTED_SESSION_FIXTURE } from "@/shared/config";
+import { AUTH_RESPONSE_FIXTURE, PERSISTED_SESSION_FIXTURE } from "@/shared/testing";
 
 import { SESSION_STORAGE_KEY } from "../session-storage";
 import {

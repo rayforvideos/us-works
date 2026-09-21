@@ -1,5 +1,10 @@
 import { createHttpClient } from "@/shared/api";
-import { createFakeAdapter, createOkResponse, readCallParams, readLastCall } from "@/shared/config";
+import {
+  createFakeAdapter,
+  createOkResponse,
+  readCallParams,
+  readLastCall,
+} from "@/shared/testing";
 
 import {
   NOTIFICATION_FIXTURE,
