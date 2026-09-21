@@ -47,7 +47,7 @@ src/
 - 모든 슬라이스는 `index.ts`를 공개 API로 두고, 외부에서는 이 파일만 import한다. `export *`는 쓰지 않는다.
 - `shared/ui`와 `shared/lib`는 레이어 단일 index 대신 컴포넌트, 모듈별 `index.ts`를 둔다.
 - Jotai 아톰은 해당 슬라이스의 `model`에 둔다. 여러 기능이 공유하는 도메인 상태는 `entities/<엔티티>/model`에 두고, `shared`에는 도메인 상태를 두지 않는다.
-- TanStack Query 훅과 요청 함수는 `api` 세그먼트에 둔다.
+- 요청 함수와 TanStack Query 코드는 `api` 세그먼트에 둔다. 조회의 키와 옵션은 엔티티의 팩토리 한 곳에 모으고 엔드포인트마다 조회 훅 모듈을 만들지 않는다(ADR-0021).
 - 레이어 간 import는 `@/` 절대 경로 별칭을, 슬라이스 내부 import는 상대 경로를 사용한다.
 - 필요한 슬라이스만 만들며, 비어 있는 레이어 폴더는 만들지 않는다.
 - 위 규칙은 eslint-plugin-boundaries와 steiger가 강제한다. 위반은 린트 실패다.

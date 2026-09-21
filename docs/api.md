@@ -7,7 +7,8 @@ HTTP 클라이언트의 동작과 API 호출 코드의 배치를 정한다. API�
 - HTTP 클라이언트는 `shared/api/http-client/`에 있고 `createHttpClient()` 팩토리가 axios 인스턴스를 만들어 반환한다. 도메인 지식이 없고 엔드포인트를 모른다.
 - 엔드포인트별 요청 함수와 응답 타입은 해당 엔티티의 `entities/<엔티티>/api/`에 둔다. 요청 함수는 클라이언트 인스턴스를 인자로 받는다. 예외는 둘이다. 로그인과 회원가입은 엔티티가 아니라 `features/auth/api/`에 있고, 엔티티 둘을 한 번에 바꾸는 뮤테이션 훅은 그 화면의 페이지 `api` 세그먼트에 있다(ADR-0017).
 - `shared/api/http-client-context/`의 `HttpClientProvider`가 클라이언트 인스턴스를 트리에 넣고, 훅은 `useHttpClient()`로 받는다. 인증이 없는 갱신 전용 클라이언트는 여기에 넣지 않는다(ADR-0020).
-- TanStack Query 훅은 요청 함수를 감싸며 같은 `api` 세그먼트에 둔다. 쿼리 키는 `[엔티티, 동작, 파라미터]` 배열이다. 예: `["contents", "list", { page: 1, limit: 10, publishStatus: "published" }]`.
+- 조회의 쿼리 키와 옵션은 엔티티 `api` 세그먼트의 팩토리 한 곳에서 만들고 화면이 그 결과를 `useQuery`에 넘긴다(ADR-0021). 엔드포인트마다 조회 훅 모듈을 만들지 않는다. 뮤테이션은 훅으로 남기며 같은 `api` 세그먼트에 둔다.
+- 쿼리 키는 `[엔티티, 동작, 파라미터]` 배열이다. 예: `["contents", "list", { page: 1, limit: 10, publishStatus: "published" }]`. 뮤테이션은 키를 다시 적지 않고 팩토리가 공개한 무효화 단위를 쓴다.
 - 클라이언트 인스턴스는 `initializeSystem()`이 만들어 주입한다(ADR-0005). 모듈 최상위에서 만들지 않는다.
 
 ## 모듈 구성
