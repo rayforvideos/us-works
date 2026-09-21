@@ -1,6 +1,7 @@
 import { Navigate, useParams, useSearchParams } from "react-router";
 
 import { ROUTES } from "@/shared/config";
+import { parseNumericId } from "@/shared/lib/numeric-id";
 
 import { parseContentId } from "../../model/content-id-param";
 import { AlarmCreateView } from "../alarm-create-view";
@@ -11,7 +12,11 @@ export function AlarmWritePage() {
   const [searchParams] = useSearchParams();
 
   if (id !== undefined) {
-    return <AlarmEditView id={id} />;
+    const notificationId = parseNumericId(id);
+    if (notificationId === null) {
+      return <Navigate to={ROUTES.alarms} replace />;
+    }
+    return <AlarmEditView id={notificationId} />;
   }
 
   const contentId = parseContentId(searchParams);

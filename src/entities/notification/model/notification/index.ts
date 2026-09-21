@@ -20,5 +20,6 @@ export {
   type NotificationSchedule,
   type NotificationScheduleInput,
   type NotificationUpdateInput,
+  type SendStatus,
   type TargetType,
 } from "./types";

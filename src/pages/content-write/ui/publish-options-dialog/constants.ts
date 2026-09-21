@@ -8,4 +8,4 @@ export const VISIBILITY_LABELS: Record<PublishVisibility, string> = {
   scheduled: "예약 발행",
 };
 
-export const SCHEDULE_DISABLED_VALUES: readonly string[] = ["scheduled"];
+export const SCHEDULE_DISABLED_VALUES = ["scheduled"] satisfies readonly PublishVisibility[];

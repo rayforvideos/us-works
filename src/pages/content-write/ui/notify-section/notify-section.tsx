@@ -74,12 +74,7 @@ export function NotifySection({
                   label: getTargetTypeLabel(target),
                 }))}
                 value={field.state.value}
-                onChange={(next) => {
-                  const picked = TARGET_TYPES.find((target) => target === next);
-                  if (picked) {
-                    field.handleChange(picked);
-                  }
-                }}
+                onChange={field.handleChange}
                 disabled={isDisabled}
               />
             )}

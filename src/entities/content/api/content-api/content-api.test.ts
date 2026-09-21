@@ -76,7 +76,7 @@ describe("fetchContent", () => {
     const { adapter, calls } = createFakeAdapter(() => createOkResponse(CONTENT_DETAIL_FIXTURE));
     const client = createHttpClient({ baseUrl: "http://api.test", adapter });
 
-    const result = await fetchContent(client, "136");
+    const result = await fetchContent(client, 136);
 
     expect(readLastCall(calls).method).toBe("get");
     expect(readLastCall(calls).url).toBe("/api/v1/contents/136");
@@ -104,7 +104,7 @@ describe("updateContent", () => {
     const { adapter, calls } = createFakeAdapter(() => createOkResponse(CONTENT_DETAIL_FIXTURE));
     const client = createHttpClient({ baseUrl: "http://api.test", adapter });
 
-    await updateContent(client, "136", { ...CONTENT_INPUT, link_url: "" });
+    await updateContent(client, 136, { ...CONTENT_INPUT, link_url: "" });
 
     expect(readLastCall(calls).method).toBe("put");
     expect(readLastCall(calls).url).toBe("/api/v1/contents/136");
@@ -117,7 +117,7 @@ describe("changeContentStatus", () => {
     const { adapter, calls } = createFakeAdapter(() => createOkResponse(CONTENT_DETAIL_FIXTURE));
     const client = createHttpClient({ baseUrl: "http://api.test", adapter });
 
-    await changeContentStatus(client, "136", "private");
+    await changeContentStatus(client, 136, "private");
 
     expect(readLastCall(calls).method).toBe("patch");
     expect(readLastCall(calls).url).toBe("/api/v1/contents/136/status");
@@ -130,7 +130,7 @@ describe("scheduleContent", () => {
     const { adapter, calls } = createFakeAdapter(() => createOkResponse(CONTENT_DETAIL_FIXTURE));
     const client = createHttpClient({ baseUrl: "http://api.test", adapter });
 
-    await scheduleContent(client, "136", { published_at: "2027-04-05T14:35:00+09:00" });
+    await scheduleContent(client, 136, { published_at: "2027-04-05T14:35:00+09:00" });
 
     expect(readLastCall(calls).method).toBe("post");
     expect(readLastCall(calls).url).toBe("/api/v1/contents/136/schedule");
@@ -145,7 +145,7 @@ describe("updateContentSchedule", () => {
     const { adapter, calls } = createFakeAdapter(() => createOkResponse(CONTENT_DETAIL_FIXTURE));
     const client = createHttpClient({ baseUrl: "http://api.test", adapter });
 
-    await updateContentSchedule(client, "136", { published_at: "2027-04-06T09:00:00+09:00" });
+    await updateContentSchedule(client, 136, { published_at: "2027-04-06T09:00:00+09:00" });
 
     expect(readLastCall(calls).method).toBe("put");
     expect(readLastCall(calls).url).toBe("/api/v1/contents/136/schedule");
@@ -162,7 +162,7 @@ describe("deleteContentSchedule", () => {
     );
     const client = createHttpClient({ baseUrl: "http://api.test", adapter });
 
-    await deleteContentSchedule(client, "136");
+    await deleteContentSchedule(client, 136);
 
     expect(readLastCall(calls).method).toBe("delete");
     expect(readLastCall(calls).url).toBe("/api/v1/contents/136/schedule");
@@ -174,7 +174,7 @@ describe("fetchContentNotification", () => {
     const { adapter, calls } = createFakeAdapter(() => createOkResponse(NOTIFICATION_RESPONSE));
     const client = createHttpClient({ baseUrl: "http://api.test", adapter });
 
-    const result = await fetchContentNotification(client, "136");
+    const result = await fetchContentNotification(client, 136);
 
     expect(readLastCall(calls).method).toBe("get");
     expect(readLastCall(calls).url).toBe("/api/v1/contents/136/notification");
@@ -186,7 +186,7 @@ describe("fetchContentNotification", () => {
     const client = createHttpClient({ baseUrl: "http://api.test", adapter });
     const controller = new AbortController();
 
-    await fetchContent(client, "136", { signal: controller.signal });
+    await fetchContent(client, 136, { signal: controller.signal });
 
     expect(readLastCall(calls).signal).toBe(controller.signal);
   });
@@ -197,7 +197,7 @@ describe("fetchContentNotification", () => {
     const controller = new AbortController();
     controller.abort();
 
-    await expect(fetchContent(client, "136", { signal: controller.signal })).rejects.toMatchObject({
+    await expect(fetchContent(client, 136, { signal: controller.signal })).rejects.toMatchObject({
       kind: "canceled",
     });
     expect(calls).toHaveLength(0);
@@ -207,20 +207,20 @@ describe("fetchContentNotification", () => {
     const { adapter } = createFakeAdapter(() => createOkResponse(null));
     const client = createHttpClient({ baseUrl: "http://api.test", adapter });
 
-    await expect(fetchContentNotification(client, "136")).resolves.toBeNull();
+    await expect(fetchContentNotification(client, 136)).resolves.toBeNull();
   });
 
   it("없는 콘텐츠의 알림을 조회하면 오류를 던진다", async () => {
     const { adapter } = createFakeAdapter(() => createFailResponse(404, "content not found"));
     const client = createHttpClient({ baseUrl: "http://api.test", adapter });
 
-    await expect(fetchContentNotification(client, "999")).rejects.toThrow();
+    await expect(fetchContentNotification(client, 999)).rejects.toThrow();
   });
 
   it("알림 조회가 다른 이유로 실패하면 오류를 그대로 던진다", async () => {
     const { adapter } = createFakeAdapter(() => createFailResponse(500, "server error"));
     const client = createHttpClient({ baseUrl: "http://api.test", adapter });
 
-    await expect(fetchContentNotification(client, "136")).rejects.toThrow();
+    await expect(fetchContentNotification(client, 136)).rejects.toThrow();
   });
 });

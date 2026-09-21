@@ -25,7 +25,7 @@ export function useCreateNotificationMutation() {
   });
 }
 
-export function useUpdateNotificationMutation(id: string) {
+export function useUpdateNotificationMutation(id: number) {
   const client = useHttpClient();
   const queryClient = useQueryClient();
 

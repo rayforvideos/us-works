@@ -21,26 +21,28 @@ function buildVisibilitySteps(
 ): PublishStep[] {
   const current = content === null ? "private" : toPublishVisibility(content);
 
-  if (values.visibility === "public") {
-    return current === "public" ? [] : [{ kind: "status", status: "public" }];
-  }
-  if (values.visibility === "private") {
-    if (current === "private") {
-      return [];
+  switch (values.visibility) {
+    case "public":
+      return current === "public" ? [] : [{ kind: "status", status: "public" }];
+    case "private":
+      if (current === "private") {
+        return [];
+      }
+      if (current === "scheduled") {
+        return [{ kind: "schedule-delete" }, { kind: "status", status: "private" }];
+      }
+      return [{ kind: "status", status: "private" }];
+    case "scheduled": {
+      const publishedAt = toSeoulIso(values.publishedAt);
+      if (current !== "scheduled") {
+        return [{ kind: "schedule-create", publishedAt }];
+      }
+      if (fromSeoulIso(content?.published_at ?? "") === values.publishedAt) {
+        return [];
+      }
+      return [{ kind: "schedule-update", publishedAt }];
     }
-    if (current === "scheduled") {
-      return [{ kind: "schedule-delete" }, { kind: "status", status: "private" }];
-    }
-    return [{ kind: "status", status: "private" }];
   }
-  const publishedAt = toSeoulIso(values.publishedAt);
-  if (current !== "scheduled") {
-    return [{ kind: "schedule-create", publishedAt }];
-  }
-  if (fromSeoulIso(content?.published_at ?? "") === values.publishedAt) {
-    return [];
-  }
-  return [{ kind: "schedule-update", publishedAt }];
 }
 
 function buildNotificationSteps({

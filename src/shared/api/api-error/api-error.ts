@@ -18,7 +18,7 @@ export class ApiError extends Error {
   readonly serverMessage: string | null;
 
   constructor({ kind, status, serverMessage, cause }: ApiErrorInit) {
-    super(`ApiError(${kind}${status === null ? "" : ` ${String(status)}`})`, { cause });
+    super(`ApiError(${kind}${status === null ? "" : ` ${status}`})`, { cause });
     this.name = "ApiError";
     this.kind = kind;
     this.status = status;

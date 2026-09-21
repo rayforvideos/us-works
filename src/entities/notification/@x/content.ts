@@ -1,1 +1,1 @@
-export { type Notification } from "../model/notification";
+export { type Notification, type SendStatus } from "../model/notification";

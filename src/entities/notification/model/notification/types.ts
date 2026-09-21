@@ -1,5 +1,3 @@
-import { type Content } from "@/entities/content/@x/notification";
-
 import { type SEND_STATUSES, type TARGET_TYPES } from "./constants";
 
 export type SendStatus = (typeof SEND_STATUSES)[number];
@@ -20,7 +18,6 @@ export type NotificationStatKey = keyof NotificationStats;
 export type Notification = {
   id: number;
   content_id: number;
-  content?: Content;
   content_status: NotificationVisibility;
   title: string;
   target_type: TargetType;

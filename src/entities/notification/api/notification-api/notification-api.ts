@@ -12,7 +12,7 @@ import {
   type NotificationUpdateInput,
 } from "../../model/notification";
 
-function toNotificationPath(id: string): string {
+function toNotificationPath(id: number): string {
   return `/api/v1/notifications/${id}`;
 }
 
@@ -33,7 +33,7 @@ export async function fetchNotifications(
 
 export async function fetchNotification(
   client: AxiosInstance,
-  id: string,
+  id: number,
   options: RequestOptions = {},
 ): Promise<Notification> {
   const response = await client.get<Notification>(toNotificationPath(id), {
@@ -52,7 +52,7 @@ export async function createNotification(
 
 export async function updateNotification(
   client: AxiosInstance,
-  id: string,
+  id: number,
   input: NotificationUpdateInput,
 ): Promise<Notification> {
   const response = await client.put<Notification>(toNotificationPath(id), input);
@@ -61,7 +61,7 @@ export async function updateNotification(
 
 export async function updateNotificationSchedule(
   client: AxiosInstance,
-  id: string,
+  id: number,
   input: NotificationScheduleInput,
 ): Promise<NotificationSchedule> {
   const response = await client.put<NotificationSchedule>(
@@ -71,6 +71,6 @@ export async function updateNotificationSchedule(
   return response.data;
 }
 
-export async function deleteNotification(client: AxiosInstance, id: string): Promise<void> {
+export async function deleteNotification(client: AxiosInstance, id: number): Promise<void> {
   await client.delete(toNotificationPath(id));
 }

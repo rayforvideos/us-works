@@ -26,7 +26,7 @@ export function ContentCreateView() {
   const [values, setValues] = useState<ContentFormValues>(initialValues);
   const [savedAt, setSavedAt] = useState<string | null>(null);
   const [publishValues, setPublishValues] = useState<ContentFormValues | null>(null);
-  const [savedContentId, setSavedContentId] = useState<string | null>(null);
+  const [savedContentId, setSavedContentId] = useState<number | null>(null);
   const mutation = usePublishContentMutation({ onContentSaved: setSavedContentId });
   const { saveNow } = useDraftAutosave({
     enabled: true,
