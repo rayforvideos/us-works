@@ -101,6 +101,13 @@ describe("라우터 보호", () => {
     expect(router.state.location.pathname).toBe("/alarms/12");
   });
 
+  it("화면 묶음을 받는 동안 로딩 표시를 보인다", async () => {
+    openRoute("/alarms", { hasSession: true });
+
+    expect(screen.getByRole("status", { name: "화면 불러오는 중" })).toBeInTheDocument();
+    expect(await screen.findByRole("heading", { name: "알람" })).toBeInTheDocument();
+  });
+
   it('알 수 없는 경로는 "/"로 보낸다', async () => {
     const router = openRoute("/없는-경로", { hasSession: true });
 
