@@ -1,20 +1,10 @@
+import { StrokeIcon } from "./stroke-icon";
 import { type IconProps } from "./types";
 
 export function ChevronRightIcon({ size = 16, ...rest }: IconProps) {
   return (
-    <svg
-      aria-hidden
-      width={size}
-      height={size}
-      viewBox="0 0 16 16"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth={1.5}
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      {...rest}
-    >
+    <StrokeIcon {...rest} size={size} viewBox="0 0 16 16" strokeWidth={1.5}>
       <path d="m6 3 5 5-5 5" />
-    </svg>
+    </StrokeIcon>
   );
 }

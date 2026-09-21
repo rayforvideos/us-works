@@ -1,6 +1,6 @@
 export type DateTimeFieldProps = {
   value: string;
-  onChange: (next: string) => void;
+  onValueChange: (next: string) => void;
   placeholder: string;
   invalid?: boolean;
   disabled?: boolean;

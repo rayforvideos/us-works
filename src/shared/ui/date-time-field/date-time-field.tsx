@@ -13,7 +13,7 @@ const STEP_SECONDS = 60;
 
 export function DateTimeField({
   value,
-  onChange,
+  onValueChange,
   placeholder,
   invalid = false,
   disabled = false,
@@ -28,7 +28,7 @@ export function DateTimeField({
   const isFilled = label !== "";
 
   function changeValue(event: ChangeEvent<HTMLInputElement>) {
-    onChange(event.target.value);
+    onValueChange(event.target.value);
   }
 
   function openPicker(event: MouseEvent<HTMLInputElement>) {

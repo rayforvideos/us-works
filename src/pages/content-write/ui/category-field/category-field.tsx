@@ -1,5 +1,6 @@
 import { CONTENT_CATEGORIES, getCategoryLabel } from "@/entities/content";
 import { CheckboxChip } from "@/shared/ui/checkbox-chip";
+import { FieldError } from "@/shared/ui/field-error";
 
 import { toggleCategory } from "../../model/toggle-category";
 import { type CategoryFieldProps } from "./types";
@@ -21,7 +22,7 @@ export function CategoryField({ value, onChange, error, disabled = false }: Cate
           </CheckboxChip>
         ))}
       </div>
-      <p className="min-h-3 text-12-r400 text-red-100">{error}</p>
+      <FieldError error={error} />
     </div>
   );
 }
