@@ -7,9 +7,9 @@ import { PENDING_NOTIFICATION_FIXTURE } from "@/entities/notification";
 import { persistedSessionAtom } from "@/entities/session";
 import { createFakeAdapter, createOkResponse, PERSISTED_SESSION_FIXTURE } from "@/shared/config";
 
-import { AppProviders } from "./app-providers";
-import { initializeSystem } from "./initialize-system";
-import { routes } from "./router";
+import { AppProviders } from "../app-providers";
+import { initializeSystem } from "../initialize-system";
+import { routes } from "./routes";
 
 function openRoute(pathname: string, { hasSession }: { hasSession: boolean }) {
   const { adapter } = createFakeAdapter((config) => {
