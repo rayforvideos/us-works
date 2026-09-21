@@ -13,7 +13,7 @@ export const iconClass = cva(
 export const positionerClass = cva("z-10 w-(--anchor-width) outline-none");
 
 export const popupClass = cva(
-  "max-h-(--available-height) origin-(--transform-origin) overflow-y-auto rounded-12 border border-grey-200 bg-white p-2 shadow-100 transition duration-150 outline-none data-ending-style:scale-95 data-ending-style:opacity-0 data-starting-style:scale-95 data-starting-style:opacity-0",
+  "max-h-(--available-height) origin-(--transform-origin) overflow-y-auto rounded-12 border border-grey-200 bg-white p-2 shadow-100 transition-[opacity,scale] duration-150 outline-none data-closed:pointer-events-none data-ending-style:scale-95 data-ending-style:opacity-0 data-starting-style:scale-95 data-starting-style:opacity-0",
 );
 
 export const itemClass = cva(

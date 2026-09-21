@@ -40,6 +40,7 @@
 - 오류 문구는 `shared/ui/field-error`의 `FieldError` 하나로 그린다. 문구 한 줄 높이를 늘 유지해 오류가 나타날 때 아래 요소가 밀리지 않고, `id`로 입력의 `aria-describedby`와 이어진다. 오류 문구를 라벨 옆처럼 다른 곳에 두는 폼은 `reserve={false}`로 빈 자리를 끄고, 문구를 스스로 갖지 않는 입력(`DateTimeField`)은 `invalid`로 테두리만 바꾼 뒤 화면이 `FieldError`를 따로 둔다. `TextField`의 `reserveError={false}`도 같은 뜻이다.
 - 값을 돌려주는 컨트롤은 콜백 이름을 `onValueChange`로 맞춘다(`Select`, `RadioGroup`, `DateTimeField`). `onChange`는 네이티브 이벤트를 그대로 넘기는 입력(`TextField`, `TextArea`)에만 쓴다.
 - 선 아이콘은 `shared/ui/icon/stroke-icon`의 `StrokeIcon`을 감싸고 `viewBox`, `strokeWidth`, 경로만 갖는다. 채움이 있는 아이콘(`RoundArrowIcon`, `RoundCancelIcon`, `LogoIcon`)은 자기 `svg`를 그대로 둔다.
+- Base UI 팝업(Select, Dialog)은 닫는 전환이 도는 동안에도 DOM에 남아 있으므로 `data-closed:pointer-events-none`으로 그 구간의 클릭을 막는다. 투명도나 표시 자체를 끄지는 않는다. 사라지는 전환까지 없어진다.
 - Base UI 팝업(Select, Dialog)의 열림·닫힘 전환은 `transition-[opacity,scale]`처럼 속성을 한정한다. Tailwind `transition` 단축은 `display`, `pointer-events` 같은 이산 속성을 포함해 Base UI가 닫힘 전환의 완료를 기다리다 팝업을 언마운트하지 못한다.
 - 사용자가 일으키는 화면 이동에는 react-router의 `viewTransition`을 붙인다. 목록 헤더의 탭과 로고, 목록 행, 안내의 목록 링크, 작성과 발행 뒤 이동이 대상이다. 인증 가드의 리다이렉트처럼 사용자가 누르지 않은 이동에는 붙이지 않는다. React의 `<ViewTransition>` 컴포넌트는 쓰지 않는다. 이동 시점을 라우터가 쥐고 있어 둘을 함께 쓰면 전환이 겹친다.
 - 동작 줄이기를 켠 사용자에게는 전환 애니메이션을 끈다. 규칙은 `app/styles/base.css`에 있다.
