@@ -25,6 +25,7 @@ const SENT_NOTIFICATION = { ...SENT_NOTIFICATION_FIXTURE, id: 12 };
 
 function renderPage(pathname: string, respond: Parameters<typeof createFakeAdapter>[0]) {
   const { adapter, calls } = createFakeAdapter(respond);
+  const queryClient = createQueryClient({ queries: { retry: false } });
   const router = createMemoryRouter(
     [
       { path: "/alarms/new", element: <AlarmWritePage /> },
@@ -36,14 +37,14 @@ function renderPage(pathname: string, respond: Parameters<typeof createFakeAdapt
   );
 
   render(
-    <QueryClientProvider client={createQueryClient({ queries: { retry: false } })}>
+    <QueryClientProvider client={queryClient}>
       <HttpClientProvider client={createHttpClient({ baseUrl: "http://api.test", adapter })}>
         <RouterProvider router={router} />
       </HttpClientProvider>
     </QueryClientProvider>,
   );
 
-  return { router, calls };
+  return { router, calls, queryClient };
 }
 
 function respondToCreate(notificationResponse: FakeResponse) {
@@ -196,6 +197,19 @@ describe("AlarmWritePage 수정", () => {
     expect(writes).toHaveLength(1);
     expect(writes[0]?.url).toBe("/api/v1/notifications/12/schedule");
     expect(readBody(writes[0]?.data)).toEqual({ scheduled_at: "2099-10-01T14:35:00+09:00" });
+  });
+
+  it("알람을 고치면 콘텐츠 목록 캐시도 무효화한다", async () => {
+    const { queryClient } = renderPage("/alarms/12", respondToEdit(EDITED_NOTIFICATION));
+    const contentsKey = ["contents", "list", { page: 1 }];
+    queryClient.setQueryData(contentsKey, { items: [] });
+
+    await screen.findByLabelText("제목");
+    fireEvent.change(screen.getByLabelText("제목"), { target: { value: "바뀐 제목" } });
+    send();
+
+    expect(await screen.findByText("알람 목록")).toBeInTheDocument();
+    expect(queryClient.getQueryState(contentsKey)?.isInvalidated).toBe(true);
   });
 
   it("수정 화면은 불러오는 동안 스피너를 보이고 실패하면 목록 링크를 보인다", async () => {

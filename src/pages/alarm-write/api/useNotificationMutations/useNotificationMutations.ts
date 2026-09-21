@@ -39,6 +39,7 @@ export function useUpdateNotificationMutation(id: string) {
     onSuccess: () => {
       void queryClient.invalidateQueries({ queryKey: ["notifications", "list"] });
       void queryClient.invalidateQueries({ queryKey: ["notifications", "detail", id] });
+      void queryClient.invalidateQueries({ queryKey: ["contents"] });
     },
   });
 }
