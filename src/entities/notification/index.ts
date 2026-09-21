@@ -4,8 +4,7 @@ export {
   updateNotification,
   updateNotificationSchedule,
 } from "./api/notification-api";
-export { useNotificationQuery } from "./api/useNotificationQuery";
-export { useNotificationsQuery } from "./api/useNotificationsQuery";
+export { notificationQueries } from "./api/notification-queries";
 export {
   FAILED_NOTIFICATION_FIXTURE,
   formatScheduledAt,

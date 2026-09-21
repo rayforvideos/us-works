@@ -1,8 +1,10 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
+import { contentQueries } from "@/entities/content";
 import {
   createNotification,
   type NotificationInput,
+  notificationQueries,
   updateNotification,
   updateNotificationSchedule,
 } from "@/entities/notification";
@@ -17,8 +19,8 @@ export function useCreateNotificationMutation() {
   return useMutation({
     mutationFn: (input: NotificationInput) => createNotification(client, input),
     onSuccess: () => {
-      void queryClient.invalidateQueries({ queryKey: ["notifications", "list"] });
-      void queryClient.invalidateQueries({ queryKey: ["contents"] });
+      void queryClient.invalidateQueries({ queryKey: notificationQueries.lists() });
+      void queryClient.invalidateQueries({ queryKey: contentQueries.all() });
     },
   });
 }
@@ -37,9 +39,9 @@ export function useUpdateNotificationMutation(id: string) {
       }
     },
     onSuccess: () => {
-      void queryClient.invalidateQueries({ queryKey: ["notifications", "list"] });
-      void queryClient.invalidateQueries({ queryKey: ["notifications", "detail", id] });
-      void queryClient.invalidateQueries({ queryKey: ["contents"] });
+      void queryClient.invalidateQueries({ queryKey: notificationQueries.lists() });
+      void queryClient.invalidateQueries({ queryKey: [...notificationQueries.details(), id] });
+      void queryClient.invalidateQueries({ queryKey: contentQueries.all() });
     },
   });
 }

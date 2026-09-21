@@ -3,6 +3,7 @@ import { type AxiosInstance } from "axios";
 
 import {
   changeContentStatus,
+  contentQueries,
   createContent,
   deleteContentSchedule,
   fetchContent,
@@ -14,6 +15,7 @@ import {
 import {
   createNotification,
   deleteNotification,
+  notificationQueries,
   updateNotification,
   updateNotificationSchedule,
 } from "@/entities/notification";
@@ -81,8 +83,8 @@ export function usePublishContentMutation({ onContentSaved }: PublishMutationOpt
       return { contentId: savedId };
     },
     onSuccess: () => {
-      void queryClient.invalidateQueries({ queryKey: ["contents"] });
-      void queryClient.invalidateQueries({ queryKey: ["notifications"] });
+      void queryClient.invalidateQueries({ queryKey: contentQueries.all() });
+      void queryClient.invalidateQueries({ queryKey: notificationQueries.all() });
     },
   });
 }

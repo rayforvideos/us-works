@@ -8,9 +8,7 @@ export {
   updateContent,
   updateContentSchedule,
 } from "./api/content-api";
-export { useContentNotificationQuery } from "./api/useContentNotificationQuery";
-export { useContentQuery } from "./api/useContentQuery";
-export { useContentsQuery } from "./api/useContentsQuery";
+export { contentQueries } from "./api/content-queries";
 export {
   type Content,
   CONTENT_CATEGORIES,

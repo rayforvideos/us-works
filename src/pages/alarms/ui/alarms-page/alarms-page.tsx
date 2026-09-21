@@ -1,11 +1,13 @@
 import { useSearchParams } from "react-router";
+import { useQuery } from "@tanstack/react-query";
 
 import {
   NOTIFICATION_LIST_PARAM_KEYS,
+  notificationQueries,
   parseNotificationListParams,
-  useNotificationsQuery,
 } from "@/entities/notification";
 import { NewPostButton } from "@/features/start-content";
+import { useHttpClient } from "@/shared/api";
 import { ROUTES } from "@/shared/config";
 import { getPageCount } from "@/shared/lib/pagination-params";
 import { Container } from "@/shared/ui/container";
@@ -25,10 +27,12 @@ const LIST_TABS: readonly ListHeaderTab[] = [
 const EMPTY_MESSAGE = "알림이 없습니다.";
 
 export function AlarmsPage() {
+  const client = useHttpClient();
   const [searchParams, setSearchParams] = useSearchParams();
   const params = parseNotificationListParams(searchParams);
-  const { data, isPending, isFetching, isPlaceholderData, error, refetch } =
-    useNotificationsQuery(params);
+  const { data, isPending, isFetching, isPlaceholderData, error, refetch } = useQuery(
+    notificationQueries.list(client, params),
+  );
 
   const goToPage = (page: number) => {
     const nextParams = new URLSearchParams(searchParams);

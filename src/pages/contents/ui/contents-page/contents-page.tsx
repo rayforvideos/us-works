@@ -1,12 +1,14 @@
 import { useSearchParams } from "react-router";
+import { useQuery } from "@tanstack/react-query";
 
 import {
   CONTENT_LIST_PARAM_KEYS,
   type ContentListFilters,
+  contentQueries,
   parseContentListParams,
-  useContentsQuery,
 } from "@/entities/content";
 import { NewPostButton } from "@/features/start-content";
+import { useHttpClient } from "@/shared/api";
 import { ROUTES } from "@/shared/config";
 import { getPageCount } from "@/shared/lib/pagination-params";
 import { Container } from "@/shared/ui/container";
@@ -37,10 +39,12 @@ function writeParam(params: URLSearchParams, key: string, value: string | undefi
 }
 
 export function ContentsPage() {
+  const client = useHttpClient();
   const [searchParams, setSearchParams] = useSearchParams();
   const params = parseContentListParams(searchParams);
-  const { data, isPending, isFetching, isPlaceholderData, error, refetch } =
-    useContentsQuery(params);
+  const { data, isPending, isFetching, isPlaceholderData, error, refetch } = useQuery(
+    contentQueries.list(client, params),
+  );
 
   const hasFilter = params.category !== undefined || params.publishStatus !== undefined;
 
