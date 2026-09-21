@@ -3,6 +3,7 @@ import { atom } from "jotai";
 
 import { clearSession, persistedSessionAtom, SESSION_STORAGE_KEY } from "@/entities/session";
 import {
+  createFailResponse,
   createFakeAdapter,
   createOkResponse,
   PERSISTED_SESSION_FIXTURE,
@@ -106,6 +107,20 @@ describe("저장된 세션 복구", () => {
 
     expect(calls.map((call) => call.url)).toEqual(["/api/v1/auth/refresh", "/api/v1/contents"]);
     expect(readAuthorization(readCallAt(calls, 1))).toBe("Bearer new-token");
+  });
+
+  it("다시 로그인한 세션에서 갱신이 실패해도 세션을 비운다", async () => {
+    const { adapter } = createFakeAdapter(() => createFailResponse(401, "unauthorized"));
+    const system = initializeSystem({ adapter });
+
+    system.store.set(persistedSessionAtom, PERSISTED_SESSION_FIXTURE);
+    await expect(system.httpClient.get("/api/v1/contents")).rejects.toThrow();
+    expect(system.store.get(persistedSessionAtom)).toBeNull();
+
+    system.store.set(persistedSessionAtom, PERSISTED_SESSION_FIXTURE);
+    await expect(system.httpClient.get("/api/v1/contents")).rejects.toThrow();
+
+    expect(system.store.get(persistedSessionAtom)).toBeNull();
   });
 
   it("저장된 세션이 없으면 갱신 없이 토큰 없는 요청을 보낸다", async () => {
